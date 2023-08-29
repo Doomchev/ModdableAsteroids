@@ -6,18 +6,20 @@ import LinearChange from "./src/logic/linear_change.js";
 import Move from "./src/logic/move.js";
 import {IfBlock} from "./src/structures.js";
 
+export let images = {
+    ship: "images/ship.png",
+};
+
 export function init() {
-    let texture = document.getElementById("ship");
+    let texture = images.ship;
     let ship = new Sprite(new Image(texture, 0, 0, texture.width, texture.height
         , 0.35, 0.5, 1.35, 1.9));
     root.background = "rgb(9, 44, 84)";
-
     root.scene = [ship];
 
     let right = new Key("KeyA");
     let left = new Key("KeyD");
     let forward = new Key("KeyW");
-    root.keys = [right, left, forward];
 
     let speed = 30.0, back = 1.5 * speed, limit = 10.0;
     root.logic = [

@@ -1,4 +1,4 @@
-import {ctx, Renderable} from "./system.js";
+import {ctx, Renderable, root} from "./system.js";
 
 let showCollisionShapes = true;
 
