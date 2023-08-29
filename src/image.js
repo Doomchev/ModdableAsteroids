@@ -1,10 +1,6 @@
-import {ctx} from "./system.js";
+import {ctx, Renderable} from "./system.js";
 
 let showCollisionShapes = true;
-
-class Renderable {
-    draw(sx, sy, swidth, sheight){}
-}
 
 export default class Image extends Renderable {
     constructor(texture, x = 0, y = 0, width = texture.width, height = texture.height

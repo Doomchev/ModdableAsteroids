@@ -10,8 +10,17 @@ export let root = {
     logic: []
 };
 
+export class Renderable {
+    draw(sx, sy, swidth, sheight) {}
+}
+
 export class Executable {
-    execute() {
+    execute() {}
+}
+
+export class Value {
+    toBoolean() {
+        return true;
     }
 }
 
@@ -26,25 +35,25 @@ document.addEventListener("DOMContentLoaded", function() {
 
     init();
     setInterval(function() {
-        for(let i = 0; i < root.logic.length; i++) {
-            root.logic[i].execute();
-        }
+        root.logic.forEach((module) => {
+            module.execute();
+        });
         currentCanvas.draw();
     }, 20)
 });
 
 document.addEventListener("keydown", (event) => {
-    for(const[name, key] of Object.entries(root.keys)) {
+    root.keys.forEach((key) => {
         if(event.code === key.code) {
             key.isDown = true;
         }
-    }
+    });
 }, false);
 
 document.addEventListener("keyup", (event) => {
-    for(const[name, key] of Object.entries(root.keys)) {
+    root.keys.forEach((key) => {
         if(event.code === key.code) {
             key.isDown = false;
         }
-    }
+    });
 }, false);
