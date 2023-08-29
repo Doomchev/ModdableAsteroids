@@ -6,12 +6,11 @@ export let fpsk = 1.0 / fps;
 
 export default class Sprite extends Shape {
     constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
-                , angleInDegrees = 0.0, dx = 1.0, dy = 0.0) {
+                , angleInDegrees = 0.0, speed = 0.0) {
         super(centerX, centerY, width, height);
         this.image = image;
         this.angle = angleInDegrees * Math.PI / 180.0;
-        this.dx = dx;
-        this.dy = dy;
+        this.speed = speed;
         this.visible = true;
     }
 
@@ -22,7 +21,7 @@ export default class Sprite extends Shape {
     }
 
     move() {
-        this.centerX += fpsk * this.dx
-        this.centerY += fpsk * this.dy
+        this.centerX += Math.cos(this.angle) * this.speed * fpsk;
+        this.centerY += Math.sin(this.angle) * this.speed * fpsk;
     }
 }

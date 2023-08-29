@@ -1,6 +1,6 @@
 import Sprite from "./sprite.js"
 import Area from "./area.js"
-import {root, ctx} from "./main.js"
+import {root, ctx} from "./system.js"
 
 export let currentCanvas, zk = 1.2;
 
