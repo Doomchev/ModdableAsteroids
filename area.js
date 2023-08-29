@@ -1,18 +1,17 @@
-function Area(leftX, topY, width, height) {
-    return {
-        leftX: leftX,
-        topY: topY,
-        width: width,
-        height: height,
-
-        rightX() {
-            return leftX + width
-        },
-        bottomY() {
-            return topY + height
-        },
-        hasPoint(px, py) {
-            return px >= leftX && px < this.rightX && py >= topY && py < this.bottomY
-        }
+export default class Area {
+    constructor(leftX, topY, width, height) {
+        this.leftX = leftX;
+        this.topY = topY;
+        this.width = width;
+        this.height = height;
+    }
+    get rightX() {
+        return this.leftX + this.width;
+    }
+    get bottomY() {
+        return this.topY + this.height;
+    }
+    hasPoint(px, py) {
+        return px >= this.leftX && px < this.rightX && py >= this.topY && py < this.bottomY;
     }
 }

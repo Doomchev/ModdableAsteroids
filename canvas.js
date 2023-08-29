@@ -1,47 +1,56 @@
-let currentCanvas, mousesx, mousesy, zk = 1.2;
+import Sprite from "./sprite.js"
+import Area from "./area.js"
+import {root, ctx} from "./main.js"
 
-const CanvasPrototype = function() {
-    this.vdx = 1.0;
-    this.vdy = 1.0;
-    this.k = 1.0;
-    this.oldZoom = 0;
-    this.defaultPosition = this;
-    this.update();
-    
-    function draw() {
+export let currentCanvas, zk = 1.2;
+
+export default class Canvas extends Sprite {
+    constructor(fx, fy, fwidth, fheight, scale, active = true) {
+        super(null, 0.0, 0.0, fwidth / scale, fheight / scale, 0.0, 0.0, 0.0, active);
+        this.viewport = new Area(fx, fy, fwidth, fheight);
+        this.vdx = 1.0;
+        this.vdy = 1.0;
+        this.k = 1.0;
+        this.oldZoom = 0;
+        this.defaultPosition = this;
+        this.active = active;
+        this.update();
+    }
+
+    draw() {
         if(!this.active) return;
         let viewport = this.viewport;
         let oldCanvas = currentCanvas;
         currentCanvas = this;
-        update();
-        g.background = root.background;
-        g.setClip(viewport.leftX, viewport.topY, viewport.width, viewport.height);
-        g.clearRect(viewport.leftX, viewport.topY, viewport.width, viewport.height);
-        for(module in drawingModules) {
-            module.draw(g);
+        this.update();
+
+        ctx.fillStyle = root.background;
+        //g.setClip(viewport.leftX, viewport.topY, viewport.width, viewport.height);
+        ctx.fillRect(viewport.leftX, viewport.topY, viewport.width, viewport.height);
+        for(let i = 0; i < root.scene.length; i++) {
+            root.scene[i].draw();
         }
-        listener.draw(g, this);
         currentCanvas = oldCanvas;
     }
 
-    function update () {
+    update() {
         let viewport = this.viewport;
-        let k = 1.0 * viewport.width / width;
+        let k = 1.0 * viewport.width / this.width;
         this.k = k;
         this.height = 1.0 * viewport.height / k;
         this.vdx = 0.5 * viewport.width - this.centerX * k + viewport.leftX;
         this.vdy = 0.5 * viewport.height - this.centerY * k + viewport.topY;
     }
 
-    function setZoom (zoom) {
-        this.width = this.viewport.width * Math.pow(zk, zoom);
+    setZoom(zoom) {
+        this.width = this.viewport.width * (zk ** zoom);
         this.update();
     }
 
-    function setZoomXY (zoom, x, y) {
+    setZoomXY(zoom, x, y) {
         let fx1 = xFromScreen(x);
         let fy1 = yFromScreen(y);
-        setZoom(zoom);
+        this.setZoom(zoom);
         let fx2 = xFromScreen(x);
         let fy2 = yFromScreen(y);
         this.centerX += fx1 - fx2;
@@ -49,16 +58,16 @@ const CanvasPrototype = function() {
         this.update();
     }
 
-    function hasMouse () {
+    hasMouse() {
         return this.viewport.hasPoint(mousesx, mousesy);
     }
 
-    function setDefaultPosition() {
+    setDefaultPosition() {
         this.oldZoom = this.zoom;
-        this.defaultPosition = Sprite(null, this.centerX, this.centerY, this.width, this.height);
+        this.defaultPosition = new Sprite(null, this.centerX, this.centerY, this.width, this.height);
     }
 
-    function restorePosition() {
+    restorePosition() {
         let defaultPosition = this.defaultPosition;
         this.centerX = defaultPosition.centerX;
         this.centerY = defaultPosition.centerY;
@@ -68,41 +77,51 @@ const CanvasPrototype = function() {
         this.update();
     }
 
-    function drawDefaultCamera(g: Graphics2D) {
-        g.color = Color.BLUE;
-        g.drawRect(xToScreen(defaultPosition.leftX), yToScreen(defaultPosition.topY), distToScreen(defaultPosition.width), distToScreen(defaultPosition.height));
-        g.color = Color.BLACK;
+    drawDefaultCamera() {
+        let pos = this.defaultPosition;
+        ctx.fillStyle("blue");
+        drawRect(xToScreen(pos.leftX), yToScreen(pos.topY), distToScreen(pos.width), distToScreen(pos.height));
+        ctx.fillStyle("white");
     }
 
     toggle() {
-        active = !active
+        this.active = !this.active
     }
-    
 }
 
-function Canvas(fx, fy, fwidth, fheight, scale, active) {
-    let canvas = Sprite(null, 0.0, 0.0, fwidth / scale, fheight / scale, 0.0, 0.0, 0.0, active);
-    canvas.prototype = CanvasPrototype;
-    canvas.viewport = Area(fx, fy, fwidth, fheight);
-    canvas.
+export function drawRect(x, y, width, height) {
+    let x2 = x + width;
+    let y2 = y + height;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x2, y);
+    ctx.lineTo(x2, y2);
+    ctx.lineTo(x, y2);
+    ctx.lineTo(x, y);
+    ctx.stroke();
 }
 
-function xToScreen(fieldX) {
+export function xToScreen(fieldX) {
     return fieldX * currentCanvas.k + currentCanvas.vdx;
 }
-function yToScreen(fieldY) {
+export function yToScreen(fieldY) {
    return fieldY * currentCanvas.k + currentCanvas.vdy;
 }
-function distToScreen(fieldDist) {
+export function distToScreen(fieldDist) {
     return fieldDist * currentCanvas.k;
 }
 
-function xFromScreen(screenX) {
+export function xFromScreen(screenX) {
     return (screenX - currentCanvas.vdx) / currentCanvas.k;
 }
-function yFromScreen(screenY) {
+export function yFromScreen(screenY) {
     return (screenY - currentCanvas.vdy) / currentCanvas.k;
 }
-function distFromScreen(screenDist) {
+
+export function distFromScreen(screenDist) {
     return screenDist / currentCanvas.k;
+}
+
+export function setCanvas(canvas) {
+    currentCanvas = canvas;
 }
