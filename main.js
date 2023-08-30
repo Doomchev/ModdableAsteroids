@@ -14,6 +14,7 @@ import CreateSprite from "./src/logic/sprite/create.js"
 import SetPosition from "./src/logic/sprite/set_position.js";
 import SetSize from "./src/logic/sprite/set_size.js";
 import SetAngle from "./src/logic/sprite/set_angle.js"
+import Delayed from "./src/logic/delayed.js"
 
 export let textures = {
     ship: "textures/ship.png",
@@ -56,7 +57,7 @@ export function init() {
 
         new Constraint(gun, ship),
 
-        new If(fire, [
+        new If(new Delayed(fire, 0.15), [
             new CreateSprite(bulletLayer, bulletImages.images[0]),
             new SetPosition(current, gun),
             new SetSize(current, 0.15),
