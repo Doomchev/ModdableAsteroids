@@ -1,4 +1,4 @@
-import {Executable} from "../../system.js";
+import {Executable} from "../../system.js"
 
 export default class SetSize extends Executable {
     constructor(object, size, width, height) {

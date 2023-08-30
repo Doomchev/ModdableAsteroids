@@ -19,7 +19,7 @@ export class If extends Executable {
 
 function executeCode(code) {
     if(code instanceof Array) {
-        code.forEach((item) => item.execute())
+        code.forEach(item => item.execute())
     } else {
         code.execute()
     }

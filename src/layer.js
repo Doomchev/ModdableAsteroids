@@ -7,10 +7,10 @@ export default class Layer extends Renderable {
     }
 
     draw() {
-        this.items.forEach((item) => item.draw())
+        this.items.forEach(item => item.draw())
     }
 
     move() {
-        this.items.forEach((item) => item.move())
+        this.items.forEach(item => item.move())
     }
 }

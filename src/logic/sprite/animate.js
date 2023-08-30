@@ -18,6 +18,6 @@ export default class Animate extends Executable {
         while(this.frame > images.length) {
             this.frame -= images.length
         }
-        this.sprite.image = images[Math.floor(this.frame)];
+        this.sprite.image = images[Math.floor(this.frame)]
     }
 }

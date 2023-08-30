@@ -24,16 +24,16 @@ export default class Sprite extends Shape {
     }
 
     applyPositionTo(sprite) {
-        sprite.centerX = this.centerX;
-        sprite.centerY = this.centerY;
+        sprite.centerX = this.centerX
+        sprite.centerY = this.centerY
     }
 
     applySizeTo(sprite) {
-        sprite.centerX = this.width;
-        sprite.centerY = this.height;
+        sprite.centerX = this.width
+        sprite.centerY = this.height
     }
 
     toSprite() {
-        return this;
+        return this
     }
 }

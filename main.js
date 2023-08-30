@@ -11,12 +11,13 @@ import Animate from "./src/logic/sprite/animate.js"
 import SetField from "./src/logic/set_field.js"
 import Layer from "./src/layer.js"
 import CreateSprite from "./src/logic/sprite/create.js"
-import SetPosition from "./src/logic/sprite/set_position.js";
-import SetSize from "./src/logic/sprite/set_size.js";
+import SetPosition from "./src/logic/sprite/set_position.js"
+import SetSize from "./src/logic/sprite/set_size.js"
 import SetAngle from "./src/logic/sprite/set_angle.js"
 import Delayed from "./src/logic/delayed.js"
 import {currentCanvas} from "./src/canvas.js"
 import SetBounds from "./src/logic/sprite/set_bounds.js"
+import LoopArea from "./src/logic/sprite/loop_area.js";
 
 export let textures = {
     ship: "textures/ship.png",
@@ -25,7 +26,7 @@ export let textures = {
 }
 
 export function init() {
-    let bounds = new Sprite(null, 0.0, 0.0, currentCanvas.width + 2.0, currentCanvas.height + 2.0);
+    let bounds = new Sprite(null, 0.0, 0.0, currentCanvas.width + 2.0, currentCanvas.height + 2.0)
 
     let shipTexture = textures.ship
     let ship = new Sprite(new Image(shipTexture, 0, 0, shipTexture.width, shipTexture.height
@@ -53,6 +54,7 @@ export function init() {
         new If(right, new LinearChange(ship,"angle", toRadians(180.0))),
         new If(forward, new LinearChange(ship,"speed", speed + back, undefined, limit)),
         new LinearChange(ship,"speed", -back, 0.0),
+        new LoopArea(ship, bounds),
         new Move(ship),
 
         new Animate(flame, flameImages, 16.0),

@@ -42,14 +42,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let entries = Object.entries(textures)
     let imagesToLoad = entries.length
-    entries.forEach((entry) => {
+    entries.forEach(entry => {
         let image = new Image()
         image.onload = () => {
             imagesToLoad--
             if(imagesToLoad <= 0) {
                 init()
                 setInterval(function() {
-                    root.logic.forEach((module) => module.execute())
+                    root.logic.forEach(module => module.execute())
                     currentCanvas.draw()
                 }, 20)
             }
@@ -59,16 +59,16 @@ document.addEventListener("DOMContentLoaded", function() {
     })
 })
 
-document.addEventListener("keydown", (event) => {
-    root.keys.forEach((key) => {
+document.addEventListener("keydown", event => {
+    root.keys.forEach(key => {
         if(event.code === key.code) {
             key.isDown = true
         }
     })
 }, false)
 
-document.addEventListener("keyup", (event) => {
-    root.keys.forEach((key) => {
+document.addEventListener("keyup", event => {
+    root.keys.forEach(key => {
         if(event.code === key.code) {
             key.isDown = false
         }
