@@ -1,6 +1,6 @@
 import {Executable} from "./system.js"
 
-export class IfBlock extends Executable {
+export class If extends Executable {
     constructor(condition, code, elseCode) {
         super()
         this.condition = condition
@@ -10,9 +10,17 @@ export class IfBlock extends Executable {
 
     execute() {
         if(this.condition.toBoolean()) {
-            this.code.execute()
+            executeCode(this.code)
         } else if(this.elseCode) {
-            this.elseCode.execute()
+            executeCode(this.elseCode)
         }
+    }
+}
+
+function executeCode(code) {
+    if(code instanceof Array) {
+        code.forEach((item) => item.execute())
+    } else {
+        code.execute()
     }
 }

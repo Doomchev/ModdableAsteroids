@@ -22,4 +22,18 @@ export default class Sprite extends Shape {
         this.centerX += Math.cos(this.angle) * this.speed * fpsk
         this.centerY += Math.sin(this.angle) * this.speed * fpsk
     }
+
+    applyPositionTo(sprite) {
+        sprite.centerX = this.centerX;
+        sprite.centerY = this.centerY;
+    }
+
+    applySizeTo(sprite) {
+        sprite.centerX = this.width;
+        sprite.centerY = this.height;
+    }
+
+    toSprite() {
+        return this;
+    }
 }

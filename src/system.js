@@ -1,7 +1,8 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {init, textures} from "../main.js"
 
-export let ctx, mousesx, mousesy, zk = 1.2, fps = 50.0, fpsk = 1.0 / fps
+export let  zk = 1.2, fps = 50.0, showCollisionShapes = false
+export let ctx, mousesx, mousesy, fpsk = 1.0 / fps
 
 export let root = {
     keys: [],
@@ -10,7 +11,7 @@ export let root = {
 }
 
 export class Renderable {
-    draw(sx, sy, swidth, sheight) {}
+    draw() {}
 }
 
 export class Executable {
@@ -27,6 +28,13 @@ export function toRadians(angle) {
     return Math.PI * angle / 180.0
 }
 
+export let current = {
+    sprite: null,
+    toSprite() {
+        return this.sprite
+    }
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     let canvas = document.getElementById("canvas")
     ctx = canvas.getContext("2d")
@@ -41,9 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if(imagesToLoad <= 0) {
                 init()
                 setInterval(function() {
-                    root.logic.forEach((module) => {
-                        module.execute()
-                    })
+                    root.logic.forEach((module) => module.execute())
                     currentCanvas.draw()
                 }, 20)
             }

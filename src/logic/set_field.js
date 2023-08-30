@@ -1,4 +1,4 @@
-import {Executable} from "../system.js";
+import {Executable, Value} from "../system.js"
 
 export default class SetField extends Executable {
     constructor(object, fieldName, value) {
@@ -9,6 +9,6 @@ export default class SetField extends Executable {
     }
 
     execute() {
-        this.object[this.fieldName] = this.value.toBoolean()
+        this.object.toSprite()[this.fieldName] = this.value.toBoolean !== undefined ? this.value.toBoolean() : this.value
     }
 }

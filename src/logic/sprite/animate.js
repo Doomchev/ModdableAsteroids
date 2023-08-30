@@ -1,6 +1,6 @@
-import {Executable, fpsk} from "../system.js";
+import {Executable, fpsk} from "../../system.js"
 
-export default class SpriteAnimation extends Executable {
+export default class Animate extends Executable {
     constructor(sprite, array, speed, frame = 0.0) {
         super()
         this.sprite = sprite
