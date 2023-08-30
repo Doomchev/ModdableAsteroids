@@ -2,8 +2,8 @@ import {fpsk, Renderable} from "./system.js"
 
 export default class Layer extends Renderable {
     constructor(items = []) {
-        super();
-        this.items = items;
+        super()
+        this.items = items
     }
 
     draw() {
@@ -11,6 +11,6 @@ export default class Layer extends Renderable {
     }
 
     move() {
-        this.items.forEach((item) => item.move());
+        this.items.forEach((item) => item.move())
     }
 }

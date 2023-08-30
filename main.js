@@ -15,6 +15,8 @@ import SetPosition from "./src/logic/sprite/set_position.js";
 import SetSize from "./src/logic/sprite/set_size.js";
 import SetAngle from "./src/logic/sprite/set_angle.js"
 import Delayed from "./src/logic/delayed.js"
+import {currentCanvas} from "./src/canvas.js"
+import SetBounds from "./src/logic/sprite/set_bounds.js"
 
 export let textures = {
     ship: "textures/ship.png",
@@ -23,6 +25,8 @@ export let textures = {
 }
 
 export function init() {
+    let bounds = new Sprite(null, 0.0, 0.0, currentCanvas.width + 2.0, currentCanvas.height + 2.0);
+
     let shipTexture = textures.ship
     let ship = new Sprite(new Image(shipTexture, 0, 0, shipTexture.width, shipTexture.height
         , 0.35, 0.5, 1.35, 1.9))
@@ -38,15 +42,15 @@ export function init() {
     root.background = "rgb(9, 44, 84)"
     root.scene = [bulletLayer, flame, ship]
 
-    let right = new Key("ArrowLeft")
-    let left = new Key("ArrowRight")
+    let left = new Key("ArrowLeft")
+    let right = new Key("ArrowRight")
     let forward = new Key("ArrowUp")
     let fire = new Key("Space")
 
     let speed = 30.0, back = 1.5 * speed, limit = 10.0
     root.logic = [
-        new If(left, new LinearChange(ship,"angle", toRadians(180.0))),
-        new If(right, new LinearChange(ship,"angle", toRadians(-180.0))),
+        new If(left, new LinearChange(ship,"angle", toRadians(-180.0))),
+        new If(right, new LinearChange(ship,"angle", toRadians(180.0))),
         new If(forward, new LinearChange(ship,"speed", speed + back, undefined, limit)),
         new LinearChange(ship,"speed", -back, 0.0),
         new Move(ship),
@@ -65,5 +69,6 @@ export function init() {
             new SetField(current, "speed", 15.0)
         ]),
         new Move(bulletLayer),
+        new SetBounds(bulletLayer, bounds),
     ]
 }

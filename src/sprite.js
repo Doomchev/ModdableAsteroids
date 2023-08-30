@@ -13,7 +13,7 @@ export default class Sprite extends Shape {
     }
 
     draw() {
-        if(!this.visible) return
+        if(!this.image || !this.visible) return
         this.image.drawRotated(xToScreen(this.centerX), yToScreen(this.centerY)
             , distToScreen(this.width), distToScreen(this.height), this.angle, false)
     }
