@@ -1,17 +1,15 @@
-import Shape from "./shape.js";
-import {xToScreen, yToScreen, distToScreen} from "./canvas.js";
-
-let fps = 50.0;
-export let fpsk = 1.0 / fps;
+import Shape from "./shape.js"
+import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
+import {fpsk} from "./system";
 
 export default class Sprite extends Shape {
     constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
                 , angleInDegrees = 0.0, speed = 0.0) {
-        super(centerX, centerY, width, height);
-        this.image = image;
-        this.angle = angleInDegrees * Math.PI / 180.0;
-        this.speed = speed;
-        this.visible = true;
+        super(centerX, centerY, width, height)
+        this.image = image
+        this.angle = angleInDegrees * Math.PI / 180.0
+        this.speed = speed
+        this.visible = true
     }
 
     draw() {
@@ -21,7 +19,7 @@ export default class Sprite extends Shape {
     }
 
     move() {
-        this.centerX += Math.cos(this.angle) * this.speed * fpsk;
-        this.centerY += Math.sin(this.angle) * this.speed * fpsk;
+        this.centerX += Math.cos(this.angle) * this.speed * fpsk
+        this.centerY += Math.sin(this.angle) * this.speed * fpsk
     }
 }

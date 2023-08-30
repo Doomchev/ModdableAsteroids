@@ -1,13 +1,13 @@
-import Canvas, {currentCanvas, setCanvas} from "./canvas.js";
-import {images, init} from "../main.js";
+import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
+import {init, textures} from "../main.js"
 
-export let ctx, mousesx, mousesy, zk = 1.2;
+export let ctx, mousesx, mousesy, zk = 1.2, fps = 50.0, fpsk = 1.0 / fps
 
 export let root = {
     keys: [],
     scene: [],
     logic: []
-};
+}
 
 export class Renderable {
     draw(sx, sy, swidth, sheight) {}
@@ -19,52 +19,52 @@ export class Executable {
 
 export class Value {
     toBoolean() {
-        return true;
+        return true
     }
 }
 
 export function toRadians(angle) {
-    return Math.PI * angle / 180.0;
+    return Math.PI * angle / 180.0
 }
 
 document.addEventListener("DOMContentLoaded", function() {
-    let canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
-    setCanvas(new Canvas(0, 0, canvas.clientWidth, canvas.clientHeight, 50.0));
+    let canvas = document.getElementById("canvas")
+    ctx = canvas.getContext("2d")
+    setCanvas(new Canvas(0, 0, canvas.clientWidth, canvas.clientHeight, 50.0))
 
-    let entries = Object.entries(images);
-    let imagesToLoad = entries.length;
+    let entries = Object.entries(textures)
+    let imagesToLoad = entries.length
     entries.forEach((entry) => {
-        let image = new Image();
+        let image = new Image()
         image.onload = () => {
-            imagesToLoad--;
+            imagesToLoad--
             if(imagesToLoad <= 0) {
-                init();
+                init()
                 setInterval(function() {
                     root.logic.forEach((module) => {
-                        module.execute();
-                    });
-                    currentCanvas.draw();
-                }, 20);
+                        module.execute()
+                    })
+                    currentCanvas.draw()
+                }, 20)
             }
         }
-        image.src = entry[1];
-        images[entry[0]] = image;
-    });
-});
+        image.src = entry[1]
+        textures[entry[0]] = image
+    })
+})
 
 document.addEventListener("keydown", (event) => {
     root.keys.forEach((key) => {
         if(event.code === key.code) {
-            key.isDown = true;
+            key.isDown = true
         }
-    });
-}, false);
+    })
+}, false)
 
 document.addEventListener("keyup", (event) => {
     root.keys.forEach((key) => {
         if(event.code === key.code) {
-            key.isDown = false;
+            key.isDown = false
         }
-    });
-}, false);
+    })
+}, false)

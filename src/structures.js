@@ -1,18 +1,18 @@
-import {Executable} from "./system.js";
+import {Executable} from "./system.js"
 
 export class IfBlock extends Executable {
     constructor(condition, code, elseCode) {
-        super();
-        this.condition = condition;
-        this.code = code;
-        this.elseCode = elseCode;
+        super()
+        this.condition = condition
+        this.code = code
+        this.elseCode = elseCode
     }
 
     execute() {
         if(this.condition.toBoolean()) {
-            this.code.execute();
+            this.code.execute()
         } else if(this.elseCode) {
-            this.elseCode.execute();
+            this.elseCode.execute()
         }
     }
 }

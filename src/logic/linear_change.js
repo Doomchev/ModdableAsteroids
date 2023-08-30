@@ -1,5 +1,4 @@
-import {Executable} from "../system.js";
-import {fpsk} from "../sprite.js";
+import {Executable, fpsk} from "../system.js";
 
 export default class LinearChange extends Executable {
     constructor(object, parameterName, speed, min, max) {
