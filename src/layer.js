@@ -14,7 +14,7 @@ export default class Layer extends Renderable {
         this.items.forEach(item => item.move())
     }
 
-    rotate(value) {
-        this.items.forEach(item => item.rotate(value))
+    rotate(angle) {
+        this.items.forEach(item => item.rotate(angle))
     }
 }

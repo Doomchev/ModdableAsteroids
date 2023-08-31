@@ -51,7 +51,6 @@ export function randomSign() {
     return 2 * randomInt(2) - 1
 }
 
-
 export function executeCode(code) {
     if(code instanceof Array) {
         code.forEach(item => item.execute())
@@ -64,6 +63,7 @@ export function executeCode(code) {
 
 document.addEventListener("DOMContentLoaded", function() {
     let canvas = document.getElementById("canvas")
+    canvas.focus()
     ctx = canvas.getContext("2d")
     setCanvas(new Canvas(0, 0, canvas.clientWidth, canvas.clientHeight, 50.0))
 
@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function() {
 })
 
 document.addEventListener("keydown", event => {
+    if(event.code === "F9") showCollisionShapes = !showCollisionShapes
     root.keys.forEach(key => {
         if(event.code === key.code) {
             key.isDown = true

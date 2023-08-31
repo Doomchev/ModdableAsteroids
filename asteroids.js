@@ -10,7 +10,7 @@ import Constraint from "./src/constraint.js"
 import Animate from "./src/actions/sprite/animate.js"
 import SetField from "./src/actions/set_field.js"
 import Layer from "./src/layer.js"
-import CreateSprite from "./src/actions/sprite/create.js"
+import Create from "./src/actions/sprite/create.js"
 import SetPosition from "./src/actions/sprite/set_position.js"
 import SetSize from "./src/actions/sprite/set_size.js"
 import SetAngle from "./src/actions/sprite/set_angle.js"
@@ -46,7 +46,7 @@ export function init() {
         , 43.0 / 48.0, 5.5 / 12.0, 10.5, 3.0)
 
     let asteroidLayer = new Layer()
-    let asteroidImages = new ImageArray(textures.asteroid, 8, 4)
+    let asteroidImages = new ImageArray(textures.asteroid, 8, 4, 0.5, 0.5, 1.25, 1.25)
 
     for(let i = 0; i < 5; i++) {
         let size = randomFloat(1.0, 2.0)
@@ -83,12 +83,8 @@ export function init() {
         new Constraint(gun, ship),
 
         new If(new Delayed(fire, 0.15), [
-            new CreateSprite(bulletLayer, bulletImages.images[0]),
-            new SetPosition(current, gun),
-            new SetSize(current, 0.15),
-            new SetAngle(current, ship),
-            new SetField(current, "speed", 15.0),
-            new AddAction(current, new Animate(current, bulletImages, 16.0 )),
+            new Create(bulletLayer, bulletImages.images[0], gun, 0.15, ship, 25.0),
+            new AddAction(current, new Animate(current, bulletImages, 16.0)),
         ]),
         new SetBounds(bulletLayer, bounds),
         new Move(bulletLayer),
@@ -96,5 +92,10 @@ export function init() {
         new ExecuteActions(asteroidLayer),
         new Move(asteroidLayer),
         new LoopArea(asteroidLayer, bounds),
+
+        /*new OnCollision(bulletLayer, asteroidLayer, [
+            new Delete(object1, bulletLayer),
+            new Create(bulletLayer, object1, )
+        ])*/
     ]
 }

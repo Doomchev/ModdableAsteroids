@@ -50,14 +50,14 @@ export default class Shape {
         this.centerY = value - this.halfHeight
     }
 
-    applyPositionTo(sprite) {
-        sprite.centerX = this.centerX
-        sprite.centerY = this.centerY
+    setPositionAs(sprite) {
+        this.centerX = sprite.centerX
+        this.centerY = sprite.centerY
     }
 
-    applySizeTo(sprite) {
-        sprite.centerX = this.width
-        sprite.centerY = this.height
+    setSizeAs(sprite) {
+        this.width = sprite.width
+        this.height = sprite.height
     }
 
     collidesWithPoint(x, y) {

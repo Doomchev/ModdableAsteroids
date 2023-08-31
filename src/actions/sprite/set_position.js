@@ -8,6 +8,7 @@ export default class SetPosition extends Executable {
     }
 
     execute() {
-        this.position.applyPositionTo(this.sprite.toSprite())
+        this.sprite.toSprite().centerX = this.position.toSprite().centerX
+        this.sprite.toSprite().centerY = this.position.toSprite().centerY
     }
 }
