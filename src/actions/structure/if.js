@@ -1,6 +1,6 @@
-import {Executable} from "./system.js"
+import {Executable, executeCode} from "../../system.js"
 
-export class If extends Executable {
+export default class If extends Executable {
     constructor(condition, code, elseCode) {
         super()
         this.condition = condition
@@ -14,13 +14,5 @@ export class If extends Executable {
         } else if(this.elseCode) {
             executeCode(this.elseCode)
         }
-    }
-}
-
-function executeCode(code) {
-    if(code instanceof Array) {
-        code.forEach(item => item.execute())
-    } else {
-        code.execute()
     }
 }

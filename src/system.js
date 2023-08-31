@@ -1,14 +1,25 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
-import {init, textures} from "../main.js"
+import {init, textures} from "../asteroids.js"
 
-export let  zk = 1.2, fps = 50.0, showCollisionShapes = false
+// global variables
+
+export let  zk = 1.2, fps = 100.0, showCollisionShapes = false
 export let ctx, mousesx, mousesy, fpsk = 1.0 / fps
 
 export let root = {
     keys: [],
     scene: [],
-    logic: []
+    actions: []
 }
+
+export let current = {
+    sprite: null,
+    toSprite() {
+        return this.sprite
+    }
+}
+
+// basic classes
 
 export class Renderable {
     draw() {}
@@ -19,21 +30,37 @@ export class Executable {
 }
 
 export class Value {
-    toBoolean() {
-        return true
-    }
+    toBoolean() {return true}
 }
+
+// global functions
 
 export function toRadians(angle) {
     return Math.PI * angle / 180.0
 }
 
-export let current = {
-    sprite: null,
-    toSprite() {
-        return this.sprite
+export function randomInt(from, to) {
+    return Math.floor(randomFloat(from, to))
+}
+
+export function randomFloat(from, to) {
+    return to === undefined ? Math.random() * from : Math.random() * (to - from) + from
+}
+
+export function randomSign() {
+    return 2 * randomInt(2) - 1
+}
+
+
+export function executeCode(code) {
+    if(code instanceof Array) {
+        code.forEach(item => item.execute())
+    } else {
+        code.execute()
     }
 }
+
+// listeners
 
 document.addEventListener("DOMContentLoaded", function() {
     let canvas = document.getElementById("canvas")
@@ -49,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
             if(imagesToLoad <= 0) {
                 init()
                 setInterval(function() {
-                    root.logic.forEach(module => module.execute())
+                    root.actions.forEach(module => module.execute())
                     currentCanvas.draw()
                 }, 20)
             }

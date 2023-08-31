@@ -1,3 +1,5 @@
+import {fpsk} from "./system.js"
+
 export default class Shape {
     constructor(centerX = 0.0, centerY = 0.0,  width = 1.0, height = 1.0) {
         this.centerX = centerX
@@ -46,6 +48,16 @@ export default class Shape {
     }
     set bottomY(value) {
         this.centerY = value - this.halfHeight
+    }
+
+    applyPositionTo(sprite) {
+        sprite.centerX = this.centerX
+        sprite.centerY = this.centerY
+    }
+
+    applySizeTo(sprite) {
+        sprite.centerX = this.width
+        sprite.centerY = this.height
     }
 
     collidesWithPoint(x, y) {

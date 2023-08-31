@@ -16,7 +16,6 @@ export default class SetSize extends Executable {
             sprite.height = this.size
         } else if(this.size !== undefined) {
             this.size.applySizeTo(sprite)
-            return
         } else {
             if(this.width !== undefined) {
                 sprite.width = this.width
