@@ -2,7 +2,7 @@ import {Action, executeCode} from "../../system.js"
 import Layer from "../../layer.js"
 import {current} from "../../variable.js"
 
-export default class ExecuteLogic extends Action {
+export default class ExecuteActions extends Action {
     constructor(object) {
         super()
         this.object = object

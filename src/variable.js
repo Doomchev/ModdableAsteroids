@@ -1,11 +1,4 @@
-export class Value {
-    toSprite() {
-        return null
-    }
-    toBoolean() {
-        return true
-    }
-}
+import {Value} from "./value.js"
 
 export class SpriteVariable extends Value {
     sprite = null

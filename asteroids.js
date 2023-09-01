@@ -18,10 +18,9 @@ import LoopArea from "./src/actions/sprite/loop_area.js";
 import Shape from "./src/shape.js"
 import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import Rotate from "./src/actions/sprite/rotate.js"
-import AddAction from "./src/actions/sprite/add_action.js"
-import {current} from "./src/variable.js"
 import OnCollision from "./src/actions/sprite/on_collision.js"
 import Delete from "./src/actions/sprite/delete.js"
+import {RandomFloat} from "./src/functions.js"
 
 export let textures = {
     ship: "textures/ship.png",
@@ -64,7 +63,7 @@ export function init() {
     }
 
     root.background = "rgb(9, 44, 84)"
-    root.scene = [bulletLayer, asteroidLayer, flame, ship]
+    root.scene = [bulletLayer, asteroidLayer, flame, ship, explosionLayer]
 
     let left = new Key("ArrowLeft")
     let right = new Key("ArrowRight")
@@ -87,19 +86,21 @@ export function init() {
         new Constraint(gun, ship),
 
         new If(new Delayed(fire, 0.15), [
-            new Create(bulletLayer, bulletImages.images[0], gun, 0.15, ship, 25.0),
-            new AddAction(current, new Animate(current, bulletImages, 16.0)),
+            new Create(bulletLayer, bulletImages, 16.0, gun, 0.15, ship, 25.0),
         ]),
         new SetBounds(bulletLayer, bounds),
+        new ExecuteActions(bulletLayer),
         new Move(bulletLayer),
 
         new ExecuteActions(asteroidLayer),
         new Move(asteroidLayer),
         new LoopArea(asteroidLayer, bounds),
 
+        new ExecuteActions(explosionLayer),
+
         new OnCollision(bulletLayer, asteroidLayer, [
+            new Create(explosionLayer, explosionImages, 16.0, collisionSprite1, 2.5, new RandomFloat(360.0)),
             new Delete(collisionSprite1, bulletLayer),
-            new Create(explosionLayer, explosionImages, collisionSprite1, collisionSprite2),
         ])
     ]
 }
