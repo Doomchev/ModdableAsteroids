@@ -1,23 +1,6 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {init, textures} from "../asteroids.js"
-
-// global variables
-
-export let  zk = 1.2, fps = 100.0, showCollisionShapes = false
-export let ctx, mousesx, mousesy, fpsk = 1.0 / fps
-
-export let root = {
-    keys: [],
-    scene: [],
-    actions: []
-}
-
-export let current = {
-    sprite: null,
-    toSprite() {
-        return this.sprite
-    }
-}
+import {SpriteVariable} from "./variable.js"
 
 // basic classes
 
@@ -25,12 +8,19 @@ export class Renderable {
     draw() {}
 }
 
-export class Executable {
+export class Action {
     execute() {}
 }
 
-export class Value {
-    toBoolean() {return true}
+// global variables
+
+export let zk = 1.2, fps = 100.0, showCollisionShapes = false
+export let ctx, mousesx, mousesy, fpsk = 1.0 / fps
+
+export let root = {
+    keys: [],
+    scene: [],
+    actions: []
 }
 
 // global functions
@@ -57,6 +47,20 @@ export function executeCode(code) {
     } else {
         code.execute()
     }
+}
+
+export let collisionSprite1 = new SpriteVariable(), collisionSprite2 = new SpriteVariable()
+
+export function executeCollisionCode(sprite1, sprite2, code) {
+    collisionSprite1.sprite = sprite1
+    collisionSprite2.sprite = sprite2
+    executeCode(code)
+}
+
+export function deleteFromArray(array, item) {
+    let i = array.indexOf(item)
+    if(i < 0) return
+    array.splice(i, 1)
 }
 
 // listeners

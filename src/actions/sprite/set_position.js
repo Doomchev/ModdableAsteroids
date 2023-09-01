@@ -1,6 +1,6 @@
-import {Executable} from "../../system.js"
+import {Action} from "../../system.js"
 
-export default class SetPosition extends Executable {
+export default class SetPosition extends Action {
     constructor(sprite, position) {
         super()
         this.sprite = sprite

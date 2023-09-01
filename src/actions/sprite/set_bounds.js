@@ -1,6 +1,6 @@
-import {Executable} from "../../system.js"
+import {Action} from "../../system.js"
 
-export default class SetBounds extends Executable {
+export default class SetBounds extends Action {
     constructor(layer, bounds) {
         super()
         this.layer = layer

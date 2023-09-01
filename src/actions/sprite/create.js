@@ -1,7 +1,8 @@
-import {current, Executable} from "../../system.js"
+import {Action} from "../../system.js"
 import Sprite from "../../sprite.js"
+import {current} from "../../variable.js"
 
-export default class Create extends Executable {
+export default class Create extends Action {
     constructor(layer, image, position, size = 1.0, angle = 0.0, speed = 0.0) {
         super()
         this.layer = layer

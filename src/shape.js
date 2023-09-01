@@ -68,11 +68,4 @@ export default class Shape {
         return shape.leftX >= this.leftX && shape.topY >= this.topY && shape.rightX < this.rightX
             && shape.bottomY < this.bottomY
     }
-
-    collidesWidth(shape2) {
-        let dx = this.centerX - shape2.centerX
-        let dy = this.centerY - shape2.centerY
-        let radius = shape2.halfWidth + this.halfWidth
-        return dx * dx + dy * dy < radius * radius
-    }
 }

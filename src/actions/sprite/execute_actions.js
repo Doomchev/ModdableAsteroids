@@ -1,7 +1,8 @@
-import {current, Executable, executeCode} from "../../system.js"
+import {Action, executeCode} from "../../system.js"
 import Layer from "../../layer.js"
+import {current} from "../../variable.js"
 
-export default class ExecuteLogic extends Executable {
+export default class ExecuteLogic extends Action {
     constructor(object) {
         super()
         this.object = object

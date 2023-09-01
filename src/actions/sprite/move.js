@@ -1,6 +1,6 @@
-import {Executable} from "../../system.js"
+import {Action} from "../../system.js"
 
-export default class Move extends Executable {
+export default class Move extends Action {
     constructor(object) {
         super()
         this.object = object

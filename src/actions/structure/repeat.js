@@ -1,6 +1,6 @@
-import {Executable, executeCode} from "../../system.js"
+import {Action, executeCode} from "../../system.js"
 
-export default class Repeat extends Executable {
+export default class Repeat extends Action {
     constructor(times, code) {
         super()
         this.times = times

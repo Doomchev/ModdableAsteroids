@@ -1,6 +1,6 @@
-import {Executable, fpsk} from "../../system.js"
+import {Action, fpsk} from "../../system.js"
 
-export default class Rotate extends Executable {
+export default class Rotate extends Action {
     constructor(object, speed) {
         super()
         this.object = object

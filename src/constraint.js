@@ -1,6 +1,6 @@
-import {Executable} from "./system.js"
+import {Action} from "./system.js"
 
-export default class Constraint extends Executable {
+export default class Constraint extends Action {
     constructor(sprite, parent) {
         super()
         this.sprite = sprite

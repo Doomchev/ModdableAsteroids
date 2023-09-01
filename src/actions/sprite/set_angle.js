@@ -1,6 +1,6 @@
-import {Executable} from "../../system.js"
+import {Action} from "../../system.js"
 
-export default class SetAngle extends Executable {
+export default class SetAngle extends Action {
     constructor(object, asObject) {
         super()
         this.object = object

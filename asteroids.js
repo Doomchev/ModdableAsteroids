@@ -1,7 +1,7 @@
 import Image from "./src/image.js"
 import Sprite from "./src/sprite.js"
 import Key from "./src/key.js"
-import {current, randomInt, randomFloat, root, toRadians, randomSign} from "./src/system.js"
+import {randomInt, randomFloat, root, toRadians, randomSign, collisionSprite1, collisionSprite2} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
 import Move from "./src/actions/sprite/move.js"
 import If from "./src/actions/structure/if.js"
@@ -11,9 +11,6 @@ import Animate from "./src/actions/sprite/animate.js"
 import SetField from "./src/actions/set_field.js"
 import Layer from "./src/layer.js"
 import Create from "./src/actions/sprite/create.js"
-import SetPosition from "./src/actions/sprite/set_position.js"
-import SetSize from "./src/actions/sprite/set_size.js"
-import SetAngle from "./src/actions/sprite/set_angle.js"
 import Delayed from "./src/actions/delayed.js"
 import {currentCanvas} from "./src/canvas.js"
 import SetBounds from "./src/actions/sprite/set_bounds.js"
@@ -22,12 +19,16 @@ import Shape from "./src/shape.js"
 import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import Rotate from "./src/actions/sprite/rotate.js"
 import AddAction from "./src/actions/sprite/add_action.js"
+import {current} from "./src/variable.js"
+import OnCollision from "./src/actions/sprite/on_collision.js"
+import Delete from "./src/actions/sprite/delete.js"
 
 export let textures = {
     ship: "textures/ship.png",
     flame: "textures/flame.png",
     bullet: "textures/bullet.png",
     asteroid: "textures/asteroid.png",
+    explosion: "textures/explosion.png",
 }
 
 export function init() {
@@ -47,6 +48,9 @@ export function init() {
 
     let asteroidLayer = new Layer()
     let asteroidImages = new ImageArray(textures.asteroid, 8, 4, 0.5, 0.5, 1.25, 1.25)
+
+    let explosionLayer = new Layer()
+    let explosionImages = new ImageArray(textures.explosion, 4, 4, 0.5, 0.5, 1.5, 1.5)
 
     for(let i = 0; i < 5; i++) {
         let size = randomFloat(1.0, 2.0)
@@ -93,9 +97,9 @@ export function init() {
         new Move(asteroidLayer),
         new LoopArea(asteroidLayer, bounds),
 
-        /*new OnCollision(bulletLayer, asteroidLayer, [
-            new Delete(object1, bulletLayer),
-            new Create(bulletLayer, object1, )
-        ])*/
+        new OnCollision(bulletLayer, asteroidLayer, [
+            new Delete(collisionSprite1, bulletLayer),
+            new Create(explosionLayer, explosionImages, collisionSprite1, collisionSprite2),
+        ])
     ]
 }

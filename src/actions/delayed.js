@@ -1,4 +1,5 @@
-import {fpsk, Value} from "../system.js"
+import {fpsk} from "../system.js"
+import {Value} from "../variable.js"
 
 export default class Delayed extends Value {
     constructor(condition, coolDown) {

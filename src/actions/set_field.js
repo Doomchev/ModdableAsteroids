@@ -1,6 +1,7 @@
-import {Executable, Value} from "../system.js"
+import {Action} from "../system.js"
+import {Value} from "../variable.js"
 
-export default class SetField extends Executable {
+export default class SetField extends Action {
     constructor(object, fieldName, value) {
         super()
         this.object = object

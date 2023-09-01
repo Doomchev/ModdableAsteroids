@@ -1,4 +1,4 @@
-import {fpsk, Renderable} from "./system.js"
+import {executeCollisionCode, fpsk, Renderable} from "./system.js"
 
 export default class Layer extends Renderable {
     constructor(items = []) {
@@ -16,5 +16,13 @@ export default class Layer extends Renderable {
 
     rotate(angle) {
         this.items.forEach(item => item.rotate(angle))
+    }
+
+    collisionWith(object, code) {
+        this.items.forEach(item => item.collisionWith(object, code))
+    }
+
+    collisionWithSprite(sprite, code) {
+        this.items.forEach(item => item.collisionWithSprite(sprite, code))
     }
 }

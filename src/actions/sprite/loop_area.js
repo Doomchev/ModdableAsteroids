@@ -1,7 +1,7 @@
-import {Executable} from "../../system.js"
+import {Action} from "../../system.js"
 import Layer from "../../layer.js";
 
-export default class LoopArea extends Executable {
+export default class LoopArea extends Action {
     constructor(object, area) {
         super()
         this.object = object

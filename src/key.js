@@ -1,4 +1,5 @@
-import {root, Value} from "./system.js"
+import {root} from "./system.js"
+import {Value} from "./variable.js"
 
 export default class Key extends Value {
     constructor(code) {

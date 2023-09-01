@@ -1,6 +1,6 @@
-import {Executable, fpsk} from "../system.js"
+import {Action, fpsk} from "../system.js"
 
-export default class LinearChange extends Executable {
+export default class LinearChange extends Action {
     constructor(object, parameterName, speed, min, max) {
         super()
         this.object = object

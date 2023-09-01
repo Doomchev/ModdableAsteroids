@@ -1,6 +1,6 @@
-import {Executable, executeCode} from "../../system.js"
+import {Action, executeCode} from "../../system.js"
 
-export default class If extends Executable {
+export default class If extends Action {
     constructor(condition, code, elseCode) {
         super()
         this.condition = condition
