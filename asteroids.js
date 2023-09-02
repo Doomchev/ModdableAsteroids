@@ -20,9 +20,13 @@ import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import Rotate from "./src/actions/sprite/rotate.js"
 import OnCollision from "./src/actions/sprite/on_collision.js"
 import Remove from "./src/actions/sprite/remove.js"
-import {RandomFloat} from "./src/functions.js"
-import AddDelayedDelete from "./src/actions/sprite/add_delayed_remove.js"
+import {Mul, RandomFloat, RandomSign} from "./src/functions.js"
+import AddDelayedDelete from "./src/actions/sprite/delayed_remove.js"
 import {current} from "./src/variable.js"
+import Empty from "./src/actions/layer/empty.js"
+import AddAction from "./src/actions/sprite/add_action.js"
+import Repeat from "./src/actions/structure/repeat.js"
+import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 
 export let textures = {
     ship: "textures/ship.png",
@@ -52,17 +56,6 @@ export function init() {
 
     let explosions = new Layer()
     let explosionImages = new ImageArray(textures.explosion, 4, 4, 0.5, 0.5, 1.5, 1.5)
-
-    for(let i = 0; i < 5; i++) {
-        let size = randomFloat(1.0, 2.0)
-        let asteroid = new Sprite(asteroidImages.images[0], randomFloat(bounds.leftX, bounds.rightX), bounds.topY
-            , size, size, randomFloat(360.0), randomFloat(2.0, 3.0), 0.0)
-        asteroid.actions = [
-            new Animate(asteroid, asteroidImages, randomFloat(12.0, 20.0) * randomSign()),
-            new Rotate(asteroid, toRadians(randomFloat(-180.0, 180.0))),
-        ]
-        asteroids.items.push(asteroid)
-    }
 
     root.background = "rgb(9, 44, 84)"
     root.scene = [bullets, asteroids, flame, ship, explosions]
@@ -100,11 +93,20 @@ export function init() {
 
         new ExecuteActions(explosions),
 
+        new If(new Empty(asteroids), [
+            new Repeat(5, [
+                new Create(asteroids, asteroidImages, new Mul(new RandomFloat(12.0, 20.0), new RandomSign())
+                    , {centerX: new RandomFloat(bounds.leftX, bounds.rightX), centerY: bounds.topY}
+                    , new RandomFloat(1.0, 2.0), new RandomFloat(360.0), new RandomFloat(2.0, 3.0), 0.0),
+                new AddAction(current, new Rotate(current, new RandomFloat(-180.0, 180.0)))
+            ]),
+        ]),
+
         new OnCollision(bullets, asteroids, [
-            new Create(explosions, explosionImages, 16.0, collisionSprite1, 2.5, new RandomFloat(360.0)),
+            new Create(explosions, explosionImages, 16.0, collisionSprite2, 2.5, new RandomFloat(360.0)),
             new Remove(collisionSprite1, bullets),
             new Remove(collisionSprite2, asteroids),
-            new AddDelayedDelete(current, explosions, 1.0)
+            new AddAction(current, new DelayedRemove(current, explosions,1.0))
         ])
     ]
 }

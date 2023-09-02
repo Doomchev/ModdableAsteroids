@@ -1,10 +1,13 @@
 import {Action} from "../../system.js"
 import Sprite from "../../sprite.js"
-import {current} from "../../variable.js"
+import {current, SpriteFunction} from "../../variable.js"
 import Animate from "./animate.js"
+import {Value} from "../../value.js"
+import {NumberFunction} from "../../functions.js"
 
 export default class Create extends Action {
-    constructor(layer, image, animationSpeed, position, size = 1.0, angle = 0.0, speed = 0.0) {
+    constructor(layer, image, animationSpeed, position, size = 1.0, angle = 0.0, speed = 0.0
+                , imageAngle) {
         super()
         this.layer = layer
         this.image = image
@@ -13,6 +16,7 @@ export default class Create extends Action {
         this.size = size
         this.angle = angle
         this.speed = speed
+        this.imageAngle = imageAngle
     }
 
     execute() {
@@ -22,18 +26,31 @@ export default class Create extends Action {
             sprite.image = this.image
         } else {
             sprite.image = this.image[0]
-            sprite.actions.push(new Animate(sprite, this.image, this.animationSpeed))
+            sprite.actions.push(new Animate(sprite, this.image, getValue(this.animationSpeed)))
         }
-        sprite.centerX = this.position?.toSprite().centerX ?? 0.0
-        sprite.centerY = this.position?.toSprite().centerY ?? 0.0
-        if(typeof this.size == "number") {
-            sprite.width = sprite.height = this.size
-        } else {
-            sprite.width = this.size?.toSprite().width
-            sprite.height = this.size?.toSprite().height
-        }
-        sprite.angle = this.angle?.angle ?? this.angle
-        sprite.speed = this.speed?.speed ?? this.speed
+        sprite.centerX = getValue(this.position, "centerX")
+        sprite.centerY = getValue(this.position, "centerY")
+        sprite.width = getValue(this.size, "width")
+        sprite.height = sprite.width //getValue(this.size, "height")
+        sprite.angle = getValue(this.angle, "angle")
+        sprite.speed = getValue(this.speed, "speed")
+        sprite.imageAngle = getValue(this.imageAngle, "imageAngle")
         this.layer?.items.push(sprite)
     }
+}
+
+function getValue(object, fieldName) {
+    if(typeof object === "number") {
+        return object
+    }
+    if(object instanceof NumberFunction) {
+        return object.float
+    }
+    if(object instanceof SpriteFunction || object instanceof Sprite) {
+        return object.toSprite()[fieldName]
+    }
+    if(object) {
+        return getValue(object[fieldName])
+    }
+    return undefined
 }

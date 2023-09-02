@@ -1,6 +1,9 @@
 import {Value} from "./value.js"
 
-export class SpriteVariable extends Value {
+export class SpriteFunction extends Value {
+}
+
+export class SpriteVariable extends SpriteFunction {
     sprite = null
 
     collisionWith(object, code) {

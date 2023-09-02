@@ -1,4 +1,4 @@
-import {removeFromArray, executeCollisionCode, apsk, Renderable} from "./system.js"
+import {removeFromArray, Renderable} from "./system.js"
 
 export default class Layer extends Renderable {
     constructor(items = []) {

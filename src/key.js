@@ -9,7 +9,7 @@ export default class Key extends Value {
         root.keys.push(this)
     }
 
-    toBoolean() {
+    get boolean() {
         return this.isDown
     }
 }

@@ -20,4 +20,8 @@ export default class Animate extends Action {
         }
         this.sprite.image = images[Math.floor(this.frame)];
     }
+
+    copy() {
+        return new Animate(this.sprite, this.array, this.speed)
+    }
 }

@@ -1,14 +1,14 @@
 export class Value {
-    toBoolean() {
-        return false
+    get boolean() {
+        return null
     }
 
-    get toInt() {
-        return 0
+    get int() {
+        return null
     }
 
-    get toFloat() {
-        return 0.0
+    get float() {
+        return null
     }
 
     toSprite() {

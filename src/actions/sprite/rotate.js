@@ -8,6 +8,10 @@ export default class Rotate extends Action {
     }
 
     execute() {
-        this.object.rotate(this.speed * apsk)
+        this.object.toSprite().rotate(this.speed * apsk)
+    }
+
+    copy() {
+        return new Rotate(this.object, this.speed)
     }
 }

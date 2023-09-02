@@ -35,7 +35,7 @@ export default class Sprite extends Shape {
 
     collisionWithSprite(sprite, code) {
         if(sprite.collidesWithSprite(this)) {
-            executeCollisionCode(sprite, this.sprite, code)
+            executeCollisionCode(sprite, this, code)
         }
     }
 

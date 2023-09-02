@@ -1,6 +1,7 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {init, textures} from "../asteroids.js"
 import {SpriteVariable} from "./variable.js"
+import {Value} from "./value.js"
 
 // basic classes
 
@@ -10,6 +11,7 @@ export class Renderable {
 
 export class Action {
     execute() {}
+    copy() {return {}}
 }
 
 // global variables
