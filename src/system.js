@@ -1,7 +1,9 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {init, textures} from "../asteroids.js"
-import {SpriteVariable} from "./variable.js"
+import {SpriteFunction, SpriteVariable} from "./variable.js"
 import {Value} from "./value.js"
+import {NumberFunction} from "./functions.js"
+import Sprite from "./sprite.js"
 
 // basic classes
 
@@ -63,6 +65,22 @@ export function removeFromArray(item, array) {
     let i = array.indexOf(item)
     if(i < 0) return
     array.splice(i, 1)
+}
+
+export function getValue(object, fieldName) {
+    if(typeof object === "number") {
+        return object
+    }
+    if(object instanceof NumberFunction) {
+        return object.float
+    }
+    if(object instanceof SpriteFunction || object instanceof Sprite) {
+        return object.toSprite()[fieldName]
+    }
+    if(object) {
+        return getValue(object[fieldName])
+    }
+    return undefined
 }
 
 // listeners

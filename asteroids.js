@@ -97,8 +97,8 @@ export function init() {
             new Repeat(5, [
                 new Create(asteroids, asteroidImages, new Mul(new RandomFloat(12.0, 20.0), new RandomSign())
                     , {centerX: new RandomFloat(bounds.leftX, bounds.rightX), centerY: bounds.topY}
-                    , new RandomFloat(1.0, 2.0), new RandomFloat(360.0), new RandomFloat(2.0, 3.0), 0.0),
-                new AddAction(current, new Rotate(current, new RandomFloat(-180.0, 180.0)))
+                    , 2.0, new RandomFloat(360.0), new RandomFloat(2.0, 3.0), 0.0),
+                new AddAction(current, new Rotate(current, new RandomFloat(toRadians(-180.0), toRadians(180.0))))
             ]),
         ]),
 

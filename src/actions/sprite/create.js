@@ -1,4 +1,4 @@
-import {Action} from "../../system.js"
+import {Action, getValue} from "../../system.js"
 import Sprite from "../../sprite.js"
 import {current, SpriteFunction} from "../../variable.js"
 import Animate from "./animate.js"
@@ -37,20 +37,4 @@ export default class Create extends Action {
         sprite.imageAngle = getValue(this.imageAngle, "imageAngle")
         this.layer?.items.push(sprite)
     }
-}
-
-function getValue(object, fieldName) {
-    if(typeof object === "number") {
-        return object
-    }
-    if(object instanceof NumberFunction) {
-        return object.float
-    }
-    if(object instanceof SpriteFunction || object instanceof Sprite) {
-        return object.toSprite()[fieldName]
-    }
-    if(object) {
-        return getValue(object[fieldName])
-    }
-    return undefined
 }
