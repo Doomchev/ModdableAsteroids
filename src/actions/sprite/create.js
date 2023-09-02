@@ -29,8 +29,8 @@ export default class Create extends Action {
         if(typeof this.size == "number") {
             sprite.width = sprite.height = this.size
         } else {
-            sprite.width = this.size.toSprite().width
-            sprite.height = this.size.toSprite().height
+            sprite.width = this.size?.toSprite().width
+            sprite.height = this.size?.toSprite().height
         }
         sprite.angle = this.angle?.angle ?? this.angle
         sprite.speed = this.speed?.speed ?? this.speed

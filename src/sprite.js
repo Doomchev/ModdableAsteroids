@@ -1,6 +1,6 @@
 import Shape from "./shape.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {executeCode, executeCollisionCode, fpsk, toRadians} from "./system.js"
+import {executeCode, executeCollisionCode, apsk, toRadians} from "./system.js"
 
 export default class Sprite extends Shape {
     constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
@@ -21,8 +21,8 @@ export default class Sprite extends Shape {
     }
 
     move() {
-        this.centerX += Math.cos(this.angle) * this.speed * fpsk
-        this.centerY += Math.sin(this.angle) * this.speed * fpsk
+        this.centerX += Math.cos(this.angle) * this.speed * apsk
+        this.centerY += Math.sin(this.angle) * this.speed * apsk
     }
 
     rotate(value) {
@@ -42,7 +42,7 @@ export default class Sprite extends Shape {
     collidesWithSprite(sprite) {
         let dx = this.centerX - sprite.centerX
         let dy = this.centerY - sprite.centerY
-        let radius = sprite.halfWidth + this.halfWidth
+        let radius = this.halfWidth + sprite.halfWidth
         return dx * dx + dy * dy < radius * radius
     }
 

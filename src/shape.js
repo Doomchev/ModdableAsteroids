@@ -1,4 +1,4 @@
-import {fpsk} from "./system.js"
+import {apsk} from "./system.js"
 
 export default class Shape {
     constructor(centerX = 0.0, centerY = 0.0,  width = 1.0, height = 1.0) {

@@ -1,4 +1,4 @@
-import {fpsk} from "../system.js"
+import {apsk} from "../system.js"
 import {Value} from "../value.js"
 
 export default class Delayed extends Value {
@@ -11,7 +11,7 @@ export default class Delayed extends Value {
 
     toBoolean() {
         if(this.time >= 0.0) {
-            this.time -= fpsk
+            this.time -= apsk
             return false
         } else {
             if(!this.condition.toBoolean()) return false

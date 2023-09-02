@@ -1,4 +1,4 @@
-import {executeCollisionCode, fpsk, Renderable} from "./system.js"
+import {removeFromArray, executeCollisionCode, apsk, Renderable} from "./system.js"
 
 export default class Layer extends Renderable {
     constructor(items = []) {
@@ -16,6 +16,10 @@ export default class Layer extends Renderable {
 
     rotate(angle) {
         this.items.forEach(item => item.rotate(angle))
+    }
+
+    remove(sprite) {
+        removeFromArray(sprite.toSprite(), this.items)
     }
 
     collisionWith(object, code) {

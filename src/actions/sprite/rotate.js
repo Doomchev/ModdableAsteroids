@@ -1,4 +1,4 @@
-import {Action, fpsk} from "../../system.js"
+import {Action, apsk} from "../../system.js"
 
 export default class Rotate extends Action {
     constructor(object, speed) {
@@ -8,6 +8,6 @@ export default class Rotate extends Action {
     }
 
     execute() {
-        this.object.rotate(this.speed * fpsk)
+        this.object.rotate(this.speed * apsk)
     }
 }

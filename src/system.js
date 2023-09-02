@@ -14,8 +14,8 @@ export class Action {
 
 // global variables
 
-export let zk = 1.2, fps = 100.0, showCollisionShapes = false
-export let ctx, mousesx, mousesy, fpsk = 1.0 / fps
+export let zk = 1.2, fps = 144.0, aps = 200.0, showCollisionShapes = false
+export let ctx, mousesx, mousesy, apsk = 1.0 / aps
 
 export let root = {
     keys: [],
@@ -57,7 +57,7 @@ export function executeCollisionCode(sprite1, sprite2, code) {
     executeCode(code)
 }
 
-export function deleteFromArray(array, item) {
+export function removeFromArray(item, array) {
     let i = array.indexOf(item)
     if(i < 0) return
     array.splice(i, 1)
@@ -81,8 +81,22 @@ document.addEventListener("DOMContentLoaded", function() {
                 init()
                 setInterval(function() {
                     root.actions.forEach(module => module.execute())
+                }, 1000 / aps)
+                let fpsTime = 0, realFps = 0, fpsCounter = 0
+                setInterval(function() {
+                    let time = new Date().getTime()
+                    if(time >= fpsTime) {
+                        realFps = fpsCounter
+                        fpsTime = time + 1000
+                        fpsCounter = 0
+                    } else {
+                        fpsCounter++
+                    }
                     currentCanvas.draw()
-                }, 20)
+                    ctx.font = "16px serif";
+                    ctx.fillStyle = "white"
+                    ctx.fillText("fps: " + realFps, 5, 20)
+                })
             }
         }
         image.src = entry[1]
