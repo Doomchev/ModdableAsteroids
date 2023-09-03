@@ -1,7 +1,7 @@
 import Image from "./src/image.js"
 import Sprite from "./src/sprite.js"
 import Key from "./src/key.js"
-import {collisionSprite1, collisionSprite2, randomFloat, randomSign, root, toRadians} from "./src/system.js"
+import {align, collisionSprite1, collisionSprite2, root, toRadians} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
 import Move from "./src/actions/sprite/move.js"
 import If from "./src/actions/structure/if.js"
@@ -21,12 +21,17 @@ import Rotate from "./src/actions/sprite/rotate.js"
 import OnCollision from "./src/actions/sprite/on_collision.js"
 import Remove from "./src/actions/sprite/remove.js"
 import {Mul, RandomFloat, RandomSign} from "./src/functions.js"
-import AddDelayedDelete from "./src/actions/sprite/delayed_remove.js"
-import {current} from "./src/variable.js"
+import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 import Empty from "./src/actions/layer/empty.js"
 import AddAction from "./src/actions/sprite/add_action.js"
 import Repeat from "./src/actions/structure/repeat.js"
-import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
+import Label from "./src/gui/label.js"
+import {current} from "./src/variable/sprite.js"
+import {IntVariable} from "./src/variable/int.js"
+import Increment from "./src/actions/variable/increment.js"
+import {EnumVariable} from "./src/variable/enum.js"
+import IntIsEqual from "./src/functions/equal.js"
+import Equate from "./src/actions/int_equate.js"
 
 export let textures = {
     ship: "textures/ship.png",
@@ -37,7 +42,24 @@ export let textures = {
 }
 
 export function init() {
-    let bounds = new Shape(0.0, 0.0, currentCanvas.width + 2.0, currentCanvas.height + 2.0)
+    let state = {
+        alive: new IntVariable(0),
+        dead: new IntVariable(1),
+        gameOver: new IntVariable(2),
+    }
+
+    let score = new IntVariable(0, "Z8")
+    let lives = new IntVariable(3, "R ∆")
+    let level = new IntVariable(0)
+    let currentState = new EnumVariable(state.alive)
+
+    let hudArea = new Shape(0.0, 0.0, currentCanvas.width - 1.0, currentCanvas.height - 1.0)
+    let scoreLabel = new Label(hudArea, [score], align.left, align.top)
+    let levelLabel = new Label(hudArea, ["LEVEL ", level], align.center, align.top)
+    let livesLabel = new Label(hudArea, [lives], align.right, align.top)
+    let messageLabel = new Label(hudArea, [""], align.center, align.center)
+
+    let bounds = new Shape(0.0, 0.0, currentCanvas.width + 2.5, currentCanvas.height + 2.5)
 
     let shipTexture = textures.ship
     let ship = new Sprite(new Image(shipTexture, 0, 0, shipTexture.width, shipTexture.height
@@ -58,7 +80,7 @@ export function init() {
     let explosionImages = new ImageArray(textures.explosion, 4, 4, 0.5, 0.5, 1.5, 1.5)
 
     root.background = "rgb(9, 44, 84)"
-    root.scene = [bullets, asteroids, flame, ship, explosions]
+    root.scene = [bullets, asteroids, flame, ship, explosions, scoreLabel, levelLabel, livesLabel, messageLabel]
 
     let left = new Key("ArrowLeft")
     let right = new Key("ArrowRight")
@@ -67,25 +89,35 @@ export function init() {
 
     let acceleration = 25.0, deceleration = 15.0, limit = 7.5, dAngle = toRadians(180.0)
     root.actions = [
-        new If(left, new LinearChange(ship,"angle", -dAngle)),
-        new If(right, new LinearChange(ship,"angle", dAngle)),
-        new If(forward, new LinearChange(ship,"speed", acceleration + deceleration, undefined, limit)),
-        new LinearChange(ship,"speed", -deceleration, 0.0),
-        new LoopArea(ship, bounds),
-        new Move(ship),
+        new If(new IntIsEqual(currentState, state.alive), [
+            new If(left, new LinearChange(ship,"angle", -dAngle)),
+            new If(right, new LinearChange(ship,"angle", dAngle)),
+            new If(forward, new LinearChange(ship,"speed", acceleration + deceleration, undefined, limit)),
+            new LinearChange(ship,"speed", -deceleration, 0.0),
+            new LoopArea(ship, bounds),
+            new Move(ship),
 
-        new Animate(flame, flameImages, 16.0),
-        new SetField(flame, "visible", forward),
-        new Constraint(flame, ship),
+            new Animate(flame, flameImages, 16.0),
+            new SetField(flame, "visible", forward),
+            new Constraint(flame, ship),
 
-        new Constraint(gun, ship),
+            new Constraint(gun, ship),
 
-        new If(new Delayed(fire, 0.15), [
-            new Create(bullets, bulletImages, 16.0, gun, 0.15, ship, 15.0),
+            new If(new Delayed(fire, 0.15), [
+                new Create(bullets, bulletImages, 16.0, gun, 0.15, ship, 15.0),
+            ]),
+            new SetBounds(bullets, bounds),
+            new ExecuteActions(bullets),
+            new Move(bullets),
+
+            new OnCollision(ship, asteroids, [
+                new Create(explosions, explosionImages, 16.0, ship, 2.5, new RandomFloat(360.0)),
+                new AddAction(current, new DelayedRemove(current, explosions,1.0)),
+                new Equate(currentState, state.dead),
+                new SetField(ship, "visible", false),
+                new SetField(flame, "visible", false),
+            ]),
         ]),
-        new SetBounds(bullets, bounds),
-        new ExecuteActions(bullets),
-        new Move(bullets),
 
         new ExecuteActions(asteroids),
         new Move(asteroids),
@@ -94,19 +126,20 @@ export function init() {
         new ExecuteActions(explosions),
 
         new If(new Empty(asteroids), [
-            new Repeat(5, [
+            new Increment(level),
+            new Repeat(level, [
                 new Create(asteroids, asteroidImages, new Mul(new RandomFloat(12.0, 20.0), new RandomSign())
                     , {centerX: new RandomFloat(bounds.leftX, bounds.rightX), centerY: bounds.topY}
-                    , 2.0, new RandomFloat(360.0), new RandomFloat(2.0, 3.0), 0.0),
+                    , 3.0, new RandomFloat(360.0), new RandomFloat(2.0, 3.0), 0.0),
                 new AddAction(current, new Rotate(current, new RandomFloat(toRadians(-180.0), toRadians(180.0))))
             ]),
         ]),
 
         new OnCollision(bullets, asteroids, [
-            new Create(explosions, explosionImages, 16.0, collisionSprite2, 2.5, new RandomFloat(360.0)),
+            new Create(explosions, explosionImages, 16.0, collisionSprite2, 3.0, new RandomFloat(360.0)),
+            new AddAction(current, new DelayedRemove(current, explosions,1.0)),
             new Remove(collisionSprite1, bullets),
             new Remove(collisionSprite2, asteroids),
-            new AddAction(current, new DelayedRemove(current, explosions,1.0))
-        ])
+        ]),
     ]
 }

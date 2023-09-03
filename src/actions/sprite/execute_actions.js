@@ -1,6 +1,6 @@
 import {Action, executeCode} from "../../system.js"
 import Layer from "../../layer.js"
-import {current} from "../../variable.js"
+import {current} from "../../variable/sprite.js"
 
 export default class ExecuteActions extends Action {
     constructor(object) {

@@ -1,13 +1,15 @@
 export class Value {
-    get boolean() {
+    equateTo(value) {}
+
+    toBoolean() {
         return null
     }
 
-    get int() {
+    toInt() {
         return null
     }
 
-    get float() {
+    toFloat() {
         return null
     }
 

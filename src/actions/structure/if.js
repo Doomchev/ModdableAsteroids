@@ -9,7 +9,7 @@ export default class If extends Action {
     }
 
     execute() {
-        if(this.condition.boolean) {
+        if(this.condition.toBoolean()) {
             executeCode(this.code)
         } else if(this.elseCode) {
             executeCode(this.elseCode)

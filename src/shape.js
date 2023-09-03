@@ -1,7 +1,9 @@
 import {apsk} from "./system.js"
+import {Renderable} from "./renderable.js"
 
-export default class Shape {
+export default class Shape extends Renderable {
     constructor(centerX = 0.0, centerY = 0.0,  width = 1.0, height = 1.0) {
+        super()
         this.centerX = centerX
         this.centerY = centerY
         this.halfWidth = 0.5 * width

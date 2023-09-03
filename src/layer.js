@@ -1,4 +1,5 @@
-import {removeFromArray, Renderable} from "./system.js"
+import {removeFromArray} from "./system.js"
+import {Renderable} from "./renderable.js"
 
 export default class Layer extends Renderable {
     constructor(items = []) {

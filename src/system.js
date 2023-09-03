@@ -1,15 +1,10 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {init, textures} from "../asteroids.js"
-import {SpriteFunction, SpriteVariable} from "./variable.js"
-import {Value} from "./value.js"
-import {NumberFunction} from "./functions.js"
+import {FloatFunction} from "./functions.js"
 import Sprite from "./sprite.js"
+import {SpriteFunction, SpriteVariable} from "./variable/sprite.js"
 
 // basic classes
-
-export class Renderable {
-    draw() {}
-}
 
 export class Action {
     execute() {}
@@ -25,6 +20,16 @@ export let root = {
     keys: [],
     scene: [],
     actions: []
+}
+
+// enums
+
+export let align = {
+    left: 0,
+    top: 0,
+    center: 1,
+    right: 2,
+    bottom: 2
 }
 
 // global functions
@@ -71,8 +76,8 @@ export function getValue(object, fieldName) {
     if(typeof object === "number") {
         return object
     }
-    if(object instanceof NumberFunction) {
-        return object.float
+    if(object instanceof FloatFunction) {
+        return object.toFloat()
     }
     if(object instanceof SpriteFunction || object instanceof Sprite) {
         return object.toSprite()[fieldName]
@@ -89,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let canvas = document.getElementById("canvas")
     canvas.focus()
     ctx = canvas.getContext("2d")
-    setCanvas(new Canvas(0, 0, canvas.clientWidth, canvas.clientHeight, 50.0))
+    setCanvas(new Canvas(0, 0, canvas.clientWidth, canvas.clientHeight, 40.0))
 
     let entries = Object.entries(textures)
     let imagesToLoad = entries.length
@@ -113,9 +118,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         fpsCounter++
                     }
                     currentCanvas.draw()
-                    ctx.font = "16px serif";
+                    /*ctx.font = "16px serif";
                     ctx.fillStyle = "white"
-                    ctx.fillText("fps: " + realFps, 5, 20)
+                    ctx.fillText("fps: " + realFps, 5, 20)*/
                 })
             }
         }

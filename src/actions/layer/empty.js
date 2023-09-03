@@ -7,7 +7,7 @@ export default class Empty extends Value {
         this.layer = layer
     }
 
-    get boolean() {
+    toBoolean() {
         return this.layer.items.length === 0
     }
 }

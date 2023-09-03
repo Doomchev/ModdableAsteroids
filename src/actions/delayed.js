@@ -9,12 +9,12 @@ export default class Delayed extends Value {
         this.time = 0.0
     }
 
-    get boolean() {
+    toBoolean() {
         if(this.time >= 0.0) {
             this.time -= apsk
             return false
         } else {
-            if(!this.condition.boolean) return false
+            if(!this.condition.toBoolean()) return false
             this.time = this.coolDown
             return true
         }

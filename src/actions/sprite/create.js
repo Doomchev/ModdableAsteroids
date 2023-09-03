@@ -1,9 +1,9 @@
 import {Action, getValue} from "../../system.js"
 import Sprite from "../../sprite.js"
-import {current, SpriteFunction} from "../../variable.js"
 import Animate from "./animate.js"
 import {Value} from "../../value.js"
-import {NumberFunction} from "../../functions.js"
+import {FloatFunction} from "../../functions.js"
+import {current} from "../../variable/sprite.js"
 
 export default class Create extends Action {
     constructor(layer, image, animationSpeed, position, size = 1.0, angle = 0.0, speed = 0.0
@@ -30,8 +30,7 @@ export default class Create extends Action {
         }
         sprite.centerX = getValue(this.position, "centerX")
         sprite.centerY = getValue(this.position, "centerY")
-        sprite.width = getValue(this.size, "width")
-        sprite.height = sprite.width //getValue(this.size, "height")
+        sprite.width = sprite.height = getValue(this.size, "width")
         sprite.angle = getValue(this.angle, "angle")
         sprite.speed = getValue(this.speed, "speed")
         sprite.imageAngle = getValue(this.imageAngle, "imageAngle")

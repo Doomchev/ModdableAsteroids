@@ -8,7 +8,8 @@ export default class Repeat extends Action {
     }
 
     execute() {
-        for(let i = 0; i < this.times; i++) {
+        let times = this.times.toInt()
+        for(let i = 0; i < times; i++) {
             executeCode(this.code)
         }
     }

@@ -10,6 +10,6 @@ export default class SetField extends Action {
     }
 
     execute() {
-        this.object.toSprite()[this.fieldName] = this.value.boolean !== undefined ? this.value.boolean : this.value
+        this.object.toSprite()[this.fieldName] = this.value instanceof Value ? this.value.toBoolean() : this.value
     }
 }

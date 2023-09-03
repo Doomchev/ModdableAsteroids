@@ -1,10 +1,17 @@
-import {Value} from "./value.js"
+import {Value} from "../value.js"
 
 export class SpriteFunction extends Value {
+    toSprite() {
+        return null
+    }
 }
 
 export class SpriteVariable extends SpriteFunction {
     sprite = null
+
+    equateTo(value) {
+        this.value = value.toSprite()
+    }
 
     collisionWith(object, code) {
         this.sprite.collisionWith(object, code)
@@ -12,6 +19,10 @@ export class SpriteVariable extends SpriteFunction {
 
     collisionWithSprite(sprite, code) {
         this.sprite.collisionWithSprite(sprite, code)
+    }
+
+    toBoolean() {
+        return this.sprite
     }
 
     toSprite() {
