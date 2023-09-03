@@ -1,8 +1,5 @@
+import {BooleanFunction} from "./boolean.js"
 import {Value} from "../value.js"
-
-class BooleanFunction extends Value {
-    toBoolean() {}
-}
 
 export default class IntIsEqual extends BooleanFunction {
     constructor(value1, value2) {
@@ -12,7 +9,6 @@ export default class IntIsEqual extends BooleanFunction {
     }
 
     toBoolean() {
-        return this.value1.toInt() === this.value2.toInt()
+        return this.value1.toInt() === (this.value2 instanceof Value ? this.value2.toInt() : this.value2)
     }
 }
-

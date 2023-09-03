@@ -1,8 +1,7 @@
 import {Action, getValue} from "../../system.js"
 import Sprite from "../../sprite.js"
 import Animate from "./animate.js"
-import {Value} from "../../value.js"
-import {FloatFunction} from "../../functions.js"
+import FloatFunction from "../../functions/float.js"
 import {current} from "../../variable/sprite.js"
 
 export default class Create extends Action {

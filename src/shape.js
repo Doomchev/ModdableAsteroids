@@ -1,4 +1,3 @@
-import {apsk} from "./system.js"
 import {Renderable} from "./renderable.js"
 
 export default class Shape extends Renderable {

@@ -20,9 +20,8 @@ import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import Rotate from "./src/actions/sprite/rotate.js"
 import OnCollision from "./src/actions/sprite/on_collision.js"
 import Remove from "./src/actions/sprite/remove.js"
-import {Mul, RandomFloat, RandomSign} from "./src/functions.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
-import Empty from "./src/actions/layer/empty.js"
+import IsEmpty from "./src/actions/layer/is_empty.js"
 import AddAction from "./src/actions/sprite/add_action.js"
 import Repeat from "./src/actions/structure/repeat.js"
 import Label from "./src/gui/label.js"
@@ -32,6 +31,13 @@ import Increment from "./src/actions/variable/increment.js"
 import {EnumVariable} from "./src/variable/enum.js"
 import IntIsEqual from "./src/functions/equal.js"
 import Equate from "./src/actions/int_equate.js"
+import RandomFloat from "./src/functions/random_float.js"
+import {RandomSign} from "./src/functions/random_sign.js"
+import {Mul} from "./src/functions/mul.js"
+import Pressed from "./src/functions/pressed.js"
+import Decrement from "./src/actions/variable/decrement.js"
+import Add from "./src/actions/variable/add.js"
+import Empty from "./src/actions/layer/empty.js"
 
 export let textures = {
     ship: "textures/ship.png",
@@ -43,9 +49,9 @@ export let textures = {
 
 export function init() {
     let state = {
-        alive: new IntVariable(0),
-        dead: new IntVariable(1),
-        gameOver: new IntVariable(2),
+        alive: 0,
+        dead: 1,
+        gameOver: 2,
     }
 
     let score = new IntVariable(0, "Z8")
@@ -64,6 +70,7 @@ export function init() {
     let shipTexture = textures.ship
     let ship = new Sprite(new Image(shipTexture, 0, 0, shipTexture.width, shipTexture.height
         , 0.35, 0.5, 1.35, 1.9))
+    let start = new Sprite()
     
     let flameImages = new ImageArray(textures.flame, 3, 3)
     let flame = new Sprite(flameImages.images[0], -0.9, 0.0, 1.0, 1.0, -90.0)
@@ -106,18 +113,44 @@ export function init() {
             new If(new Delayed(fire, 0.15), [
                 new Create(bullets, bulletImages, 16.0, gun, 0.15, ship, 15.0),
             ]),
-            new SetBounds(bullets, bounds),
-            new ExecuteActions(bullets),
-            new Move(bullets),
 
             new OnCollision(ship, asteroids, [
                 new Create(explosions, explosionImages, 16.0, ship, 2.5, new RandomFloat(360.0)),
                 new AddAction(current, new DelayedRemove(current, explosions,1.0)),
-                new Equate(currentState, state.dead),
                 new SetField(ship, "visible", false),
                 new SetField(flame, "visible", false),
+                new If(new IntIsEqual(lives, 0), [
+                    new SetField(messageLabel, "items", ["GAME OVER"]),
+                    new Equate(currentState, state.gameOver),
+                ], [
+                    new SetField(messageLabel, "items", ["PRESS SPACE"]),
+                    new Equate(currentState, state.dead),
+                ])
             ]),
+        ], [
+            new If(new Pressed(fire), [
+                new SetField(ship, "visible", true),
+                new SetField(flame, "visible", true),
+                new SetField(messageLabel, "items", []),
+                new SetField(ship, "centerX", 0.0),
+                new SetField(ship, "centerY", 0.0),
+                new SetField(ship, "angle", 0.0),
+                new SetField(ship, "speed", 0.0),
+                new If(new IntIsEqual(currentState, state.dead), [
+                    new Decrement(lives),
+                ], [
+                    new Equate(lives, new IntVariable(3)),
+                    new Equate(score, new IntVariable(0)),
+                    new Equate(level, new IntVariable(0)),
+                    new Empty(asteroids)
+                ]),
+                new Equate(currentState, state.alive),
+            ])
         ]),
+
+        new SetBounds(bullets, bounds),
+        new ExecuteActions(bullets),
+        new Move(bullets),
 
         new ExecuteActions(asteroids),
         new Move(asteroids),
@@ -125,7 +158,7 @@ export function init() {
 
         new ExecuteActions(explosions),
 
-        new If(new Empty(asteroids), [
+        new If(new IsEmpty(asteroids), [
             new Increment(level),
             new Repeat(level, [
                 new Create(asteroids, asteroidImages, new Mul(new RandomFloat(12.0, 20.0), new RandomSign())
@@ -133,6 +166,7 @@ export function init() {
                     , 3.0, new RandomFloat(360.0), new RandomFloat(2.0, 3.0), 0.0),
                 new AddAction(current, new Rotate(current, new RandomFloat(toRadians(-180.0), toRadians(180.0))))
             ]),
+            new Add(score, 500)
         ]),
 
         new OnCollision(bullets, asteroids, [
@@ -140,6 +174,7 @@ export function init() {
             new AddAction(current, new DelayedRemove(current, explosions,1.0)),
             new Remove(collisionSprite1, bullets),
             new Remove(collisionSprite2, asteroids),
+            new Add(score, 100)
         ]),
     ]
 }

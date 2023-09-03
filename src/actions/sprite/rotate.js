@@ -1,4 +1,4 @@
-import {Action, apsk, getValue, toRadians} from "../../system.js"
+import {Action, apsk, getValue} from "../../system.js"
 
 export default class Rotate extends Action {
     constructor(object, speed) {

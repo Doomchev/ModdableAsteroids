@@ -1,6 +1,6 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {init, textures} from "../asteroids.js"
-import {FloatFunction} from "./functions.js"
+import FloatFunction from "./functions/float.js"
 import Sprite from "./sprite.js"
 import {SpriteFunction, SpriteVariable} from "./variable/sprite.js"
 
@@ -106,6 +106,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 init()
                 setInterval(function() {
                     root.actions.forEach(module => module.execute())
+                    root.keys.forEach(key => key.isPressed = false)
                 }, 1000 / aps)
                 let fpsTime = 0, realFps = 0, fpsCounter = 0
                 setInterval(function() {
@@ -142,6 +143,14 @@ document.addEventListener("keyup", event => {
     root.keys.forEach(key => {
         if(event.code === key.code) {
             key.isDown = false
+        }
+    })
+}, false)
+
+document.addEventListener("keypress", event => {
+    root.keys.forEach(key => {
+        if(event.code === key.code) {
+            key.isPressed = true
         }
     })
 }, false)
