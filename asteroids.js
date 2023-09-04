@@ -38,7 +38,7 @@ import Pressed from "./src/functions/pressed.js"
 import Decrement from "./src/actions/variable/decrement.js"
 import Add from "./src/actions/variable/add.js"
 import Empty from "./src/actions/layer/empty.js"
-import {exportObject, exportToConsole, exportValue} from "./src/export.js"
+import {exportToConsole} from "./src/export.js"
 
 export let texture = {
     ship: "textures/ship.png",
@@ -55,45 +55,45 @@ export function init() {
         gameOver: 2,
     }
 
-    let score = new IntVariable(0, "Z8")
-    let lives = new IntVariable(3, "R ∆")
-    let level = new IntVariable(0)
-    let currentState = new EnumVariable(state.alive)
+    let score = new IntVariable("score", 0, "Z8")
+    let lives = new IntVariable("lives", 3, "R ∆")
+    let level = new IntVariable("level", 0)
+    let currentState = new EnumVariable("state", state.alive)
 
-    let hudArea = new Shape(0.0, 0.0, currentCanvas.width - 1.0, currentCanvas.height - 1.0)
+    let hudArea = new Shape("hudArea", 0.0, 0.0, currentCanvas.width - 1.0, currentCanvas.height - 1.0)
     let scoreLabel = new Label(hudArea, [score], align.left, align.top)
     let levelLabel = new Label(hudArea, ["LEVEL ", level], align.center, align.top)
     let livesLabel = new Label(hudArea, [lives], align.right, align.top)
     let messageLabel = new Label(hudArea, [""], align.center, align.center)
 
-    let bounds = new Shape(0.0, 0.0, currentCanvas.width + 2.5, currentCanvas.height + 2.5)
+    let bounds = new Shape("bounds",0.0, 0.0, currentCanvas.width + 2.5, currentCanvas.height + 2.5)
 
     let shipTexture = texture.ship
-    let ship = new Sprite(new Image(shipTexture, 0, 0, shipTexture.width, shipTexture.height
+    let ship = new Sprite("ship", new Image(shipTexture, 0, 0, shipTexture.width, shipTexture.height
         , 0.35, 0.5, 1.35, 1.9))
-    let start = new Sprite()
+    let start = new Sprite("start")
     
-    let flameImages = new ImageArray(texture.flame, 3, 3)
-    let flame = new Sprite(flameImages._images[0], -0.9, 0.0, 1.0, 1.0, -90.0)
+    let flameImages = new ImageArray("flameImages", texture.flame, 3, 3)
+    let flame = new Sprite("flame", flameImages._images[0], -0.9, 0.0, 1.0, 1.0, -90.0)
 
-    let gun = new Sprite(null, 1.0, 0.0)
-    let bullets = new Layer()
-    let bulletImages = new ImageArray(texture.bullet, 1, 16
+    let gun = new Sprite("gun", undefined, 1.0, 0.0)
+    let bullets = new Layer("bullets")
+    let bulletImages = new ImageArray("bulletImages", texture.bullet, 1, 16
         , 43.0 / 48.0, 5.5 / 12.0, 10.5, 3.0)
 
-    let asteroids = new Layer()
-    let asteroidImages = new ImageArray(texture.asteroid, 8, 4, 0.5, 0.5, 1.25, 1.25)
+    let asteroids = new Layer("asteroids")
+    let asteroidImages = new ImageArray("asteroidImages", texture.asteroid, 8, 4, 0.5, 0.5, 1.25, 1.25)
 
-    let explosions = new Layer()
-    let explosionImages = new ImageArray(texture.explosion, 4, 4, 0.5, 0.5, 1.5, 1.5)
+    let explosions = new Layer("explosions")
+    let explosionImages = new ImageArray("explosionImages", texture.explosion, 4, 4, 0.5, 0.5, 1.5, 1.5)
 
     root.background = "rgb(9, 44, 84)"
     root.scene = [bullets, asteroids, flame, ship, explosions, scoreLabel, levelLabel, livesLabel, messageLabel]
 
-    let left = new Key("ArrowLeft")
-    let right = new Key("ArrowRight")
-    let forward = new Key("ArrowUp")
-    let fire = new Key("Space")
+    let left = new Key("left", "ArrowLeft")
+    let right = new Key("right", "ArrowRight")
+    let forward = new Key("forward", "ArrowUp")
+    let fire = new Key("fire", "Space")
 
     let acceleration = 25.0, deceleration = 15.0, limit = 7.5, dAngle = toRadians(180.0)
     root.actions = [

@@ -7,27 +7,31 @@ export class SpriteFunction extends Value {
 }
 
 export class SpriteVariable extends SpriteFunction {
-    _sprite = null
+    constructor(name) {
+        super()
+        if(name) this._name = name
+        this.sprite = null
+    }
 
     equateTo(value) {
         this.value = value.toSprite()
     }
 
     collisionWith(object, code) {
-        this._sprite.collisionWith(object, code)
+        this.sprite.collisionWith(object, code)
     }
 
     collisionWithSprite(sprite, code) {
-        this._sprite.collisionWithSprite(sprite, code)
+        this.sprite.collisionWithSprite(sprite, code)
     }
 
     toBoolean() {
-        return this._sprite
+        return this.sprite
     }
 
     toSprite() {
-        return this._sprite
+        return this.sprite
     }
 }
 
-export let current = new SpriteVariable()
+export let current = new SpriteVariable("current")

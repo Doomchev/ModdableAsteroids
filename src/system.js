@@ -58,7 +58,8 @@ export function executeCode(code) {
     }
 }
 
-export let collisionSprite1 = new SpriteVariable(), collisionSprite2 = new SpriteVariable()
+export let collisionSprite1 = new SpriteVariable("collisionSprite1")
+export let collisionSprite2 = new SpriteVariable("collisionSprite2")
 
 export function executeCollisionCode(sprite1, sprite2, code) {
     collisionSprite1._sprite = sprite1

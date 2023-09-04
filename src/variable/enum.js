@@ -1,16 +1,17 @@
 import {Value} from "../value.js"
 
 export class EnumVariable extends Value {
-    constructor(value) {
+    constructor(name, value) {
         super()
-        this._value = value
+        if(name) this._name = name
+        this.value = value
     }
 
     equateTo(value) {
-        this._value = value instanceof Value ? value.toInt() : value
+        this.value = value instanceof Value ? value.toInt() : value
     }
 
     toInt() {
-        return this._value
+        return this.value
     }
 }

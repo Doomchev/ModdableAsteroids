@@ -64,7 +64,7 @@ export default class Canvas extends Sprite {
 
     setDefaultPosition() {
         this.oldZoom = this.zoom
-        this.defaultPosition = new Sprite(null, this.centerX, this.centerY, this.width, this.height)
+        this.defaultPosition = new Sprite(undefined, undefined, this.centerX, this.centerY, this.width, this.height)
     }
 
     restorePosition() {

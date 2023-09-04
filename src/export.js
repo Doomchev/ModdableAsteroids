@@ -13,19 +13,23 @@ export function exportToConsole() {
 }
 
 export function exportObject(object) {
-    if(object._num) {
-        text += `#${object._num}`
+    if(object._id) {
+        text += `#${object._id}`
         return
     }
 
     let single = object instanceof Action || object instanceof SingleFunction
 
     if(!single) {
-        currentIndex++
-        object._num = currentIndex
+        if(object._name) {
+            object._id = object._name
+        } else {
+            currentIndex++
+            object._id = currentIndex
+        }
     }
 
-    let id = single ? "" : `(${currentIndex})`
+    let id = single ? "" : `(#${object._id})`
     text += `${object.constructor.name}${id} {`
     indent += "  "
     let hasValue = false
@@ -36,14 +40,14 @@ export function exportObject(object) {
             hasValue = true
         }
         text += `${indent}${key}: `
-        exportValue(value)
+        exportValue(value, key)
         text += "\r\n"
     }
     indent = indent.substring(2)
     text += hasValue ? `${indent}}` : "}"
 }
 
-export function exportValue(value) {
+export function exportValue(value, key) {
     if(value instanceof Array) {
         if(value.length === 0) {
             text += "[]"
@@ -52,24 +56,23 @@ export function exportValue(value) {
         text += "[\r\n"
         indent += "  "
         let first = true
-        value.forEach(value2 => {
+        value.forEach(item => {
             if(first) {
                 first = false
             } else {
                 text += ", \r\n"
             }
             text += indent
-            exportValue(value2)
+            exportValue(item)
         })
         indent = indent.substring(2)
         text += `\r\n${indent}]`
     } else if(value instanceof HTMLImageElement) {
-        if(value._num) {
-            text += `#${value._num}`
+        if(value._id) {
+            text += `#${value._id}`
         } else {
-            currentIndex++
-            value._num = currentIndex
-            text += `Texture(${currentIndex}, ${value.src})`
+            value._id = `${key}Texture`
+            text += `Texture(#${value._id}, ${value.src})`
         }
     } else if(value instanceof Object) {
         exportObject(value)

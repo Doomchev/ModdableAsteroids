@@ -1,4 +1,3 @@
-import {Value} from "../value.js"
 import SingleFunction from "./single.js"
 
 export default class FloatFunction extends SingleFunction {

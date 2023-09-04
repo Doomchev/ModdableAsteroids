@@ -2,8 +2,9 @@ import {removeFromArray} from "./system.js"
 import {Renderable} from "./renderable.js"
 
 export default class Layer extends Renderable {
-    constructor(items = []) {
+    constructor(name, items = []) {
         super()
+        if(name) this._name = name
         this.items = items
     }
 

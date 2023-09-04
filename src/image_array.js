@@ -1,8 +1,9 @@
 import Image from "./image.js"
 
 export default class ImageArray {
-    constructor(texture, columns, rows
+    constructor(name, texture, columns, rows
                 , xMul = 0.5, yMul = 0.5, widthMul = 1.0, heightMul = 1.0) {
+        if(name) this._name = name
         this.texture = texture
         this.columns = columns
         this.rows =  rows

@@ -3,9 +3,9 @@ import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {executeCollisionCode, apsk, toRadians} from "./system.js"
 
 export default class Sprite extends Shape {
-    constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
+    constructor(name, image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
                 , angleInDegrees = 0.0, speed = 0.0, imageAngle) {
-        super(centerX, centerY, width, height)
+        super(name, centerX, centerY, width, height)
         this.image = image
         this.imageAngle = imageAngle
         this.angle = toRadians(angleInDegrees)

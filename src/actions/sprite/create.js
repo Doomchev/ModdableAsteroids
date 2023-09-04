@@ -1,7 +1,6 @@
 import {Action, getValue} from "../../system.js"
 import Sprite from "../../sprite.js"
 import Animate from "./animate.js"
-import FloatFunction from "../../functions/float.js"
 import {current} from "../../variable/sprite.js"
 
 export default class Create extends Action {
@@ -19,8 +18,8 @@ export default class Create extends Action {
     }
 
     execute() {
-        let sprite = new Sprite(this.image)
-        current._sprite = sprite
+        let sprite = new Sprite(undefined, this.image)
+        current.sprite = sprite
         if(this.animationSpeed === undefined) {
             sprite.image = this.image
         } else {
