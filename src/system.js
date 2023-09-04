@@ -2,7 +2,7 @@ import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {init, texture} from "../asteroids.js"
 import FloatFunction from "./functions/float.js"
 import Sprite from "./sprite.js"
-import {SpriteFunction, SpriteVariable} from "./variable/sprite.js"
+import SpriteVariable, {SpriteFunction} from "./variable/sprite.js"
 
 // basic classes
 
@@ -105,6 +105,7 @@ document.addEventListener("DOMContentLoaded", function() {
             imagesToLoad--
             if(imagesToLoad <= 0) {
                 init()
+                
                 let apsTime = 0, realAps = 0, apsCounter = 0
                 setInterval(function() {
                     root.actions.forEach(module => module.execute())
@@ -118,6 +119,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         apsCounter++
                     }
                 }, 1000 / aps)
+
                 let fpsTime = 0, realFps = 0, fpsCounter = 0
                 setInterval(function() {
                     let time = new Date().getTime()

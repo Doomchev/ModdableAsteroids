@@ -1,6 +1,6 @@
 import {Value} from "../value.js"
 
-export class EnumVariable extends Value {
+export default class EnumVariable extends Value {
     constructor(name, value) {
         super()
         if(name) this._name = name

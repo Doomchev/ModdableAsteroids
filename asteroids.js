@@ -1,3 +1,5 @@
+// noinspection UnreachableCodeJS
+
 import Image from "./src/image.js"
 import Sprite from "./src/sprite.js"
 import Key from "./src/key.js"
@@ -26,19 +28,21 @@ import AddAction from "./src/actions/sprite/add_action.js"
 import Repeat from "./src/actions/structure/repeat.js"
 import Label from "./src/gui/label.js"
 import {current} from "./src/variable/sprite.js"
-import {IntVariable} from "./src/variable/int.js"
+import IntVariable from "./src/variable/int.js"
 import Increment from "./src/actions/variable/increment.js"
-import {EnumVariable} from "./src/variable/enum.js"
+import EnumVariable from "./src/variable/enum.js"
 import IntIsEqual from "./src/functions/equal.js"
 import Equate from "./src/actions/variable/int_equate.js"
 import RandomFloat from "./src/functions/random_float.js"
-import {RandomSign} from "./src/functions/random_sign.js"
-import {Mul} from "./src/functions/mul.js"
+import RandomSign from "./src/functions/random_sign.js"
+import Mul from "./src/functions/mul.js"
 import Pressed from "./src/functions/pressed.js"
 import Decrement from "./src/actions/variable/decrement.js"
 import Add from "./src/actions/variable/add.js"
 import Empty from "./src/actions/layer/empty.js"
 import {exportToConsole} from "./src/export.js"
+import {data} from "./data.js"
+import {importFromEon} from "./src/import.js"
 
 export let texture = {
     ship: "textures/ship.png",
@@ -49,6 +53,13 @@ export let texture = {
 }
 
 export function init() {
+    if(true) {
+        importFromEon()
+        console.log(texture)
+        console.log(root)
+        return
+    }
+
     let state = {
         alive: 0,
         dead: 1,

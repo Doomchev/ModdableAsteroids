@@ -6,7 +6,7 @@ export class SpriteFunction extends Value {
     }
 }
 
-export class SpriteVariable extends SpriteFunction {
+export default class SpriteVariable extends SpriteFunction {
     constructor(name) {
         super()
         if(name) this._name = name

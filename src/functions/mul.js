@@ -1,6 +1,6 @@
 import FloatFunction from "./float.js"
 
-export class Mul extends FloatFunction {
+export default class Mul extends FloatFunction {
     constructor(value1, value2) {
         super()
         this.value1 = value1

@@ -31,7 +31,7 @@ export function exportObject(object) {
 
     let id = single ? "" : `(#${object._id})`
     text += `${object.constructor.name}${id} {`
-    indent += "  "
+    indent += "\t"
     let hasValue = false
     for(const[key, value] of Object.entries(object)) {
         if(key.charAt(0) === "_" || value === undefined) continue
@@ -43,7 +43,7 @@ export function exportObject(object) {
         exportValue(value, key)
         text += "\r\n"
     }
-    indent = indent.substring(2)
+    indent = indent.substring(1)
     text += hasValue ? `${indent}}` : "}"
 }
 
@@ -54,7 +54,7 @@ export function exportValue(value, key) {
             return
         }
         text += "[\r\n"
-        indent += "  "
+        indent += "\t"
         let first = true
         value.forEach(item => {
             if(first) {
@@ -65,14 +65,14 @@ export function exportValue(value, key) {
             text += indent
             exportValue(item)
         })
-        indent = indent.substring(2)
+        indent = indent.substring(1)
         text += `\r\n${indent}]`
     } else if(value instanceof HTMLImageElement) {
         if(value._id) {
             text += `#${value._id}`
         } else {
             value._id = `${key}Texture`
-            text += `Texture(#${value._id}, ${value.src})`
+            text += `Texture(#${value._id}, \"${value.src}\")`
         }
     } else if(value instanceof Object) {
         exportObject(value)

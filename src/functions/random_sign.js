@@ -1,7 +1,7 @@
 import {randomSign} from "../system.js"
 import FloatFunction from "./float.js"
 
-export class RandomSign extends FloatFunction {
+export default class RandomSign extends FloatFunction {
     toFloat() {
         return randomSign()
     }

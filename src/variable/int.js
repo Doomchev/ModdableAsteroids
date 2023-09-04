@@ -1,6 +1,6 @@
 import {Value} from "../value.js"
 
-export class IntVariable extends Value {
+export default class IntVariable extends Value {
     constructor(name, value, format) {
         super()
         if(name) this._name = name
