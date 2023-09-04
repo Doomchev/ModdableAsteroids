@@ -1,5 +1,5 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
-import {init, textures} from "../asteroids.js"
+import {init, texture} from "../asteroids.js"
 import FloatFunction from "./functions/float.js"
 import Sprite from "./sprite.js"
 import {SpriteFunction, SpriteVariable} from "./variable/sprite.js"
@@ -61,8 +61,8 @@ export function executeCode(code) {
 export let collisionSprite1 = new SpriteVariable(), collisionSprite2 = new SpriteVariable()
 
 export function executeCollisionCode(sprite1, sprite2, code) {
-    collisionSprite1.sprite = sprite1
-    collisionSprite2.sprite = sprite2
+    collisionSprite1._sprite = sprite1
+    collisionSprite2._sprite = sprite2
     executeCode(code)
 }
 
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", function() {
     ctx = canvas.getContext("2d")
     setCanvas(new Canvas(0, 0, canvas.clientWidth, canvas.clientHeight, 40.0))
 
-    let entries = Object.entries(textures)
+    let entries = Object.entries(texture)
     let imagesToLoad = entries.length
     entries.forEach(entry => {
         let image = new Image()
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
         image.src = entry[1]
-        textures[entry[0]] = image
+        texture[entry[0]] = image
     })
 })
 

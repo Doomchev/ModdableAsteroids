@@ -7,26 +7,26 @@ export class SpriteFunction extends Value {
 }
 
 export class SpriteVariable extends SpriteFunction {
-    sprite = null
+    _sprite = null
 
     equateTo(value) {
         this.value = value.toSprite()
     }
 
     collisionWith(object, code) {
-        this.sprite.collisionWith(object, code)
+        this._sprite.collisionWith(object, code)
     }
 
     collisionWithSprite(sprite, code) {
-        this.sprite.collisionWithSprite(sprite, code)
+        this._sprite.collisionWithSprite(sprite, code)
     }
 
     toBoolean() {
-        return this.sprite
+        return this._sprite
     }
 
     toSprite() {
-        return this.sprite
+        return this._sprite
     }
 }
 

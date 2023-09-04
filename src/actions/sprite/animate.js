@@ -10,7 +10,7 @@ export default class Animate extends Action {
     }
 
     execute() {
-        let images = this.array.images
+        let images = this.array._images
         this.frame += apsk * this.speed
         while(this.frame < 0.0) {
             this.frame += images.length

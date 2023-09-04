@@ -9,7 +9,7 @@ export default class ExecuteActions extends Action {
     }
 
     executeActions(sprite) {
-        current.sprite = sprite
+        current._sprite = sprite
         sprite.actions.forEach(command => command.execute())
     }
 

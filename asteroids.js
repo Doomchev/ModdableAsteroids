@@ -38,8 +38,9 @@ import Pressed from "./src/functions/pressed.js"
 import Decrement from "./src/actions/variable/decrement.js"
 import Add from "./src/actions/variable/add.js"
 import Empty from "./src/actions/layer/empty.js"
+import {exportObject, exportToConsole, exportValue} from "./src/export.js"
 
-export let textures = {
+export let texture = {
     ship: "textures/ship.png",
     flame: "textures/flame.png",
     bullet: "textures/bullet.png",
@@ -67,24 +68,24 @@ export function init() {
 
     let bounds = new Shape(0.0, 0.0, currentCanvas.width + 2.5, currentCanvas.height + 2.5)
 
-    let shipTexture = textures.ship
+    let shipTexture = texture.ship
     let ship = new Sprite(new Image(shipTexture, 0, 0, shipTexture.width, shipTexture.height
         , 0.35, 0.5, 1.35, 1.9))
     let start = new Sprite()
     
-    let flameImages = new ImageArray(textures.flame, 3, 3)
-    let flame = new Sprite(flameImages.images[0], -0.9, 0.0, 1.0, 1.0, -90.0)
+    let flameImages = new ImageArray(texture.flame, 3, 3)
+    let flame = new Sprite(flameImages._images[0], -0.9, 0.0, 1.0, 1.0, -90.0)
 
     let gun = new Sprite(null, 1.0, 0.0)
     let bullets = new Layer()
-    let bulletImages = new ImageArray(textures.bullet, 1, 16
+    let bulletImages = new ImageArray(texture.bullet, 1, 16
         , 43.0 / 48.0, 5.5 / 12.0, 10.5, 3.0)
 
     let asteroids = new Layer()
-    let asteroidImages = new ImageArray(textures.asteroid, 8, 4, 0.5, 0.5, 1.25, 1.25)
+    let asteroidImages = new ImageArray(texture.asteroid, 8, 4, 0.5, 0.5, 1.25, 1.25)
 
     let explosions = new Layer()
-    let explosionImages = new ImageArray(textures.explosion, 4, 4, 0.5, 0.5, 1.5, 1.5)
+    let explosionImages = new ImageArray(texture.explosion, 4, 4, 0.5, 0.5, 1.5, 1.5)
 
     root.background = "rgb(9, 44, 84)"
     root.scene = [bullets, asteroids, flame, ship, explosions, scoreLabel, levelLabel, livesLabel, messageLabel]
@@ -177,4 +178,5 @@ export function init() {
             new Add(score, 100)
         ]),
     ]
+    exportToConsole()
 }

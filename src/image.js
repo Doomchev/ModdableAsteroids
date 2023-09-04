@@ -34,11 +34,12 @@ export default class Image extends Renderable {
         ctx.rotate(angle)
         ctx.drawImage(this.texture, this.x, this.y, this.width, this.height, newX, newY, newWidth, newHeight)
         if(showCollisionShapes) {
+            let oldStyle = ctx.fillStyle
             ctx.beginPath()
             ctx.arc(0.0, 0.0, 0.5 * swidth, 0, 2.0 * Math.PI, false)
             ctx.fillStyle = "rgba(255, 0, 255, 0.5)"
             ctx.fill()
-            ctx.fillStyle = "black"
+            ctx.fillStyle = oldStyle
         }
         ctx.restore()
     }

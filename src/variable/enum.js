@@ -3,14 +3,14 @@ import {Value} from "../value.js"
 export class EnumVariable extends Value {
     constructor(value) {
         super()
-        this.value = value
+        this._value = value
     }
 
     equateTo(value) {
-        this.value = value instanceof Value ? value.toInt() : value
+        this._value = value instanceof Value ? value.toInt() : value
     }
 
     toInt() {
-        return this.value
+        return this._value
     }
 }

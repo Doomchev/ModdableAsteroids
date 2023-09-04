@@ -5,12 +5,12 @@ export default class Key extends Value {
     constructor(code) {
         super()
         this.code = code
-        this.pressed = false
-        this.isDown = false
+        this._isPressed = false
+        this._isDown = false
         root.keys.push(this)
     }
 
     toBoolean() {
-        return this.isDown
+        return this._isDown
     }
 }

@@ -1,7 +1,7 @@
-import {apsk} from "../system.js"
+import {Action, apsk} from "../system.js"
 import {Value} from "../value.js"
 
-export default class Delayed extends Value {
+export default class Delayed extends Action {
     constructor(condition, coolDown) {
         super()
         this.condition = condition

@@ -20,7 +20,7 @@ export default class Create extends Action {
 
     execute() {
         let sprite = new Sprite(this.image)
-        current.sprite = sprite
+        current._sprite = sprite
         if(this.animationSpeed === undefined) {
             sprite.image = this.image
         } else {

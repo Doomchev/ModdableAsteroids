@@ -14,6 +14,6 @@ export default class ImageArray {
             images[i] = new Image(texture, (i % columns) * width, Math.floor(i / columns) * height, width, height
                 , xMul, yMul, widthMul, heightMul)
         }
-        this.images = images
+        this._images = images
     }
 }
