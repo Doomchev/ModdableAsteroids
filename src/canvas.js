@@ -6,7 +6,7 @@ export let currentCanvas, zk = 1.2
 
 export default class Canvas extends Sprite {
     constructor(fx, fy, fwidth, fheight, scale, active = true) {
-        super(null, 0.0, 0.0, fwidth / scale, fheight / scale, 0.0, 0.0, 0.0, active)
+        super(undefined, undefined, 0.0, 0.0, fwidth / scale, fheight / scale, 0.0, 0.0, 0.0, active)
         this.viewport = new Area(fx, fy, fwidth, fheight)
         this.vdx = 1.0
         this.vdy = 1.0

@@ -1,4 +1,4 @@
-import {Action} from "../system.js"
+import {Action} from "../../system.js"
 
 export default class Equate extends Action {
     constructor(variable, value) {

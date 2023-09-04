@@ -7,6 +7,6 @@ export default class Pressed extends BooleanFunction {
     }
 
     toBoolean() {
-        return this.key.isPressed;
+        return this.key._isPressed;
     }
 }

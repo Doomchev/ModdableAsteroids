@@ -1,6 +1,6 @@
-import {Value} from "../../value.js"
+import {BooleanFunction} from "./boolean.js"
 
-export default class IsEmpty extends Value {
+export default class IsEmpty extends BooleanFunction {
     constructor(layer) {
         super()
         this.layer = layer

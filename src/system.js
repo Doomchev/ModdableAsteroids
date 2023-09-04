@@ -62,8 +62,8 @@ export let collisionSprite1 = new SpriteVariable("collisionSprite1")
 export let collisionSprite2 = new SpriteVariable("collisionSprite2")
 
 export function executeCollisionCode(sprite1, sprite2, code) {
-    collisionSprite1._sprite = sprite1
-    collisionSprite2._sprite = sprite2
+    collisionSprite1.sprite = sprite1
+    collisionSprite2.sprite = sprite2
     executeCode(code)
 }
 
@@ -105,9 +105,18 @@ document.addEventListener("DOMContentLoaded", function() {
             imagesToLoad--
             if(imagesToLoad <= 0) {
                 init()
+                let apsTime = 0, realAps = 0, apsCounter = 0
                 setInterval(function() {
                     root.actions.forEach(module => module.execute())
-                    root.keys.forEach(key => key.isPressed = false)
+                    root.keys.forEach(key => key._isPressed = false)
+                    let time = new Date().getTime()
+                    if(time >= apsTime) {
+                        realAps = apsCounter
+                        apsTime = time + 1000
+                        apsCounter = 0
+                    } else {
+                        apsCounter++
+                    }
                 }, 1000 / aps)
                 let fpsTime = 0, realFps = 0, fpsCounter = 0
                 setInterval(function() {
@@ -120,9 +129,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         fpsCounter++
                     }
                     currentCanvas.draw()
-                    /*ctx.font = "16px serif";
+                    ctx.font = "12px serif";
                     ctx.fillStyle = "white"
-                    ctx.fillText("fps: " + realFps, 5, 20)*/
+                    ctx.fillText(`fps: ${realFps}, aps: ${realAps}` , 5, 5)
                 })
             }
         }
@@ -135,7 +144,7 @@ document.addEventListener("keydown", event => {
     if(event.code === "F9") showCollisionShapes = !showCollisionShapes
     root.keys.forEach(key => {
         if(event.code === key.code) {
-            key.isDown = true
+            key._isDown = true
         }
     })
 }, false)
@@ -143,7 +152,7 @@ document.addEventListener("keydown", event => {
 document.addEventListener("keyup", event => {
     root.keys.forEach(key => {
         if(event.code === key.code) {
-            key.isDown = false
+            key._isDown = false
         }
     })
 }, false)
@@ -151,7 +160,7 @@ document.addEventListener("keyup", event => {
 document.addEventListener("keypress", event => {
     root.keys.forEach(key => {
         if(event.code === key.code) {
-            key.isPressed = true
+            key._isPressed = true
         }
     })
 }, false)

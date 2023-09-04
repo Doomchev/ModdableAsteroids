@@ -4,7 +4,7 @@ import {xToScreen, yToScreen} from "../canvas.js"
 
 export default class Label extends Shape {
     constructor(sprite, items, horizontalAlign, verticalAlign) {
-        super(sprite.centerX, sprite.centerY, sprite.width, sprite.height)
+        super(undefined, sprite.centerX, sprite.centerY, sprite.width, sprite.height)
         this.items = items
         this.horizontalAlign = horizontalAlign
         this.verticalAlign = verticalAlign

@@ -21,7 +21,7 @@ import Rotate from "./src/actions/sprite/rotate.js"
 import OnCollision from "./src/actions/sprite/on_collision.js"
 import Remove from "./src/actions/sprite/remove.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
-import IsEmpty from "./src/actions/layer/is_empty.js"
+import IsEmpty from "./src/functions/is_empty.js"
 import AddAction from "./src/actions/sprite/add_action.js"
 import Repeat from "./src/actions/structure/repeat.js"
 import Label from "./src/gui/label.js"
@@ -30,7 +30,7 @@ import {IntVariable} from "./src/variable/int.js"
 import Increment from "./src/actions/variable/increment.js"
 import {EnumVariable} from "./src/variable/enum.js"
 import IntIsEqual from "./src/functions/equal.js"
-import Equate from "./src/actions/int_equate.js"
+import Equate from "./src/actions/variable/int_equate.js"
 import RandomFloat from "./src/functions/random_float.js"
 import {RandomSign} from "./src/functions/random_sign.js"
 import {Mul} from "./src/functions/mul.js"
@@ -140,9 +140,9 @@ export function init() {
                 new If(new IntIsEqual(currentState, state.dead), [
                     new Decrement(lives),
                 ], [
-                    new Equate(lives, new IntVariable(3)),
-                    new Equate(score, new IntVariable(0)),
-                    new Equate(level, new IntVariable(0)),
+                    new Equate(lives, new IntVariable(undefined, 3)),
+                    new Equate(score, new IntVariable(undefined, 0)),
+                    new Equate(level, new IntVariable(undefined, 0)),
                     new Empty(asteroids)
                 ]),
                 new Equate(currentState, state.alive),

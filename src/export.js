@@ -6,7 +6,7 @@ let text = "", indent = "", currentIndex = -1
 
 export function exportToConsole() {
     text = "texture = "
-    exportValue(texture)
+    exportObject(texture)
     text += "\r\nroot = "
     exportObject(root)
     console.log(text)
