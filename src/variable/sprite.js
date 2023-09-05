@@ -10,6 +10,7 @@ export default class SpriteVariable extends SpriteFunction {
     constructor(name) {
         super()
         if(name) this._name = name
+        this._id = name
         this.sprite = null
     }
 

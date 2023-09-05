@@ -254,9 +254,7 @@ root = Object(#0) {
 							speed: 0
 						}, 
 						AddAction {
-							sprite: SpriteVariable(#current) {
-								sprite: null
-							}
+							sprite: #current
 							action: DelayedRemove {
 								sprite: #current
 								layer: #explosions
@@ -378,7 +376,7 @@ root = Object(#0) {
 										value: 0
 									}
 								}, 
-								Empty {
+								Clear {
 									layer: #asteroids
 								}
 							]
@@ -482,9 +480,7 @@ root = Object(#0) {
 					layer: #explosions
 					image: #explosionImages
 					animationSpeed: 16
-					position: SpriteVariable(#collisionSprite2) {
-						sprite: null
-					}
+					position: #collisionSprite2
 					size: 3
 					angle: RandomFloat {
 						from: 360
@@ -500,9 +496,7 @@ root = Object(#0) {
 					}
 				}, 
 				Remove {
-					object: SpriteVariable(#collisionSprite1) {
-						sprite: null
-					}
+					object: #collisionSprite1
 					layer: #bullets
 				}, 
 				Remove {
@@ -516,6 +510,29 @@ root = Object(#0) {
 			]
 		}
 	]
+	canvas: Canvas(#11) {
+		centerX: 0
+		centerY: 0
+		halfWidth: 4.5
+		halfHeight: 8
+		imageAngle: 0
+		angle: 0
+		speed: 0
+		visible: true
+		actions: []
+		viewport: Area(#12) {
+			leftX: 0
+			topY: 0
+			width: 360
+			height: 640
+		}
+		vdx: 180
+		vdy: 320
+		k: 40
+		oldZoom: 0
+		defaultPosition: #11
+		active: true
+	}
 	background: "rgb(9, 44, 84)"
 }
 `

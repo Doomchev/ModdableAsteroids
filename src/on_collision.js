@@ -1,4 +1,4 @@
-import {Action} from "../../system.js"
+import {Action} from "./system.js"
 
 export default class OnCollision extends Action {
     constructor(object1, object2, code) {

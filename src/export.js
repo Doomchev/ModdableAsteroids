@@ -4,7 +4,7 @@ import {texture} from "../asteroids.js"
 
 let text = "", indent = "", currentIndex = -1
 
-export function exportToConsole() {
+export function exportToEon() {
     text += "\r\nroot = "
     exportObject(root)
     console.log(text)

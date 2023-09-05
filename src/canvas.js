@@ -4,6 +4,10 @@ import {root, ctx, mousesx, mousesy} from "./system.js"
 
 export let currentCanvas, zk = 1.2
 
+export function setCurrentCanvas(canvas) {
+    currentCanvas = canvas
+}
+
 export default class Canvas extends Sprite {
     constructor(fx, fy, fwidth, fheight, scale, active = true) {
         super(undefined, undefined, 0.0, 0.0, fwidth / scale, fheight / scale, 0.0, 0.0, 0.0, active)

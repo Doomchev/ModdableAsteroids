@@ -1,56 +1,22 @@
-// noinspection ES6UnusedImports
-
-import Image from "./image.js"
-import Sprite from "./sprite.js"
-import Key from "./key.js"
-import {align, collisionSprite1, collisionSprite2, root} from "./system.js"
-import LinearChange from "./actions/linear_change.js"
-import Move from "./actions/sprite/move.js"
-import If from "./actions/structure/if.js"
-import ImageArray from "./image_array.js"
-import Constraint from "./constraint.js"
-import Animate from "./actions/sprite/animate.js"
-import SetField from "./actions/set_field.js"
-import Layer from "./layer.js"
-import Create from "./actions/sprite/create.js"
-import Delayed from "./actions/delayed.js"
-import {currentCanvas} from "./canvas.js"
-import SetBounds from "./actions/sprite/set_bounds.js"
-import LoopArea from "./actions/sprite/loop_area.js"
-import Shape from "./shape.js"
-import ExecuteActions from "./actions/sprite/execute_actions.js"
-import Rotate from "./actions/sprite/rotate.js"
-import OnCollision from "./actions/sprite/on_collision.js"
-import Remove from "./actions/sprite/remove.js"
-import DelayedRemove from "./actions/sprite/delayed_remove.js"
-import IsEmpty from "./functions/is_empty.js"
-import AddAction from "./actions/sprite/add_action.js"
-import Repeat from "./actions/structure/repeat.js"
-import Label from "./gui/label.js"
-import {current} from "./variable/sprite.js"
-import IntVariable from "./variable/int.js"
-import Increment from "./actions/variable/increment.js"
-import EnumVariable from "./variable/enum.js"
-import IntIsEqual from "./functions/equal.js"
-import Equate from "./actions/variable/int_equate.js"
-import RandomFloat from "./functions/random_float.js"
-import RandomSign from "./functions/random_sign.js"
-import Mul from "./functions/mul.js"
-import Pressed from "./functions/pressed.js"
-import Decrement from "./actions/variable/decrement.js"
-import Add from "./actions/variable/add.js"
-import Empty from "./actions/layer/empty.js"
-import SpriteVariable, {SpriteFunction} from "./variable/sprite.js"
 import {data} from "../data.js"
 import {texture} from "../asteroids.js"
+import {collisionSprite1, collisionSprite2, root} from "./system.js"
+import {setCurrentCanvas} from "./canvas.js"
+import {classes} from "./classes.js"
+import {current} from "./variable/sprite.js"
 
 let log = true
-let pos = 0, objects = {}, logText = ""
+let pos = 0, objects = new Map(), logText = ""
 
 export function importFromEon() {
+    objects.clear()
+    objects.set("current", current)
+    objects.set("collisionSprite1", collisionSprite1)
+    objects.set("collisionSprite2", collisionSprite2)
+
     while (true) {
         let name = readId()
-        if(name === "") return
+        if(name === "") break
 
         if(log) logText += " "
         expect("=")
@@ -60,6 +26,8 @@ export function importFromEon() {
 
         if(log) logText += "\r\n"
     }
+
+    setCurrentCanvas(root.canvas)
 }
 
 function isDigit(symbol) {
@@ -132,10 +100,11 @@ function readObject(object) {
         object = readValue()
         expect(")")
         texture[link.replace("Texture", "")] = object
+        objects.set(link, object)
         return object
     }
 
-    if(object === undefined) object = Object.create(eval(name))
+    let map = object ?? {}
     if(link !== "") expect(")")
     if(log) logText += " "
     expect("{")
@@ -152,12 +121,13 @@ function readObject(object) {
         let name = readId()
         expect(":")
         if(log) logText += " "
-        object[name] = readValue()
+        map[name] = readValue()
     }
     if(log) logText += "}"
     pos++
 
-    if(link !== "") objects[link] = object
+    object = object ?? classes[name](map)
+    if(link !== "") objects.set(link, object)
     return object
 }
 
@@ -177,7 +147,7 @@ function readValue() {
             expect("]")
             return array
         case "#":
-            return objects[readId().substring(1)]
+            return objects.get(readId().substring(1))
         case "\"":
             pos++
             let start = pos

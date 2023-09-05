@@ -6,6 +6,7 @@ export default class Equate extends Action {
         this.variable = variable
         this.value = value
     }
+
     execute() {
         this.variable.equateTo(this.value)
     }

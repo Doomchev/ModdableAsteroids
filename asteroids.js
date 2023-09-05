@@ -20,7 +20,7 @@ import LoopArea from "./src/actions/sprite/loop_area.js"
 import Shape from "./src/shape.js"
 import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import Rotate from "./src/actions/sprite/rotate.js"
-import OnCollision from "./src/actions/sprite/on_collision.js"
+import OnCollision from "./src/on_collision.js"
 import Remove from "./src/actions/sprite/remove.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 import IsEmpty from "./src/functions/is_empty.js"
@@ -39,8 +39,8 @@ import Mul from "./src/functions/mul.js"
 import Pressed from "./src/functions/pressed.js"
 import Decrement from "./src/actions/variable/decrement.js"
 import Add from "./src/actions/variable/add.js"
-import Empty from "./src/actions/layer/empty.js"
-import {exportToConsole} from "./src/export.js"
+import Clear from "./src/actions/layer/clear.js"
+import {exportToEon} from "./src/export.js"
 import {data} from "./data.js"
 import {importFromEon} from "./src/import.js"
 
@@ -56,8 +56,9 @@ export function init() {
     // noinspection PointlessBooleanExpressionJS
     if(true) {
         importFromEon()
-        console.log(texture)
-        console.log(root)
+        //console.log(texture)
+        //console.log(root)
+        exportToEon()
         return
     }
 
@@ -155,7 +156,7 @@ export function init() {
                     new Equate(lives, new IntVariable(undefined, 3)),
                     new Equate(score, new IntVariable(undefined, 0)),
                     new Equate(level, new IntVariable(undefined, 0)),
-                    new Empty(asteroids)
+                    new Clear(asteroids)
                 ]),
                 new Equate(currentState, state.alive),
             ])
@@ -190,5 +191,5 @@ export function init() {
             new Add(score, 100)
         ]),
     ]
-    exportToConsole()
+    exportToEon()
 }

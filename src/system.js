@@ -95,7 +95,8 @@ document.addEventListener("DOMContentLoaded", function() {
     let canvas = document.getElementById("canvas")
     canvas.focus()
     ctx = canvas.getContext("2d")
-    setCanvas(new Canvas(0, 0, canvas.clientWidth, canvas.clientHeight, 40.0))
+    root.canvas = new Canvas(0, 0, canvas.clientWidth, canvas.clientHeight, 40.0)
+    setCanvas(root.canvas)
 
     let entries = Object.entries(texture)
     let imagesToLoad = entries.length
