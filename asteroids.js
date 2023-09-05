@@ -53,6 +53,7 @@ export let texture = {
 }
 
 export function init() {
+    // noinspection PointlessBooleanExpressionJS
     if(true) {
         importFromEon()
         console.log(texture)

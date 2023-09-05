@@ -1,12 +1,5 @@
-export let data = `
-texture = Object(#0) {
-	ship: Texture(#shipTexture, "http://localhost:63342/ModdableAsteroids/textures/ship.png")
-	flame: Texture(#flameTexture, "http://localhost:63342/ModdableAsteroids/textures/flame.png")
-	bullet: Texture(#bulletTexture, "http://localhost:63342/ModdableAsteroids/textures/bullet.png")
-	asteroid: Texture(#asteroidTexture, "http://localhost:63342/ModdableAsteroids/textures/asteroid.png")
-	explosion: Texture(#explosionTexture, "http://localhost:63342/ModdableAsteroids/textures/explosion.png")
-}
-root = Object(#1) {
+export let data = ` 
+root = Object(#0) {
 	keys: [
 		Key(#left) {
 			code: "ArrowLeft"
@@ -33,8 +26,8 @@ root = Object(#1) {
 			centerY: 0
 			halfWidth: 0.5
 			halfHeight: 0.5
-			image: Image(#2) {
-				texture: #flameTexture
+			image: Image(#1) {
+				texture: Texture(#flameTexture, "http://localhost:63342/ModdableAsteroids/textures/flame.png")
 				x: 0
 				y: 0
 				height: 64
@@ -55,8 +48,8 @@ root = Object(#1) {
 			centerY: 0
 			halfWidth: 0.5
 			halfHeight: 0.5
-			image: Image(#3) {
-				texture: #shipTexture
+			image: Image(#2) {
+				texture: Texture(#shipTexture, "http://localhost:63342/ModdableAsteroids/textures/ship.png")
 				x: 0
 				y: 0
 				height: 100
@@ -75,7 +68,7 @@ root = Object(#1) {
 		Layer(#explosions) {
 			items: []
 		}, 
-		Label(#4) {
+		Label(#3) {
 			centerX: 0
 			centerY: 0
 			halfWidth: 4
@@ -89,7 +82,7 @@ root = Object(#1) {
 			horizontalAlign: 0
 			verticalAlign: 0
 		}, 
-		Label(#5) {
+		Label(#4) {
 			centerX: 0
 			centerY: 0
 			halfWidth: 4
@@ -103,7 +96,7 @@ root = Object(#1) {
 			horizontalAlign: 1
 			verticalAlign: 0
 		}, 
-		Label(#6) {
+		Label(#5) {
 			centerX: 0
 			centerY: 0
 			halfWidth: 4
@@ -117,7 +110,7 @@ root = Object(#1) {
 			horizontalAlign: 2
 			verticalAlign: 0
 		}, 
-		Label(#7) {
+		Label(#6) {
 			centerX: 0
 			centerY: 0
 			halfWidth: 4
@@ -229,7 +222,7 @@ root = Object(#1) {
 						Create {
 							layer: #bullets
 							image: ImageArray(#bulletImages) {
-								texture: #bulletTexture
+								texture: Texture(#bulletTexture, "http://localhost:63342/ModdableAsteroids/textures/bullet.png")
 								columns: 1
 								rows: 16
 							}
@@ -248,7 +241,7 @@ root = Object(#1) {
 						Create {
 							layer: #explosions
 							image: ImageArray(#explosionImages) {
-								texture: #explosionTexture
+								texture: Texture(#explosionTexture, "http://localhost:63342/ModdableAsteroids/textures/explosion.png")
 								columns: 4
 								rows: 4
 							}
@@ -287,7 +280,7 @@ root = Object(#1) {
 							}
 							code: [
 								SetField {
-									object: #7
+									object: #6
 									fieldName: "items"
 									value: [
 										"GAME OVER"
@@ -300,7 +293,7 @@ root = Object(#1) {
 							]
 							elseCode: [
 								SetField {
-									object: #7
+									object: #6
 									fieldName: "items"
 									value: [
 										"PRESS SPACE"
@@ -332,7 +325,7 @@ root = Object(#1) {
 							value: true
 						}, 
 						SetField {
-							object: #7
+							object: #6
 							fieldName: "items"
 							value: []
 						}, 
@@ -369,19 +362,19 @@ root = Object(#1) {
 							elseCode: [
 								Equate {
 									variable: #lives
-									value: IntVariable(#8) {
+									value: IntVariable(#7) {
 										value: 3
 									}
 								}, 
 								Equate {
 									variable: #score
-									value: IntVariable(#9) {
+									value: IntVariable(#8) {
 										value: 0
 									}
 								}, 
 								Equate {
 									variable: #level
-									value: IntVariable(#10) {
+									value: IntVariable(#9) {
 										value: 0
 									}
 								}, 
@@ -435,7 +428,7 @@ root = Object(#1) {
 						Create {
 							layer: #asteroids
 							image: ImageArray(#asteroidImages) {
-								texture: #asteroidTexture
+								texture: Texture(#asteroidTexture, "http://localhost:63342/ModdableAsteroids/textures/asteroid.png")
 								columns: 8
 								rows: 4
 							}
@@ -446,7 +439,7 @@ root = Object(#1) {
 								}
 								value2: RandomSign {}
 							}
-							position: Object(#11) {
+							position: Object(#10) {
 								centerX: RandomFloat {
 									from: -5.75
 									to: 5.75

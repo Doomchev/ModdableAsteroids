@@ -5,8 +5,6 @@ import {texture} from "../asteroids.js"
 let text = "", indent = "", currentIndex = -1
 
 export function exportToConsole() {
-    text = "texture = "
-    exportObject(texture)
     text += "\r\nroot = "
     exportObject(root)
     console.log(text)
@@ -71,8 +69,14 @@ export function exportValue(value, key) {
         if(value._id) {
             text += `#${value._id}`
         } else {
-            value._id = `${key}Texture`
+            for(const[texKey, texValue] of Object.entries(texture)) {
+                if(value === texValue) {
+                    value._id = `${texKey}Texture`
+                    break
+                }
+            }
             text += `Texture(#${value._id}, \"${value.src}\")`
+            if(!value._id) throw Error(`Texture ${value.src}`)
         }
     } else if(value instanceof Object) {
         exportObject(value)

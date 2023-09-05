@@ -56,7 +56,6 @@ export function importFromEon() {
         expect("=")
         if(log) logText += " "
 
-        if(name === "texture") readObject(texture)
         if(name === "root") readObject(root)
 
         if(log) logText += "\r\n"
@@ -132,6 +131,7 @@ function readObject(object) {
         if (log) logText += " "
         object = readValue()
         expect(")")
+        texture[link.replace("Texture", "")] = object
         return object
     }
 
