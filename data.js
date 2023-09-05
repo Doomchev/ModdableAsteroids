@@ -41,6 +41,7 @@ root = Object(#0) {
 			angle: -1.5707963267948966
 			speed: 0
 			visible: true
+			active: true
 			actions: []
 		}, 
 		Sprite(#ship) {
@@ -63,6 +64,7 @@ root = Object(#0) {
 			angle: 0
 			speed: 0
 			visible: true
+			active: true
 			actions: []
 		}, 
 		Layer(#explosions) {
@@ -205,6 +207,7 @@ root = Object(#0) {
 						angle: 0
 						speed: 0
 						visible: true
+						active: true
 						actions: []
 					}
 					parent: #ship
@@ -519,6 +522,7 @@ root = Object(#0) {
 		angle: 0
 		speed: 0
 		visible: true
+		active: true
 		actions: []
 		viewport: Area(#12) {
 			leftX: 0
@@ -526,12 +530,6 @@ root = Object(#0) {
 			width: 360
 			height: 640
 		}
-		vdx: 180
-		vdy: 320
-		k: 40
-		oldZoom: 0
-		defaultPosition: #11
-		active: true
 	}
 	background: "rgb(9, 44, 84)"
 }

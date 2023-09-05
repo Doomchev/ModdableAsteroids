@@ -101,6 +101,7 @@ function readObject(object) {
         expect(")")
         texture[link.replace("Texture", "")] = object
         objects.set(link, object)
+        //object._name = link
         return object
     }
 
@@ -127,7 +128,10 @@ function readObject(object) {
     pos++
 
     object = object ?? classes[name](map)
-    if(link !== "") objects.set(link, object)
+    if(link !== "") {
+        objects.set(link, object)
+        object._name = link
+    }
     return object
 }
 

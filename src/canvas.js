@@ -9,16 +9,22 @@ export function setCurrentCanvas(canvas) {
 }
 
 export default class Canvas extends Sprite {
-    constructor(fx, fy, fwidth, fheight, scale, active = true) {
-        super(undefined, undefined, 0.0, 0.0, fwidth / scale, fheight / scale, 0.0, 0.0, 0.0, active)
-        this.viewport = new Area(fx, fy, fwidth, fheight)
-        this.vdx = 1.0
-        this.vdy = 1.0
-        this.k = 1.0
-        this.oldZoom = 0
-        this.defaultPosition = this
+    constructor(centerX, centerY, width, height, active, viewport) {
+        super(undefined, undefined, centerX, centerY, width, height, 0.0, 0.0, 0.0, active)
+        this.viewport = viewport
+        this._vdx = 1.0
+        this._vdy = 1.0
+        this._k = 1.0
+        this._oldZoom = 0
+        this._defaultPosition = this
         this.active = active
         this.update()
+    }
+    
+    
+    static create(fx, fy, fwidth, fheight, scale, active = true) {
+        return  new Canvas(0.0, 0.0, fwidth / scale, fheight / scale, active
+            , new Area(fx, fy, fwidth, fheight))
     }
 
     draw() {
@@ -40,10 +46,10 @@ export default class Canvas extends Sprite {
     update() {
         let viewport = this.viewport
         let k = 1.0 * viewport.width / this.width
-        this.k = k
+        this._k = k
         this.height = 1.0 * viewport.height / k
-        this.vdx = 0.5 * viewport.width - this.centerX * k + viewport.leftX
-        this.vdy = 0.5 * viewport.height - this.centerY * k + viewport.topY
+        this._vdx = 0.5 * viewport.width - this.centerX * k + viewport.leftX
+        this._vdy = 0.5 * viewport.height - this.centerY * k + viewport.topY
     }
 
     setZoom(zoom) {
@@ -67,22 +73,22 @@ export default class Canvas extends Sprite {
     }
 
     setDefaultPosition() {
-        this.oldZoom = this.zoom
-        this.defaultPosition = new Sprite(undefined, undefined, this.centerX, this.centerY, this.width, this.height)
+        this._oldZoom = this.zoom
+        this._defaultPosition = new Sprite(undefined, undefined, this.centerX, this.centerY, this.width, this.height)
     }
 
     restorePosition() {
-        let defaultPosition = this.defaultPosition
+        let defaultPosition = this._defaultPosition
         this.centerX = defaultPosition.centerX
         this.centerY = defaultPosition.centerY
         this.width = defaultPosition.width
         this.height = defaultPosition.height
-        this.zoom = this.oldZoom
+        this.zoom = this._oldZoom
         this.update()
     }
 
     drawDefaultCamera() {
-        let pos = this.defaultPosition
+        let pos = this._defaultPosition
         ctx.fillStyle("blue")
         drawRect(xToScreen(pos.leftX), yToScreen(pos.topY), distToScreen(pos.width), distToScreen(pos.height))
         ctx.fillStyle("white")
@@ -106,24 +112,24 @@ export function drawRect(x, y, width, height) {
 }
 
 export function xToScreen(fieldX) {
-    return fieldX * currentCanvas.k + currentCanvas.vdx
+    return fieldX * currentCanvas._k + currentCanvas._vdx
 }
 export function yToScreen(fieldY) {
-   return fieldY * currentCanvas.k + currentCanvas.vdy
+   return fieldY * currentCanvas._k + currentCanvas._vdy
 }
 export function distToScreen(fieldDist) {
-    return fieldDist * currentCanvas.k
+    return fieldDist * currentCanvas._k
 }
 
 export function xFromScreen(screenX) {
-    return (screenX - currentCanvas.vdx) / currentCanvas.k
+    return (screenX - currentCanvas._vdx) / currentCanvas._k
 }
 export function yFromScreen(screenY) {
-    return (screenY - currentCanvas.vdy) / currentCanvas.k
+    return (screenY - currentCanvas._vdy) / currentCanvas._k
 }
 
 export function distFromScreen(screenDist) {
-    return screenDist / currentCanvas.k
+    return screenDist / currentCanvas._k
 }
 
 export function setCanvas(canvas) {
