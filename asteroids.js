@@ -1,56 +1,6 @@
-// noinspection UnreachableCodeJS
-
-import Image from "./src/image.js"
-import Sprite from "./src/sprite.js"
-import Key from "./src/key.js"
-import {
-    addTextures,
-    align,
-    collisionSprite1,
-    collisionSprite2,
-    project,
-    root,
-    textures,
-    toRadians
-} from "./src/system.js"
-import LinearChange from "./src/actions/linear_change.js"
-import Move from "./src/actions/sprite/move.js"
-import If from "./src/actions/structure/if.js"
-import ImageArray from "./src/image_array.js"
-import Constraint from "./src/constraint.js"
-import Animate from "./src/actions/sprite/animate.js"
-import SetField from "./src/actions/set_field.js"
-import Layer from "./src/layer.js"
-import Create from "./src/actions/sprite/create.js"
-import Delayed from "./src/actions/delayed.js"
-import {currentCanvas} from "./src/canvas.js"
-import SetBounds from "./src/actions/sprite/set_bounds.js"
-import LoopArea from "./src/actions/sprite/loop_area.js"
-import Shape from "./src/shape.js"
-import ExecuteActions from "./src/actions/sprite/execute_actions.js"
-import Rotate from "./src/actions/sprite/rotate.js"
-import OnCollision from "./src/on_collision.js"
-import Remove from "./src/actions/sprite/remove.js"
-import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
-import IsEmpty from "./src/functions/is_empty.js"
-import AddAction from "./src/actions/sprite/add_action.js"
-import Repeat from "./src/actions/structure/repeat.js"
-import Label from "./src/gui/label.js"
-import {current} from "./src/variable/sprite.js"
-import IntVariable from "./src/variable/int.js"
-import Increment from "./src/actions/variable/increment.js"
-import EnumVariable from "./src/variable/enum.js"
-import IntIsEqual from "./src/functions/equal.js"
-import Equate from "./src/actions/variable/int_equate.js"
-import RandomFloat from "./src/functions/random_float.js"
-import RandomSign from "./src/functions/random_sign.js"
-import Mul from "./src/functions/mul.js"
-import Pressed from "./src/functions/pressed.js"
-import Decrement from "./src/actions/variable/decrement.js"
-import Add from "./src/actions/variable/add.js"
-import Clear from "./src/actions/layer/clear.js"
-import {exportAll} from "./src/export.js"
+import {project} from "./src/system.js"
 import {importRoot, importTextures} from "./src/import.js"
+import {exportAll} from "./src/export.js"
 
 project.loadTextures = () => {
     importTextures()

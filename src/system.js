@@ -2,8 +2,11 @@ import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import FloatFunction from "./functions/float.js"
 import Sprite from "./sprite.js"
 import SpriteVariable, {SpriteFunction} from "./variable/sprite.js"
+import {Value} from "./value.js"
 
-export let project = {}
+export let project = {
+    loc: "ru"
+}
 
 // basic classes
 
@@ -51,25 +54,6 @@ export function randomSign() {
     return 2 * randomInt(2) - 1
 }
 
-export function executeCode(code) {
-    if(code instanceof Array) {
-        code.forEach(item => item.execute())
-    } else {
-        code.execute()
-    }
-}
-
-
-
-export let collisionSprite1 = new SpriteVariable("collisionSprite1")
-export let collisionSprite2 = new SpriteVariable("collisionSprite2")
-
-export function executeCollisionCode(sprite1, sprite2, code) {
-    collisionSprite1.sprite = sprite1
-    collisionSprite2.sprite = sprite2
-    executeCode(code)
-}
-
 export function removeFromArray(item, array) {
     let i = array.indexOf(item)
     if(i < 0) return
@@ -92,6 +76,25 @@ export function getValue(object, fieldName) {
     return undefined
 }
 
+// code, collisions
+
+export function executeCode(code) {
+    if(code instanceof Array) {
+        code.forEach(item => item.execute())
+    } else {
+        code.execute()
+    }
+}
+
+export let collisionSprite1 = new SpriteVariable("collisionSprite1")
+export let collisionSprite2 = new SpriteVariable("collisionSprite2")
+
+export function executeCollisionCode(sprite1, sprite2, code) {
+    collisionSprite1.sprite = sprite1
+    collisionSprite2.sprite = sprite2
+    executeCode(code)
+}
+
 // textures
 
 let textureSource = new Map()
@@ -109,6 +112,24 @@ export function addTexturesToObjects(objects) {
     for(let [name, texture] of Object.entries(textures)) {
         objects.set(name + "Texture", texture)
     }
+}
+
+// localization
+
+class LocTextVariable extends Value {
+    constructor(name) {
+        super()
+        this.name = name
+    }
+
+    toString() {
+        return project[project.loc][this.name]
+    }
+}
+
+export function loc(stringName) {
+    return new LocTextVariable(stringName)
+
 }
 
 // listeners

@@ -1,13 +1,4 @@
-import {data} from "../data.js"
-import {
-    addTextures,
-    addTexturesToObjects,
-    collisionSprite1,
-    collisionSprite2,
-    project,
-    root,
-    textures
-} from "./system.js"
+import {addTextures, addTexturesToObjects, collisionSprite1, collisionSprite2, project, root} from "./system.js"
 import {setCurrentCanvas} from "./canvas.js"
 import {classes} from "./classes.js"
 import {current} from "./variable/sprite.js"

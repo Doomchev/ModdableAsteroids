@@ -8,6 +8,7 @@ import {
     align,
     collisionSprite1,
     collisionSprite2,
+    loc,
     project,
     root,
     textures,
@@ -48,6 +49,7 @@ import Rotate from "./src/actions/sprite/rotate.js"
 import Add from "./src/actions/variable/add.js"
 import Remove from "./src/actions/sprite/remove.js"
 import {exportAll} from "./src/export.js"
+import "./asteroids_localization.js"
 
 project.loadTextures = () => {
     addTextures({
@@ -74,7 +76,7 @@ project.init = () => {
     let hudArea = new Shape("hudArea", 0.0, 0.0, currentCanvas.width - 1.0
         , currentCanvas.height - 1.0)
     let scoreLabel = new Label(hudArea, [score], align.left, align.top)
-    let levelLabel = new Label(hudArea, ["LEVEL ", level], align.center, align.top)
+    let levelLabel = new Label(hudArea, [loc("level"), level], align.center, align.top)
     let livesLabel = new Label(hudArea, [lives], align.right, align.top)
     let messageLabel = new Label(hudArea, [""], align.center, align.center)
 
@@ -137,10 +139,10 @@ project.init = () => {
                 new SetField(ship, "visible", false),
                 new SetField(flame, "visible", false),
                 new If(new IntIsEqual(lives, 0), [
-                    new SetField(messageLabel, "items", ["GAME OVER"]),
+                    new SetField(messageLabel, "items", [loc("gameOver")]),
                     new Equate(currentState, state.gameOver),
                 ], [
-                    new SetField(messageLabel, "items", ["PRESS SPACE"]),
+                    new SetField(messageLabel, "items", [loc("pressSpace")]),
                     new Equate(currentState, state.dead),
                 ])
             ]),
