@@ -219,6 +219,10 @@ root = Object(#1) {
 								texture: #bulletTexture
 								columns: 1
 								rows: 16
+								xMul: 0.8958333333333334
+								yMul: 0.4583333333333333
+								heightMul: 3
+								widthMul: 10.5
 							}
 							animationSpeed: 16
 							position: #gun
@@ -238,6 +242,8 @@ root = Object(#1) {
 								texture: #explosionTexture
 								columns: 4
 								rows: 4
+								heightMul: 1.5
+								widthMul: 1.5
 							}
 							animationSpeed: 16
 							position: #ship
@@ -423,6 +429,8 @@ root = Object(#1) {
 								texture: #asteroidTexture
 								columns: 8
 								rows: 4
+								heightMul: 1.25
+								widthMul: 1.25
 							}
 							animationSpeed: Mul {
 								value1: RandomFloat {

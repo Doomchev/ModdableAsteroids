@@ -7,6 +7,10 @@ export default class ImageArray {
         this.texture = texture
         this.columns = columns
         this.rows =  rows
+        this.xMul = xMul
+        this.yMul = yMul
+        this.heightMul = heightMul
+        this.widthMul = widthMul
         let quantity = columns * rows
         let width = texture.width / columns
         let height = texture.height / rows

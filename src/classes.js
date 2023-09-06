@@ -42,8 +42,8 @@ import Canvas from "./canvas.js"
 export let classes = {
     Image: function(o) {return new Image(o.texture, o.x, o.y, o.width, o.height, o.xMul ?? dv.xMul
         , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
-    Sprite: function(o) {return new Sprite(o._name, o.image, o.centerX, o.centerY, o.width, o.height, o.angle, o.speed
-        , o.imageAngle, o.active ?? dv.active, o.visible ?? dv.visible)},
+    Sprite: function(o) {return new Sprite(o._name, o.image, o.centerX, o.centerY, 2.0 * o.halfWidth, 2.0 * o.halfHeight
+        , o.angle, o.speed, o.imageAngle, o.active ?? dv.active, o.visible ?? dv.visible)},
     Key: function(o) {return new Key(o._name, o.code)},
     LinearChange: function(o) {return new LinearChange(o.object, o.parameterName, o.speed, o.min, o.max)},
     Move: function(o) {return new Move(o.object)},
@@ -57,11 +57,13 @@ export let classes = {
     Create: function(o) {return new Create(o.layer, o.image, o.animationSpeed, o.position, o.size, o.angle, o.speed
         , o.imageAngle)},
     Delayed: function(o) {return new Delayed(o.condition, o.coolDown)},
-    Canvas: function(o) {return new Canvas(o.centerX, o.centerY, o.width, o.height, o.active ?? dv.active, o.viewport)},
+    Canvas: function(o) {return new Canvas(o.centerX, o.centerY, 2.0 * o.halfWidth, 2.0 * o.halfHeight
+        , o.active ?? dv.active, o.viewport)},
     Area: function(o) {return new Area(o.leftX, o.topY, o.width, o.height)},
     SetBounds: function(o) {return new SetBounds(o.layer, o.bounds)},
     LoopArea: function(o) {return new LoopArea(o.object, o.area)},
-    Shape: function(o) {return new Shape(o._name, o.centerX, o.centerY,  o.width, o.height)},
+    Shape: function(o) {return new Shape(o._name, o.centerX, o.centerY, 2.0 * o.halfWidth
+        , 2.0 * o.halfHeight)},
     ExecuteActions: function(o) {return new ExecuteActions(o.object)},
     Rotate: function(o) {return new Rotate(o.object, o.speed)},
     OnCollision: function(o) {return new OnCollision(o.object1, o.object2, o.code)},
