@@ -1,8 +1,9 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
-import {init, loadTextures} from "../asteroids.js"
 import FloatFunction from "./functions/float.js"
 import Sprite from "./sprite.js"
 import SpriteVariable, {SpriteFunction} from "./variable/sprite.js"
+
+export let project = {}
 
 // basic classes
 
@@ -57,6 +58,8 @@ export function executeCode(code) {
         code.execute()
     }
 }
+
+
 
 export let collisionSprite1 = new SpriteVariable("collisionSprite1")
 export let collisionSprite2 = new SpriteVariable("collisionSprite2")
@@ -117,14 +120,14 @@ document.addEventListener("DOMContentLoaded", function() {
     root.canvas = Canvas.create(0, 0, canvas.clientWidth, canvas.clientHeight, 40.0)
     setCanvas(root.canvas)
 
-    loadTextures()
+    project.loadTextures()
 
     let imagesToLoad = textureSource.size
     textureSource.forEach((src, image) => {
         image.onload = () => {
             imagesToLoad--
             if(imagesToLoad <= 0) {
-                init()
+                project.init()
                 
                 let apsTime = 0, realAps = 0, apsCounter = 0
                 setInterval(function() {

@@ -1,19 +1,31 @@
 import {data} from "../data.js"
-import {addTextures, addTexturesToObjects, collisionSprite1, collisionSprite2, root, textures} from "./system.js"
+import {
+    addTextures,
+    addTexturesToObjects,
+    collisionSprite1,
+    collisionSprite2,
+    project,
+    root,
+    textures
+} from "./system.js"
 import {setCurrentCanvas} from "./canvas.js"
 import {classes} from "./classes.js"
 import {current} from "./variable/sprite.js"
 
 let log = true
-let pos = 0, objects = new Map(), logText = ""
+let pos = 0, objects = new Map(), logText = "", data
 
 export function importTextures() {
+    data = project.data
+
     let textureMap = {}
     importEntry(textureMap)
     addTextures(textureMap)
 }
 
 export function importRoot() {
+    data = project.data
+
     objects.clear()
     objects.set("current", current)
     objects.set("collisionSprite1", collisionSprite1)
