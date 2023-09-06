@@ -1,5 +1,12 @@
 export let data = ` 
-root = Object(#0) {
+textures = Object {
+	ship: Texture(#shipTexture, "http://localhost:63342/ModdableAsteroids/textures/ship.png")
+	flame: Texture(#flameTexture, "http://localhost:63342/ModdableAsteroids/textures/flame.png")
+	bullet: Texture(#bulletTexture, "http://localhost:63342/ModdableAsteroids/textures/bullet.png")
+	asteroid: Texture(#asteroidTexture, "http://localhost:63342/ModdableAsteroids/textures/asteroid.png")
+	explosion: Texture(#explosionTexture, "http://localhost:63342/ModdableAsteroids/textures/explosion.png")
+}
+root = Object(#1) {
 	keys: [
 		Key(#left) {
 			code: "ArrowLeft"
@@ -26,51 +33,38 @@ root = Object(#0) {
 			centerY: 0
 			halfWidth: 0.5
 			halfHeight: 0.5
-			image: Image(#1) {
-				texture: Texture(#flameTexture, "http://localhost:63342/ModdableAsteroids/textures/flame.png")
+			image: Image(#2) {
+				texture: #flameTexture
 				x: 0
 				y: 0
 				height: 64
 				width: 64
-				xMul: 0.5
-				yMul: 0.5
-				heightMul: 1
-				widthMul: 1
-				visible: true
 			}
 			angle: -1.5707963267948966
 			speed: 0
-			visible: true
-			active: true
-			actions: []
 		}, 
 		Sprite(#ship) {
 			centerX: 0
 			centerY: 0
 			halfWidth: 0.5
 			halfHeight: 0.5
-			image: Image(#2) {
-				texture: Texture(#shipTexture, "http://localhost:63342/ModdableAsteroids/textures/ship.png")
+			image: Image(#3) {
+				texture: #shipTexture
 				x: 0
 				y: 0
 				height: 100
 				width: 75
 				xMul: 0.35
-				yMul: 0.5
 				heightMul: 1.9
 				widthMul: 1.35
-				visible: true
 			}
 			angle: 0
 			speed: 0
-			visible: true
-			active: true
-			actions: []
 		}, 
 		Layer(#explosions) {
 			items: []
 		}, 
-		Label(#3) {
+		Label(#4) {
 			centerX: 0
 			centerY: 0
 			halfWidth: 4
@@ -84,7 +78,7 @@ root = Object(#0) {
 			horizontalAlign: 0
 			verticalAlign: 0
 		}, 
-		Label(#4) {
+		Label(#5) {
 			centerX: 0
 			centerY: 0
 			halfWidth: 4
@@ -98,7 +92,7 @@ root = Object(#0) {
 			horizontalAlign: 1
 			verticalAlign: 0
 		}, 
-		Label(#5) {
+		Label(#6) {
 			centerX: 0
 			centerY: 0
 			halfWidth: 4
@@ -112,7 +106,7 @@ root = Object(#0) {
 			horizontalAlign: 2
 			verticalAlign: 0
 		}, 
-		Label(#6) {
+		Label(#7) {
 			centerX: 0
 			centerY: 0
 			halfWidth: 4
@@ -206,9 +200,6 @@ root = Object(#0) {
 						halfHeight: 0.5
 						angle: 0
 						speed: 0
-						visible: true
-						active: true
-						actions: []
 					}
 					parent: #ship
 					dAngle: 0
@@ -225,7 +216,7 @@ root = Object(#0) {
 						Create {
 							layer: #bullets
 							image: ImageArray(#bulletImages) {
-								texture: Texture(#bulletTexture, "http://localhost:63342/ModdableAsteroids/textures/bullet.png")
+								texture: #bulletTexture
 								columns: 1
 								rows: 16
 							}
@@ -244,7 +235,7 @@ root = Object(#0) {
 						Create {
 							layer: #explosions
 							image: ImageArray(#explosionImages) {
-								texture: Texture(#explosionTexture, "http://localhost:63342/ModdableAsteroids/textures/explosion.png")
+								texture: #explosionTexture
 								columns: 4
 								rows: 4
 							}
@@ -252,7 +243,7 @@ root = Object(#0) {
 							position: #ship
 							size: 2.5
 							angle: RandomFloat {
-								from: 360
+								from: 6.283185307179586
 							}
 							speed: 0
 						}, 
@@ -281,7 +272,7 @@ root = Object(#0) {
 							}
 							code: [
 								SetField {
-									object: #6
+									object: #7
 									fieldName: "items"
 									value: [
 										"GAME OVER"
@@ -294,7 +285,7 @@ root = Object(#0) {
 							]
 							elseCode: [
 								SetField {
-									object: #6
+									object: #7
 									fieldName: "items"
 									value: [
 										"PRESS SPACE"
@@ -326,7 +317,7 @@ root = Object(#0) {
 							value: true
 						}, 
 						SetField {
-							object: #6
+							object: #7
 							fieldName: "items"
 							value: []
 						}, 
@@ -363,19 +354,19 @@ root = Object(#0) {
 							elseCode: [
 								Equate {
 									variable: #lives
-									value: IntVariable(#7) {
+									value: IntVariable(#8) {
 										value: 3
 									}
 								}, 
 								Equate {
 									variable: #score
-									value: IntVariable(#8) {
+									value: IntVariable(#9) {
 										value: 0
 									}
 								}, 
 								Equate {
 									variable: #level
-									value: IntVariable(#9) {
+									value: IntVariable(#10) {
 										value: 0
 									}
 								}, 
@@ -429,7 +420,7 @@ root = Object(#0) {
 						Create {
 							layer: #asteroids
 							image: ImageArray(#asteroidImages) {
-								texture: Texture(#asteroidTexture, "http://localhost:63342/ModdableAsteroids/textures/asteroid.png")
+								texture: #asteroidTexture
 								columns: 8
 								rows: 4
 							}
@@ -440,7 +431,7 @@ root = Object(#0) {
 								}
 								value2: RandomSign {}
 							}
-							position: Object(#10) {
+							position: Object(#11) {
 								centerX: RandomFloat {
 									from: -5.75
 									to: 5.75
@@ -513,18 +504,14 @@ root = Object(#0) {
 			]
 		}
 	]
-	canvas: Canvas(#11) {
+	canvas: Canvas(#12) {
 		centerX: 0
 		centerY: 0
 		halfWidth: 4.5
 		halfHeight: 8
-		imageAngle: 0
 		angle: 0
 		speed: 0
-		visible: true
-		active: true
-		actions: []
-		viewport: Area(#12) {
+		viewport: Area(#13) {
 			leftX: 0
 			topY: 0
 			width: 360

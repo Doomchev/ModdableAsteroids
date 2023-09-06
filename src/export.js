@@ -1,11 +1,12 @@
-import {Action, root} from "./system.js"
+import {Action, root, textures} from "./system.js"
 import SingleFunction from "./functions/single.js"
-import {texture} from "../asteroids.js"
 import {dv} from "./classes.js"
 
 let text = "", indent = "", currentIndex = -1
 
-export function exportToEon() {
+export function exportAll() {
+    text += "\r\ntextures = "
+    exportObject(textures)
     text += "\r\nroot = "
     exportObject(root)
     console.log(text)
@@ -74,12 +75,7 @@ export function exportValue(value) {
         if(value._id) {
             text += `#${value._id}`
         } else {
-            for(const[texKey, texValue] of Object.entries(texture)) {
-                if(value === texValue) {
-                    value._id = `${texKey}Texture`
-                    break
-                }
-            }
+            value._id = `${value._name}Texture`
             text += `Texture(#${value._id}, \"${value.src}\")`
             if(!value._id) throw Error(`Texture ${value.src}`)
         }

@@ -1,6 +1,6 @@
 import Shape from "./shape.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {executeCollisionCode, apsk, toRadians} from "./system.js"
+import {apsk, executeCollisionCode} from "./system.js"
 
 export default class Sprite extends Shape {
     constructor(name, image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0

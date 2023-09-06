@@ -1,6 +1,5 @@
 import {data} from "../data.js"
-import {texture} from "../asteroids.js"
-import {collisionSprite1, collisionSprite2, root} from "./system.js"
+import {addTextures, addTexturesToObjects, collisionSprite1, collisionSprite2, root, textures} from "./system.js"
 import {setCurrentCanvas} from "./canvas.js"
 import {classes} from "./classes.js"
 import {current} from "./variable/sprite.js"
@@ -8,27 +7,38 @@ import {current} from "./variable/sprite.js"
 let log = true
 let pos = 0, objects = new Map(), logText = ""
 
-export function importFromEon() {
+export function importTextures() {
+    let textureMap = {}
+    importEntry(textureMap)
+    addTextures(textureMap)
+}
+
+export function importRoot() {
     objects.clear()
     objects.set("current", current)
     objects.set("collisionSprite1", collisionSprite1)
     objects.set("collisionSprite2", collisionSprite2)
 
-    while (true) {
-        let name = readId()
-        if(name === "") break
+    addTexturesToObjects(objects)
 
-        if(log) logText += " "
-        expect("=")
-        if(log) logText += " "
-
-        if(name === "root") readObject(root)
-
-        if(log) logText += "\r\n"
-    }
+    importEntry(root)
 
     setCurrentCanvas(root.canvas)
 }
+
+function importEntry(object) {
+    let name = readId()
+
+    if(log) logText += " "
+    expect("=")
+    if(log) logText += " "
+
+    readObject(object)
+
+    if(log) logText += "\r\n"
+}
+
+// checking
 
 function isDigit(symbol) {
     return (symbol >= "0" && symbol <= "9")
@@ -50,6 +60,8 @@ function expect(symbol) {
     if(log) logText += symbol
     pos++
 }
+
+// readers
 
 function readSymbol() {
     while(true) {
@@ -97,12 +109,9 @@ function readObject(object) {
     if(name === "Texture") {
         expect(",")
         if (log) logText += " "
-        object = readValue()
+        let src = readValue()
         expect(")")
-        texture[link.replace("Texture", "")] = object
-        objects.set(link, object)
-        //object._name = link
-        return object
+        return src
     }
 
     let map = object ?? {}

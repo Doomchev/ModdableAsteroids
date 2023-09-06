@@ -3,7 +3,7 @@
 import Image from "./src/image.js"
 import Sprite from "./src/sprite.js"
 import Key from "./src/key.js"
-import {align, collisionSprite1, collisionSprite2, root, toRadians} from "./src/system.js"
+import {addTextures, align, collisionSprite1, collisionSprite2, root, textures, toRadians} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
 import Move from "./src/actions/sprite/move.js"
 import If from "./src/actions/structure/if.js"
@@ -40,25 +40,30 @@ import Pressed from "./src/functions/pressed.js"
 import Decrement from "./src/actions/variable/decrement.js"
 import Add from "./src/actions/variable/add.js"
 import Clear from "./src/actions/layer/clear.js"
-import {exportToEon} from "./src/export.js"
-import {data} from "./data.js"
-import {importFromEon} from "./src/import.js"
+import {exportAll} from "./src/export.js"
+import {importRoot, importTextures} from "./src/import.js"
 
-export let texture = {
-    ship: "textures/ship.png",
-    flame: "textures/flame.png",
-    bullet: "textures/bullet.png",
-    asteroid: "textures/asteroid.png",
-    explosion: "textures/explosion.png",
+let load = true
+
+export function loadTextures() {
+    if(load) {
+        importTextures()
+        return
+    }
+
+    addTextures({
+        ship: "textures/ship.png",
+        flame: "textures/flame.png",
+        bullet: "textures/bullet.png",
+        asteroid: "textures/asteroid.png",
+        explosion: "textures/explosion.png",
+    })
 }
 
 export function init() {
-    // noinspection PointlessBooleanExpressionJS
-    if(true) {
-        importFromEon()
-        //console.log(texture)
-        //console.log(root)
-        exportToEon()
+    if(load) {
+        importRoot()
+        exportAll()
         return
     }
 
@@ -83,26 +88,25 @@ export function init() {
     let bounds = new Shape("bounds",0.0, 0.0, currentCanvas.width + 2.5
         , currentCanvas.height + 2.5)
 
-    let shipTexture = texture.ship
-    let ship = new Sprite("ship", new Image(shipTexture, 0, 0, shipTexture.width, shipTexture.height
-        , 0.35, 0.5, 1.35, 1.9))
+    let ship = new Sprite("ship", new Image(textures.ship, 0, 0
+        , undefined, undefined, 0.35, 0.5, 1.35, 1.9))
     let start = new Sprite("start")
     
-    let flameImages = new ImageArray("flameImages", texture.flame, 3, 3)
+    let flameImages = new ImageArray("flameImages", textures.flame, 3, 3)
     let flame = new Sprite("flame", flameImages._images[0], -0.9, 0.0, 1.0, 1.0, toRadians(-90.0))
 
     let gun = new Sprite("gun", undefined, 1.0, 0.0)
     let bullets = new Layer("bullets")
-    let bulletImages = new ImageArray("bulletImages", texture.bullet, 1, 16
-        , 43.0 / 48.0, 5.5 / 12.0, 10.5, 3.0)
+    let bulletImages = new ImageArray("bulletImages", textures.bullet
+        , 1, 16, 43.0 / 48.0, 5.5 / 12.0, 10.5, 3.0)
 
     let asteroids = new Layer("asteroids")
-    let asteroidImages = new ImageArray("asteroidImages", texture.asteroid, 8, 4, 0.5
-        , 0.5, 1.25, 1.25)
+    let asteroidImages = new ImageArray("asteroidImages", textures.asteroid
+        , 8, 4, 0.5, 0.5, 1.25, 1.25)
 
     let explosions = new Layer("explosions")
-    let explosionImages = new ImageArray("explosionImages", texture.explosion, 4, 4, 0.5
-        , 0.5, 1.5, 1.5)
+    let explosionImages = new ImageArray("explosionImages", textures.explosion
+        , 4, 4, 0.5, 0.5, 1.5, 1.5)
 
     root.background = "rgb(9, 44, 84)"
     root.scene = [bullets, asteroids, flame, ship, explosions, scoreLabel, levelLabel, livesLabel, messageLabel]
@@ -135,7 +139,7 @@ export function init() {
 
             new OnCollision(ship, asteroids, [
                 new Create(explosions, explosionImages, 16.0, ship, 2.5
-                    , toRadians(new RandomFloat(360.0))),
+                    , new RandomFloat(toRadians(360.0))),
                 new AddAction(current, new DelayedRemove(current, explosions,1.0)),
                 new SetField(ship, "visible", false),
                 new SetField(flame, "visible", false),
@@ -197,5 +201,5 @@ export function init() {
             new Add(score, 100)
         ]),
     ]
-    exportToEon()
+    exportAll()
 }

@@ -1,5 +1,5 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
-import {init, texture} from "../asteroids.js"
+import {init, loadTextures} from "../asteroids.js"
 import FloatFunction from "./functions/float.js"
 import Sprite from "./sprite.js"
 import SpriteVariable, {SpriteFunction} from "./variable/sprite.js"
@@ -89,6 +89,25 @@ export function getValue(object, fieldName) {
     return undefined
 }
 
+// textures
+
+let textureSource = new Map()
+export let textures = {}
+export function addTextures(textureMap) {
+    for(let [name, src] of Object.entries(textureMap)) {
+        let texture = new Image();
+        texture._name = name
+        textureSource.set(texture, src)
+        textures[name] = texture
+    }
+}
+
+export function addTexturesToObjects(objects) {
+    for(let [name, texture] of Object.entries(textures)) {
+        objects.set(name + "Texture", texture)
+    }
+}
+
 // listeners
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -98,10 +117,10 @@ document.addEventListener("DOMContentLoaded", function() {
     root.canvas = Canvas.create(0, 0, canvas.clientWidth, canvas.clientHeight, 40.0)
     setCanvas(root.canvas)
 
-    let entries = Object.entries(texture)
-    let imagesToLoad = entries.length
-    entries.forEach(entry => {
-        let image = new Image()
+    loadTextures()
+
+    let imagesToLoad = textureSource.size
+    textureSource.forEach((src, image) => {
         image.onload = () => {
             imagesToLoad--
             if(imagesToLoad <= 0) {
@@ -138,8 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 })
             }
         }
-        image.src = entry[1]
-        texture[entry[0]] = image
+        image.src = src
     })
 })
 
