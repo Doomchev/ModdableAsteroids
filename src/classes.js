@@ -84,3 +84,13 @@ export let classes = {
     Clear: function(o) {return new Clear(o.layer)},
     Object: function(o) {return o},
 }
+
+export let defaultValue = {
+    xMul: 0.5,
+    yMul: 0.5,
+    heightMul: 1,
+    widthMul: 1,
+    visible: true,
+    active: true,
+    actions: [],
+}

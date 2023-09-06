@@ -1,6 +1,7 @@
 import {Action, root} from "./system.js"
 import SingleFunction from "./functions/single.js"
 import {texture} from "../asteroids.js"
+import {defaultValue} from "./classes.js"
 
 let text = "", indent = "", currentIndex = -1
 
@@ -32,20 +33,21 @@ export function exportObject(object) {
     indent += "\t"
     let hasValue = false
     for(const[key, value] of Object.entries(object)) {
-        if(key.charAt(0) === "_" || value === undefined) continue
+        if(key.charAt(0) === "_" || value === undefined
+            || value == defaultValue[key]) continue
         if(hasValue === false) {
             text += "\r\n"
             hasValue = true
         }
         text += `${indent}${key}: `
-        exportValue(value, key)
+        exportValue(value)
         text += "\r\n"
     }
     indent = indent.substring(1)
     text += hasValue ? `${indent}}` : "}"
 }
 
-export function exportValue(value, key) {
+export function exportValue(value) {
     if(value instanceof Array) {
         if(value.length === 0) {
             text += "[]"
