@@ -73,13 +73,15 @@ export function init() {
     let level = new IntVariable("level", 0)
     let currentState = new EnumVariable("state", state.alive)
 
-    let hudArea = new Shape("hudArea", 0.0, 0.0, currentCanvas.width - 1.0, currentCanvas.height - 1.0)
+    let hudArea = new Shape("hudArea", 0.0, 0.0, currentCanvas.width - 1.0
+        , currentCanvas.height - 1.0)
     let scoreLabel = new Label(hudArea, [score], align.left, align.top)
     let levelLabel = new Label(hudArea, ["LEVEL ", level], align.center, align.top)
     let livesLabel = new Label(hudArea, [lives], align.right, align.top)
     let messageLabel = new Label(hudArea, [""], align.center, align.center)
 
-    let bounds = new Shape("bounds",0.0, 0.0, currentCanvas.width + 2.5, currentCanvas.height + 2.5)
+    let bounds = new Shape("bounds",0.0, 0.0, currentCanvas.width + 2.5
+        , currentCanvas.height + 2.5)
 
     let shipTexture = texture.ship
     let ship = new Sprite("ship", new Image(shipTexture, 0, 0, shipTexture.width, shipTexture.height
@@ -87,7 +89,7 @@ export function init() {
     let start = new Sprite("start")
     
     let flameImages = new ImageArray("flameImages", texture.flame, 3, 3)
-    let flame = new Sprite("flame", flameImages._images[0], -0.9, 0.0, 1.0, 1.0, -90.0)
+    let flame = new Sprite("flame", flameImages._images[0], -0.9, 0.0, 1.0, 1.0, toRadians(-90.0))
 
     let gun = new Sprite("gun", undefined, 1.0, 0.0)
     let bullets = new Layer("bullets")
@@ -95,10 +97,12 @@ export function init() {
         , 43.0 / 48.0, 5.5 / 12.0, 10.5, 3.0)
 
     let asteroids = new Layer("asteroids")
-    let asteroidImages = new ImageArray("asteroidImages", texture.asteroid, 8, 4, 0.5, 0.5, 1.25, 1.25)
+    let asteroidImages = new ImageArray("asteroidImages", texture.asteroid, 8, 4, 0.5
+        , 0.5, 1.25, 1.25)
 
     let explosions = new Layer("explosions")
-    let explosionImages = new ImageArray("explosionImages", texture.explosion, 4, 4, 0.5, 0.5, 1.5, 1.5)
+    let explosionImages = new ImageArray("explosionImages", texture.explosion, 4, 4, 0.5
+        , 0.5, 1.5, 1.5)
 
     root.background = "rgb(9, 44, 84)"
     root.scene = [bullets, asteroids, flame, ship, explosions, scoreLabel, levelLabel, livesLabel, messageLabel]
@@ -113,7 +117,8 @@ export function init() {
         new If(new IntIsEqual(currentState, state.alive), [
             new If(left, new LinearChange(ship,"angle", -dAngle)),
             new If(right, new LinearChange(ship,"angle", dAngle)),
-            new If(forward, new LinearChange(ship,"speed", acceleration + deceleration, undefined, limit)),
+            new If(forward, new LinearChange(ship,"speed", acceleration + deceleration
+                , undefined, limit)),
             new LinearChange(ship,"speed", -deceleration, 0.0),
             new LoopArea(ship, bounds),
             new Move(ship),
@@ -129,7 +134,8 @@ export function init() {
             ]),
 
             new OnCollision(ship, asteroids, [
-                new Create(explosions, explosionImages, 16.0, ship, 2.5, new RandomFloat(360.0)),
+                new Create(explosions, explosionImages, 16.0, ship, 2.5
+                    , toRadians(new RandomFloat(360.0))),
                 new AddAction(current, new DelayedRemove(current, explosions,1.0)),
                 new SetField(ship, "visible", false),
                 new SetField(flame, "visible", false),

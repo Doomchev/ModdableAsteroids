@@ -4,14 +4,15 @@ import {executeCollisionCode, apsk, toRadians} from "./system.js"
 
 export default class Sprite extends Shape {
     constructor(name, image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
-                , angleInDegrees = 0.0, speed = 0.0, imageAngle, active = true) {
+                , angle = 0.0, speed = 0.0, imageAngle, active = true, visible = true) {
         super(name, centerX, centerY, width, height)
         this.image = image
         this.imageAngle = imageAngle
-        this.angle = toRadians(angleInDegrees)
+        this.angle = angle
         this.speed = speed
         this.visible = true
         this.active = active
+        this.visible = visible
         this.actions = []
     }
 

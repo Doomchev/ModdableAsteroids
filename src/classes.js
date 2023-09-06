@@ -41,20 +41,24 @@ import SpriteVariable from "./variable/sprite.js"
 import Canvas from "./canvas.js"
 
 export let classes = {
-    Image: function(o) {return new Image(o.texture, o.x, o.y, o.width, o.height, o.xMul, o.yMul, o.widthMul, o.heightMul)},
-    Sprite: function(o) {return new Sprite(o._name, o.image, o.centerX, o.centerY, o.width, o.height, o.angleInDegrees, o.speed, o.imageAngle)},
+    Image: function(o) {return new Image(o.texture, o.x, o.y, o.width, o.height, o.xMul ?? dv.xMul
+        , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
+    Sprite: function(o) {return new Sprite(o._name, o.image, o.centerX, o.centerY, o.width, o.height, o.angle, o.speed
+        , o.imageAngle, o.active ?? dv.active, o.visible ?? dv.visible)},
     Key: function(o) {return new Key(o._name, o.code)},
     LinearChange: function(o) {return new LinearChange(o.object, o.parameterName, o.speed, o.min, o.max)},
     Move: function(o) {return new Move(o.object)},
     If: function(o) {return new If(o.condition, o.code, o.elseCode)},
-    ImageArray: function(o) {return new ImageArray(o._name, o.texture, o.columns, o.rows, o.xMul, o.yMul, o.widthMul, o.heightMul)},
+    ImageArray: function(o) {return new ImageArray(o._name, o.texture, o.columns, o.rows, o.xMul ?? dv.xMul
+        , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
     Constraint: function(o) {return new Constraint(o.sprite, o.parent)},
     Animate: function(o) {return new Animate(o.sprite, o.array, o.speed)},
     SetField: function(o) {return new SetField(o.object, o.fieldName, o.value)},
     Layer: function(o) {return new Layer(o._name, o.items)},
-    Create: function(o) {return new Create(o.layer, o.image, o.animationSpeed, o.position, o.size, o.angle, o.speed, o.imageAngle)},
+    Create: function(o) {return new Create(o.layer, o.image, o.animationSpeed, o.position, o.size, o.angle, o.speed
+        , o.imageAngle)},
     Delayed: function(o) {return new Delayed(o.condition, o.coolDown)},
-    Canvas: function(o) {return new Canvas(o.centerX, o.centerY, o.width, o.height, o.active, o.viewport)},
+    Canvas: function(o) {return new Canvas(o.centerX, o.centerY, o.width, o.height, o.active ?? dv.active, o.viewport)},
     Area: function(o) {return new Area(o.leftX, o.topY, o.width, o.height)},
     SetBounds: function(o) {return new SetBounds(o.layer, o.bounds)},
     LoopArea: function(o) {return new LoopArea(o.object, o.area)},
@@ -85,7 +89,7 @@ export let classes = {
     Object: function(o) {return o},
 }
 
-export let defaultValue = {
+export let dv = {
     xMul: 0.5,
     yMul: 0.5,
     heightMul: 1,
