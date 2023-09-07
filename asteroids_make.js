@@ -71,7 +71,7 @@ project.init = () => {
         gameOver: 2,
     }
 
-    let score = new IntVariable("score", 0, "Z8")
+    let score = new IntVariable("score", -500, "Z8")
     let lives = new IntVariable("lives", 3, "R ∆")
     let level = new IntVariable("level", 0)
     let currentState = new EnumVariable("state", state.alive)
@@ -100,7 +100,7 @@ project.init = () => {
 
     let asteroids = new Layer("asteroids")
     let asteroidImages = new ImageArray("asteroidImages", textures.asteroid
-        , 8, 4, 0.5, 0.5, 1.25, 1.25)
+        , 8, 4, 0.5, 0.5, 1.5, 1.5)
 
     let explosions = new Layer("explosions")
     let explosionImages = new ImageArray("explosionImages", textures.explosion
@@ -162,7 +162,7 @@ project.init = () => {
                     new Decrement(lives),
                 ], [
                     new Equate(lives, new IntVariable(undefined, 3)),
-                    new Equate(score, new IntVariable(undefined, 0)),
+                    new Equate(score, new IntVariable(undefined, -500)),
                     new Equate(level, new IntVariable(undefined, 0)),
                     new Clear(asteroids)
                 ]),

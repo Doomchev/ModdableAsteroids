@@ -129,7 +129,6 @@ export class Loc extends Value {
 
 export function loc(stringName) {
     return new Loc(stringName)
-
 }
 
 // listeners
@@ -186,7 +185,15 @@ document.addEventListener("DOMContentLoaded", function() {
 })
 
 document.addEventListener("keydown", event => {
-    if(event.code === "F9") showCollisionShapes = !showCollisionShapes
+    switch (event.code) {
+        case "KeyL":
+            project.loc = project.loc === "ru" ? "en" : "ru"
+            break
+        case "KeyO":
+            showCollisionShapes = !showCollisionShapes
+            break
+    }
+
     project.keys.forEach(key => {
         if(event.code === key.code) {
             key._isDown = true

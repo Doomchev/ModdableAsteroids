@@ -19,6 +19,7 @@ textures = Object {
 	asteroid: Texture(#asteroidTexture, "http://localhost:63342/ModdableAsteroids/textures/asteroid.png")
 	explosion: Texture(#explosionTexture, "http://localhost:63342/ModdableAsteroids/textures/explosion.png")
 }
+loc = "ru"
 keys = [
 	Key(#left) {
 		code: "ArrowLeft"
@@ -83,7 +84,7 @@ scene = [
 		halfHeight: 7.5
 		items: [
 			IntVariable(#score) {
-				value: 0
+				value: -500
 				format: "Z8"
 			}
 		]
@@ -96,9 +97,7 @@ scene = [
 		halfWidth: 4
 		halfHeight: 7.5
 		items: [
-			Loc(#5) {
-				name: "level"
-			}, 
+			Loc(level), 
 			IntVariable(#level) {
 				value: 0
 			}
@@ -106,7 +105,7 @@ scene = [
 		horizontalAlign: 1
 		verticalAlign: 0
 	}, 
-	Label(#6) {
+	Label(#5) {
 		centerX: 0
 		centerY: 0
 		halfWidth: 4
@@ -120,7 +119,7 @@ scene = [
 		horizontalAlign: 2
 		verticalAlign: 0
 	}, 
-	Label(#7) {
+	Label(#6) {
 		centerX: 0
 		centerY: 0
 		halfWidth: 4
@@ -292,12 +291,10 @@ actions = [
 						}
 						code: [
 							SetField {
-								object: #7
+								object: #6
 								fieldName: "items"
 								value: [
-									Loc(#8) {
-										name: "gameOver"
-									}
+									Loc(gameOver)
 								]
 							}, 
 							Equate {
@@ -307,12 +304,10 @@ actions = [
 						]
 						elseCode: [
 							SetField {
-								object: #7
+								object: #6
 								fieldName: "items"
 								value: [
-									Loc(#9) {
-										name: "pressSpace"
-									}
+									Loc(pressSpace)
 								]
 							}, 
 							Equate {
@@ -341,7 +336,7 @@ actions = [
 						value: true
 					}, 
 					SetField {
-						object: #7
+						object: #6
 						fieldName: "items"
 						value: []
 					}, 
@@ -378,19 +373,19 @@ actions = [
 						elseCode: [
 							Equate {
 								variable: #lives
-								value: IntVariable(#10) {
+								value: IntVariable(#7) {
 									value: 3
 								}
 							}, 
 							Equate {
 								variable: #score
-								value: IntVariable(#11) {
-									value: 0
+								value: IntVariable(#8) {
+									value: -500
 								}
 							}, 
 							Equate {
 								variable: #level
-								value: IntVariable(#12) {
+								value: IntVariable(#9) {
 									value: 0
 								}
 							}, 
@@ -447,8 +442,8 @@ actions = [
 							texture: #asteroidTexture
 							columns: 8
 							rows: 4
-							heightMul: 1.25
-							widthMul: 1.25
+							heightMul: 1.5
+							widthMul: 1.5
 						}
 						animationSpeed: Mul {
 							value1: RandomFloat {
@@ -457,7 +452,7 @@ actions = [
 							}
 							value2: RandomSign {}
 						}
-						position: Object(#13) {
+						position: Object(#10) {
 							centerX: RandomFloat {
 								from: -5.75
 								to: 5.75
@@ -530,7 +525,6 @@ actions = [
 		]
 	}
 ]
-loc = "ru"
 en = Object {
 	level: "LEVEL "
 	pressSpace: "PRESS SPACE"
@@ -548,7 +542,7 @@ canvas = Canvas {
 	halfHeight: 8
 	angle: 0
 	speed: 0
-	viewport: Area(#17) {
+	viewport: Area(#14) {
 		leftX: 0
 		topY: 0
 		width: 360

@@ -1,4 +1,4 @@
-import {addTextures, addTexturesToObjects, collisionSprite1, collisionSprite2, project} from "./system.js"
+import {addTextures, addTexturesToObjects, collisionSprite1, collisionSprite2, Loc, project} from "./system.js"
 import {setCurrentCanvas} from "./canvas.js"
 import {classes} from "./classes.js"
 import {current} from "./variable/sprite.js"
@@ -99,6 +99,19 @@ function readObject(object) {
         case "true": return true
         case "false": return false
         case "null": return null
+        case "Loc":
+            expect("(")
+            let name = readId()
+            expect(")")
+            return new Loc(name)
+        case "Texture":
+            expect("(")
+            readId()
+            expect(",")
+            if (log) logText += " "
+            let src = readValue()
+            expect(")")
+            return src
     }
 
     if(name.startsWith("#")) return objects[name.substring(1)]
@@ -107,14 +120,6 @@ function readObject(object) {
     if(readSymbol() === "(") {
         expect("(")
         link = readId().substring(1)
-    }
-
-    if(name === "Texture") {
-        expect(",")
-        if (log) logText += " "
-        let src = readValue()
-        expect(")")
-        return src
     }
 
     let map = object ?? {}

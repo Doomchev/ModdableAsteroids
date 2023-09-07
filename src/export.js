@@ -1,4 +1,4 @@
-import {Action, project} from "./system.js"
+import {Action, Loc, project} from "./system.js"
 import SingleFunction from "./functions/single.js"
 import {dv} from "./classes.js"
 
@@ -86,6 +86,8 @@ function exportValue(value) {
             text += `Texture(#${value._id}, \"${value.src}\")`
             if(!value._id) throw Error(`Texture ${value.src}`)
         }
+    } else if(value instanceof Loc) {
+        text += `Loc(${value.name})`
     } else if(value instanceof Object) {
         exportObject(value, true)
     } else if(typeof value === 'string') {
