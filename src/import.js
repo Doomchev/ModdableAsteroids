@@ -1,4 +1,4 @@
-import {addTextures, addTexturesToObjects, collisionSprite1, collisionSprite2, project, root} from "./system.js"
+import {addTextures, addTexturesToObjects, collisionSprite1, collisionSprite2, project} from "./system.js"
 import {setCurrentCanvas} from "./canvas.js"
 import {classes} from "./classes.js"
 import {current} from "./variable/sprite.js"
@@ -9,14 +9,12 @@ let pos = 0, objects = new Map(), logText = "", data
 export function importTextures() {
     data = project.data
 
-    let textureMap = {}
-    importEntry(textureMap)
-    addTextures(textureMap)
+    readId()
+    expect("=")
+    addTextures(readValue())
 }
 
-export function importRoot() {
-    data = project.data
-
+export function importProject() {
     objects.clear()
     objects.set("current", current)
     objects.set("collisionSprite1", collisionSprite1)
@@ -24,21 +22,23 @@ export function importRoot() {
 
     addTexturesToObjects(objects)
 
-    importEntry(root)
+    while(true) {
+        let name = readId()
+        if(name === "") break
 
-    setCurrentCanvas(root.canvas)
-}
+        if(log) logText += " "
+        expect("=")
+        if(log) logText += " "
 
-function importEntry(object) {
-    let name = readId()
+        project[name] = readValue()
+        if(name === "textures") {
+            addTexturesToObjects(objects)
 
-    if(log) logText += " "
-    expect("=")
-    if(log) logText += " "
+        }
 
-    readObject(object)
-
-    if(log) logText += "\r\n"
+        if(log) logText += "\r\n"
+    }
+    setCurrentCanvas(project.canvas)
 }
 
 // checking

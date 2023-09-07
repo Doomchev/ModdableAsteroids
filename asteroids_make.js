@@ -3,17 +3,7 @@ import EnumVariable from "./src/variable/enum.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {
-    addTextures,
-    align,
-    collisionSprite1,
-    collisionSprite2,
-    loc,
-    project,
-    root,
-    textures,
-    toRadians
-} from "./src/system.js"
+import {addTextures, align, collisionSprite1, collisionSprite2, loc, project, toRadians} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Image from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -48,8 +38,7 @@ import RandomSign from "./src/functions/random_sign.js"
 import Rotate from "./src/actions/sprite/rotate.js"
 import Add from "./src/actions/variable/add.js"
 import Remove from "./src/actions/sprite/remove.js"
-import {exportAll} from "./src/export.js"
-import "./asteroids_localization.js"
+import {exportProject} from "./src/export.js"
 
 project.loadTextures = () => {
     addTextures({
@@ -61,7 +50,21 @@ project.loadTextures = () => {
     })
 }
 
+project.en = {
+    level: "LEVEL ",
+    pressSpace: "PRESS SPACE",
+    gameOver: "GAME OVER",
+}
+
+project.ru = {
+    level: "УРОВЕНЬ ",
+    pressSpace: "НАЖМИТЕ ПРОБЕЛ",
+    gameOver: "ИГРА ОКОНЧЕНА",
+}
+
 project.init = () => {
+    let textures = project.textures
+
     let state = {
         alive: 0,
         dead: 1,
@@ -103,8 +106,8 @@ project.init = () => {
     let explosionImages = new ImageArray("explosionImages", textures.explosion
         , 4, 4, 0.5, 0.5, 1.5, 1.5)
 
-    root.background = "rgb(9, 44, 84)"
-    root.scene = [bullets, asteroids, flame, ship, explosions, scoreLabel, levelLabel, livesLabel, messageLabel]
+    project.background = "rgb(9, 44, 84)"
+    project.scene = [bullets, asteroids, flame, ship, explosions, scoreLabel, levelLabel, livesLabel, messageLabel]
 
     let left = new Key("left", "ArrowLeft")
     let right = new Key("right", "ArrowRight")
@@ -112,7 +115,7 @@ project.init = () => {
     let fire = new Key("fire", "Space")
 
     let acceleration = 25.0, deceleration = 15.0, limit = 7.5, dAngle = toRadians(180.0)
-    root.actions = [
+    project.actions = [
         new If(new IntIsEqual(currentState, state.alive), [
             new If(left, new LinearChange(ship,"angle", -dAngle)),
             new If(right, new LinearChange(ship,"angle", dAngle)),
@@ -196,5 +199,5 @@ project.init = () => {
             new Add(score, 100)
         ]),
     ]
-    exportAll()
+    exportProject()
 }

@@ -1,5 +1,5 @@
-import {root} from "./system.js"
 import {Value} from "./value.js"
+import {project} from "./system.js"
 
 export default class Key extends Value {
     constructor(name, code) {
@@ -8,7 +8,7 @@ export default class Key extends Value {
         this.code = code
         this._isPressed = false
         this._isDown = false
-        root.keys.push(this)
+        project.keys.push(this)
     }
 
     toBoolean() {

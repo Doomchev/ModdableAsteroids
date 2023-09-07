@@ -1,6 +1,6 @@
 import Sprite from "./sprite.js"
 import Area from "./area.js"
-import {root, ctx, mousesx, mousesy} from "./system.js"
+import {ctx, mousesx, mousesy, project} from "./system.js"
 
 export let currentCanvas, zk = 1.2
 
@@ -33,11 +33,11 @@ export default class Canvas extends Sprite {
         currentCanvas = this
         this.update()
 
-        ctx.fillStyle = root.background
+        ctx.fillStyle = project.background
         //g.setClip(viewport.leftX, viewport.topY, viewport.width, viewport.height)
         ctx.fillRect(viewport.leftX, viewport.topY, viewport.width, viewport.height)
-        for(let i = 0; i < root.scene.length; i++) {
-            root.scene[i].draw()
+        for(let i = 0; i < project.scene.length; i++) {
+            project.scene[i].draw()
         }
         currentCanvas = oldCanvas
     }

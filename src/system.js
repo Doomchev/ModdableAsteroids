@@ -5,7 +5,14 @@ import SpriteVariable, {SpriteFunction} from "./variable/sprite.js"
 import {Value} from "./value.js"
 
 export let project = {
-    loc: "ru"
+    textures: {},
+    loc: "ru",
+    loadTextures: undefined,
+    init: undefined,
+    data: undefined,
+    keys: [],
+    scene: [],
+    actions: [],
 }
 
 // basic classes
@@ -19,12 +26,6 @@ export class Action {
 
 export let zk = 1.2, fps = 144.0, aps = 200.0, showCollisionShapes = false
 export let ctx, mousesx, mousesy, apsk = 1.0 / aps
-
-export let root = {
-    keys: [],
-    scene: [],
-    actions: []
-}
 
 // enums
 
@@ -98,25 +99,24 @@ export function executeCollisionCode(sprite1, sprite2, code) {
 // textures
 
 let textureSource = new Map()
-export let textures = {}
 export function addTextures(textureMap) {
     for(let [name, src] of Object.entries(textureMap)) {
         let texture = new Image();
         texture._name = name
         textureSource.set(texture, src)
-        textures[name] = texture
+        project.textures[name] = texture
     }
 }
 
 export function addTexturesToObjects(objects) {
-    for(let [name, texture] of Object.entries(textures)) {
+    for(let [name, texture] of Object.entries(project.textures)) {
         objects.set(name + "Texture", texture)
     }
 }
 
 // localization
 
-class LocTextVariable extends Value {
+export class Loc extends Value {
     constructor(name) {
         super()
         this.name = name
@@ -128,7 +128,7 @@ class LocTextVariable extends Value {
 }
 
 export function loc(stringName) {
-    return new LocTextVariable(stringName)
+    return new Loc(stringName)
 
 }
 
@@ -138,8 +138,8 @@ document.addEventListener("DOMContentLoaded", function() {
     let canvas = document.getElementById("canvas")
     canvas.focus()
     ctx = canvas.getContext("2d")
-    root.canvas = Canvas.create(0, 0, canvas.clientWidth, canvas.clientHeight, 40.0)
-    setCanvas(root.canvas)
+    project.canvas = Canvas.create(0, 0, canvas.clientWidth, canvas.clientHeight, 40.0)
+    setCanvas(project.canvas)
 
     project.loadTextures()
 
@@ -152,8 +152,8 @@ document.addEventListener("DOMContentLoaded", function() {
                 
                 let apsTime = 0, realAps = 0, apsCounter = 0
                 setInterval(function() {
-                    root.actions.forEach(module => module.execute())
-                    root.keys.forEach(key => key._isPressed = false)
+                    project.actions.forEach(module => module.execute())
+                    project.keys.forEach(key => key._isPressed = false)
                     let time = new Date().getTime()
                     if(time >= apsTime) {
                         realAps = apsCounter
@@ -178,7 +178,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     ctx.font = "12px serif";
                     ctx.fillStyle = "white"
                     ctx.fillText(`fps: ${realFps}, aps: ${realAps}` , 5, 5)
-                })
+                }, 1000.0 / 144)
             }
         }
         image.src = src
@@ -187,7 +187,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 document.addEventListener("keydown", event => {
     if(event.code === "F9") showCollisionShapes = !showCollisionShapes
-    root.keys.forEach(key => {
+    project.keys.forEach(key => {
         if(event.code === key.code) {
             key._isDown = true
         }
@@ -195,7 +195,7 @@ document.addEventListener("keydown", event => {
 }, false)
 
 document.addEventListener("keyup", event => {
-    root.keys.forEach(key => {
+    project.keys.forEach(key => {
         if(event.code === key.code) {
             key._isDown = false
         }
@@ -203,7 +203,7 @@ document.addEventListener("keyup", event => {
 }, false)
 
 document.addEventListener("keypress", event => {
-    root.keys.forEach(key => {
+    project.keys.forEach(key => {
         if(event.code === key.code) {
             key._isPressed = true
         }

@@ -38,6 +38,7 @@ import Decrement from "./actions/variable/decrement.js"
 import Add from "./actions/variable/add.js"
 import Clear from "./actions/layer/clear.js"
 import Canvas from "./canvas.js"
+import {Loc} from "./system.js"
 
 export let classes = {
     Image: function(o) {return new Image(o.texture, o.x, o.y, o.width, o.height, o.xMul ?? dv.xMul
@@ -84,10 +85,10 @@ export let classes = {
     Pressed: function(o) {return new Pressed(o.key)},
     Decrement: function(o) {return new Decrement(o.variable)},
     Add: function(o) {return new Add(o.variable, o.value)},
-    Empty: function(o) {return new Clear(o.layer)},
     SpriteVariable: function(o) {return new SpriteVariable(o._name)},
     Clear: function(o) {return new Clear(o.layer)},
     Object: function(o) {return o},
+    Loc: function(o) {return new Loc(o.name)},
 }
 
 export let dv = {

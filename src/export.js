@@ -1,18 +1,25 @@
-import {Action, root, textures} from "./system.js"
+import {Action, project} from "./system.js"
 import SingleFunction from "./functions/single.js"
 import {dv} from "./classes.js"
 
 let text = "", indent = "", currentIndex = -1
 
-export function exportAll() {
-    text += "\r\ntextures = "
-    exportObject(textures)
-    text += "\r\nroot = "
-    exportObject(root)
+export function exportProject() {
+    for(let [name, object] of Object.entries(project)) {
+        if(name === "data") continue
+        if(object instanceof Function) continue
+
+        text += `\r\n${name} = `
+        if(!(object instanceof Object) || object instanceof Array) {
+            exportValue(object)
+        } else {
+            exportObject(object)
+        }
+    }
     console.log(text)
 }
 
-export function exportObject(object) {
+function exportObject(object, attachId = false) {
     if(object._id) {
         text += `#${object._id}`
         return
@@ -29,7 +36,7 @@ export function exportObject(object) {
         }
     }
 
-    let id = single ? "" : `(#${object._id})`
+    let id = single ? "" : (attachId ? `(#${object._id})` : "")
     text += `${object.constructor.name}${id} {`
     indent += "\t"
     let hasValue = false
@@ -51,7 +58,7 @@ export function exportObject(object) {
     text += hasValue ? `${indent}}` : "}"
 }
 
-export function exportValue(value) {
+function exportValue(value) {
     if(value instanceof Array) {
         if(value.length === 0) {
             text += "[]"
@@ -80,7 +87,7 @@ export function exportValue(value) {
             if(!value._id) throw Error(`Texture ${value.src}`)
         }
     } else if(value instanceof Object) {
-        exportObject(value)
+        exportObject(value, true)
     } else if(typeof value === 'string') {
         text += `"${value}"`
     } else {
