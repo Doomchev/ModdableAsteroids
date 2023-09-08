@@ -21,9 +21,9 @@ export default class Canvas extends Sprite {
     }
     
     
-    static create(fx, fy, fwidth, fheight, scale, active = true) {
-        return  new Canvas(0.0, 0.0, fwidth / scale, fheight / scale, active
-            , new Area(fx, fy, fwidth, fheight))
+    static create(fwidth, fheight, swidth, sheight, active = true) {
+        return  new Canvas(0.0, 0.0, fwidth, fheight, active, new Area(0, 0
+            , swidth, sheight))
     }
 
     draw() {

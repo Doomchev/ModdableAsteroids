@@ -83,7 +83,7 @@ function exportValue(value) {
             text += `#${value._id}`
         } else {
             value._id = `${value._name}Texture`
-            text += `Texture(#${value._id}, \"${value.src}\")`
+            text += `Texture(\"${value.src.substring(value.src.indexOf("/textures/") + 1)}\")`
             if(!value._id) throw Error(`Texture ${value.src}`)
         }
     } else if(value instanceof Loc) {

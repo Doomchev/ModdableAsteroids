@@ -35,10 +35,14 @@ import Increment from "./src/actions/variable/increment.js"
 import Repeat from "./src/actions/structure/repeat.js"
 import Mul from "./src/functions/mul.js"
 import RandomSign from "./src/functions/random_sign.js"
-import Rotate from "./src/actions/sprite/rotate.js"
+import RotateImage from "./src/actions/sprite/rotate_image.js"
 import Add from "./src/actions/variable/add.js"
 import Remove from "./src/actions/sprite/remove.js"
 import {exportProject} from "./src/export.js"
+import GetField from "./src/actions/get_field.js"
+import Turn from "./src/actions/sprite/turn.js"
+import Sum from "./src/functions/sum.js"
+import CallFunction, {CustomFunction, V} from "./src/actions/call_function.js"
 
 project.loadTextures = () => {
     addTextures({
@@ -71,10 +75,19 @@ project.init = () => {
         gameOver: 2,
     }
 
-    let score = new IntVariable("score", -500, "Z8")
+    let asteroidType = {
+        big: 0,
+        medium: 1,
+        small: 2,
+    }
+
+    let levelBonus = 1000
+
+    let score = new IntVariable("score", -levelBonus, "Z8")
     let lives = new IntVariable("lives", 3, "R ∆")
     let level = new IntVariable("level", 0)
     let currentState = new EnumVariable("state", state.alive)
+    let oldAstSize = new IntVariable("size", 0)
 
     let hudArea = new Shape("hudArea", 0.0, 0.0, currentCanvas.width - 1.0
         , currentCanvas.height - 1.0)
@@ -104,7 +117,7 @@ project.init = () => {
 
     let explosions = new Layer("explosions")
     let explosionImages = new ImageArray("explosionImages", textures.explosion
-        , 4, 4, 0.5, 0.5, 1.5, 1.5)
+        , 4, 4, 0.5, 0.5, 2, 2)
 
     project.background = "rgb(9, 44, 84)"
     project.scene = [bullets, asteroids, flame, ship, explosions, scoreLabel, levelLabel, livesLabel, messageLabel]
@@ -113,6 +126,23 @@ project.init = () => {
     let right = new Key("right", "ArrowRight")
     let forward = new Key("forward", "ArrowUp")
     let fire = new Key("fire", "Space")
+
+    let minAstAnimSpeed = 0
+    let maxAstAnimSpeed = 1
+    let astSize = 2
+    let minAstSize = 3
+    let maxAstSize = 4
+    let astType = 5
+    let astAngle = 6
+
+    let createAsteroid = new CustomFunction([
+        new Create(asteroids, asteroidImages, new Mul(new RandomFloat(new V(minAstAnimSpeed), new V(maxAstAnimSpeed))
+                , new RandomSign()), collisionSprite2, new V(astSize), collisionSprite1
+                , new RandomFloat(new V(minAstSize), new V(maxAstSize), 0.0)),
+        new AddAction(current, new RotateImage(current, new RandomFloat(toRadians(-180.0), toRadians(180.0)))),
+        new SetField(current, "type", new V(astType)),
+        new Turn(current, new Sum(new V(astAngle), new RandomFloat(toRadians(-15.0), toRadians(15.0)))),
+    ])
 
     let acceleration = 25.0, deceleration = 15.0, limit = 7.5, dAngle = toRadians(180.0)
     project.actions = [
@@ -162,7 +192,7 @@ project.init = () => {
                     new Decrement(lives),
                 ], [
                     new Equate(lives, new IntVariable(undefined, 3)),
-                    new Equate(score, new IntVariable(undefined, -500)),
+                    new Equate(score, new IntVariable(undefined, -levelBonus)),
                     new Equate(level, new IntVariable(undefined, 0)),
                     new Clear(asteroids)
                 ]),
@@ -185,18 +215,39 @@ project.init = () => {
             new Repeat(level, [
                 new Create(asteroids, asteroidImages, new Mul(new RandomFloat(12.0, 20.0), new RandomSign())
                     , {centerX: new RandomFloat(bounds.leftX, bounds.rightX), centerY: bounds.topY}
-                    , 3.0, new RandomFloat(360.0), new RandomFloat(2.0, 3.0), 0.0),
-                new AddAction(current, new Rotate(current, new RandomFloat(toRadians(-180.0), toRadians(180.0))))
+                    , 3.0, new RandomFloat(toRadians(360.0)), new RandomFloat(2.0, 3.0), 0.0),
+                new AddAction(current, new RotateImage(current
+                    , new RandomFloat(toRadians(-180.0), toRadians(180.0)))),
+                new SetField(current, "type", asteroidType.big),
             ]),
-            new Add(score, 500)
+            new Add(score, levelBonus)
         ]),
 
         new OnCollision(bullets, asteroids, [
-            new Create(explosions, explosionImages, 16.0, collisionSprite2, 3.0, new RandomFloat(360.0)),
+            new If(new IntIsEqual(new GetField(collisionSprite2, "type"), asteroidType.big), [
+                new CallFunction(createAsteroid, 16.0, 25.0, 2.0, 2.5, 4.0, asteroidType.medium, 0.0),
+                new CallFunction(createAsteroid, 20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(60.0)),
+                new CallFunction(createAsteroid, 20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(-60.0)),
+                new Equate(oldAstSize, 3.0),
+                new Add(score, 100)
+            ]),
+
+            new If(new IntIsEqual(new GetField(collisionSprite2, "type"), asteroidType.medium), [
+                new CallFunction(createAsteroid, 20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(60.0)),
+                new CallFunction(createAsteroid, 20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(-60.0)),
+                new Equate(oldAstSize, 2.0),
+                new Add(score, 200)
+            ]),
+
+            new If(new IntIsEqual(new GetField(collisionSprite2, "type"), asteroidType.small), [
+                new Equate(oldAstSize, 1.0),
+                new Add(score, 300)
+            ]),
+
+            new Create(explosions, explosionImages, 16.0, collisionSprite2, oldAstSize, new RandomFloat(toRadians(360.0))),
             new AddAction(current, new DelayedRemove(current, explosions,1.0)),
             new Remove(collisionSprite1, bullets),
             new Remove(collisionSprite2, asteroids),
-            new Add(score, 100)
         ]),
     ]
     exportProject()

@@ -16,7 +16,7 @@ import SetBounds from "./actions/sprite/set_bounds.js"
 import LoopArea from "./actions/sprite/loop_area.js"
 import Shape from "./shape.js"
 import ExecuteActions from "./actions/sprite/execute_actions.js"
-import Rotate from "./actions/sprite/rotate.js"
+import RotateImage from "./actions/sprite/rotate_image.js"
 import OnCollision from "./on_collision.js"
 import Remove from "./actions/sprite/remove.js"
 import DelayedRemove from "./actions/sprite/delayed_remove.js"
@@ -39,6 +39,10 @@ import Add from "./actions/variable/add.js"
 import Clear from "./actions/layer/clear.js"
 import Canvas from "./canvas.js"
 import {Loc} from "./system.js"
+import Turn from "./actions/sprite/turn.js"
+import GetField from "./actions/get_field.js"
+import CallFunction, {CustomFunction, V} from "./actions/call_function.js"
+import Sum from "./functions/sum.js"
 
 export let classes = {
     Image: function(o) {return new Image(o.texture, o.x, o.y, o.width, o.height, o.xMul ?? dv.xMul
@@ -53,6 +57,7 @@ export let classes = {
         , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
     Constraint: function(o) {return new Constraint(o.sprite, o.parent)},
     Animate: function(o) {return new Animate(o.sprite, o.array, o.speed)},
+    GetField: function(o) {return new GetField(o.object, o.fieldName)},
     SetField: function(o) {return new SetField(o.object, o.fieldName, o.value)},
     Layer: function(o) {return new Layer(o._name, o.items)},
     Create: function(o) {return new Create(o.layer, o.image, o.animationSpeed, o.position, o.size, o.angle, o.speed
@@ -66,7 +71,8 @@ export let classes = {
     Shape: function(o) {return new Shape(o._name, o.centerX, o.centerY, 2.0 * o.halfWidth
         , 2.0 * o.halfHeight)},
     ExecuteActions: function(o) {return new ExecuteActions(o.object)},
-    Rotate: function(o) {return new Rotate(o.object, o.speed)},
+    RotateImage: function(o) {return new RotateImage(o.object, o.speed)},
+    Turn: function(o) {return new Turn(o.object, o.amount)},
     OnCollision: function(o) {return new OnCollision(o.object1, o.object2, o.code)},
     Remove: function(o) {return new Remove(o.object, o.layer)},
     DelayedRemove: function(o) {return new DelayedRemove(o.sprite, o.layer, o.time)},
@@ -81,6 +87,7 @@ export let classes = {
     Equate: function(o) {return new Equate(o.variable, o.value)},
     RandomFloat: function(o) {return new RandomFloat(o.from, o.to)},
     RandomSign: function(o) {return new RandomSign()},
+    Sum: function(o) {return new Sum(o.value1, o.value2)},
     Mul: function(o) {return new Mul(o.value1, o.value2)},
     Pressed: function(o) {return new Pressed(o.key)},
     Decrement: function(o) {return new Decrement(o.variable)},
@@ -88,7 +95,10 @@ export let classes = {
     SpriteVariable: function(o) {return new SpriteVariable(o._name)},
     Clear: function(o) {return new Clear(o.layer)},
     Object: function(o) {return o},
+    CustomFunction: function(o) {return new CustomFunction(o.code)},
+    CallFunction: function(o) {return new CallFunction(o.func, o.args)},
     Loc: function(o) {return new Loc(o.name)},
+    V: function(o) {return new V(o.index)},
 }
 
 export let dv = {

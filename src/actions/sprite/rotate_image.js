@@ -1,6 +1,6 @@
 import {Action, apsk, getValue} from "../../system.js"
 
-export default class Rotate extends Action {
+export default class RotateImage extends Action {
     constructor(object, speed) {
         super()
         this.object = object
@@ -8,10 +8,10 @@ export default class Rotate extends Action {
     }
 
     execute() {
-        this.object.toSprite().rotate(this.speed * apsk)
+        this.object.toSprite().turnImage(this.speed * apsk)
     }
 
     copy() {
-        return new Rotate(this.object.toSprite(), getValue(this.speed, "speed"))
+        return new RotateImage(this.object.toSprite(), getValue(this.speed, "speed"))
     }
 }

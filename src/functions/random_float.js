@@ -1,4 +1,4 @@
-import {randomFloat} from "../system.js"
+import {getValue, randomFloat} from "../system.js"
 import FloatFunction from "./float.js"
 
 export default class RandomFloat extends FloatFunction {
@@ -9,6 +9,6 @@ export default class RandomFloat extends FloatFunction {
     }
 
     toFloat() {
-        return randomFloat(this.from, this.to)
+        return randomFloat(getValue(this.from), getValue(this.to))
     }
 }

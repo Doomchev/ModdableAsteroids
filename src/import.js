@@ -106,8 +106,6 @@ function readObject(object) {
             return new Loc(name)
         case "Texture":
             expect("(")
-            readId()
-            expect(",")
             if (log) logText += " "
             let src = readValue()
             expect(")")
@@ -120,13 +118,13 @@ function readObject(object) {
     if(readSymbol() === "(") {
         expect("(")
         link = readId().substring(1)
+        expect(")")
     }
 
-    let map = object ?? {}
-    if(link !== "") expect(")")
     if(log) logText += " "
     expect("{")
 
+    let map = object ?? {}
     let first = true
     while(readSymbol() !== "}") {
         if (log) {

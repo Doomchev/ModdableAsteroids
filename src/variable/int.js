@@ -1,4 +1,5 @@
 import {Value} from "../value.js"
+import IntFunction from "../functions/int.js"
 
 export default class IntVariable extends Value {
     constructor(name, value, format) {
@@ -9,7 +10,7 @@ export default class IntVariable extends Value {
     }
 
     equateTo(value) {
-        this.value = value.toInt()
+        this.value = typeof value == "number" ? value : value.toInt()
     }
 
     add(value) {
@@ -17,6 +18,10 @@ export default class IntVariable extends Value {
     }
 
     toInt() {
+        return this.value
+    }
+
+    toFloat() {
         return this.value
     }
 

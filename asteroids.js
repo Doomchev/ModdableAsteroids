@@ -12,12 +12,13 @@ project.init = () => {
 }
 
 project.data = ` 
+
 textures = Object {
-	ship: Texture(#shipTexture, "http://localhost:63342/ModdableAsteroids/textures/ship.png")
-	flame: Texture(#flameTexture, "http://localhost:63342/ModdableAsteroids/textures/flame.png")
-	bullet: Texture(#bulletTexture, "http://localhost:63342/ModdableAsteroids/textures/bullet.png")
-	asteroid: Texture(#asteroidTexture, "http://localhost:63342/ModdableAsteroids/textures/asteroid.png")
-	explosion: Texture(#explosionTexture, "http://localhost:63342/ModdableAsteroids/textures/explosion.png")
+	ship: Texture("textures/ship.png")
+	flame: Texture("textures/flame.png")
+	bullet: Texture("textures/bullet.png")
+	asteroid: Texture("textures/asteroid.png")
+	explosion: Texture("textures/explosion.png")
 }
 loc = "ru"
 keys = [
@@ -81,10 +82,10 @@ scene = [
 		centerX: 0
 		centerY: 0
 		halfWidth: 4
-		halfHeight: 7.5
+		halfHeight: 7.518181818181818
 		items: [
 			IntVariable(#score) {
-				value: -500
+				value: -1000
 				format: "Z8"
 			}
 		]
@@ -95,7 +96,7 @@ scene = [
 		centerX: 0
 		centerY: 0
 		halfWidth: 4
-		halfHeight: 7.5
+		halfHeight: 7.518181818181818
 		items: [
 			Loc(level), 
 			IntVariable(#level) {
@@ -109,7 +110,7 @@ scene = [
 		centerX: 0
 		centerY: 0
 		halfWidth: 4
-		halfHeight: 7.5
+		halfHeight: 7.518181818181818
 		items: [
 			IntVariable(#lives) {
 				value: 3
@@ -123,7 +124,7 @@ scene = [
 		centerX: 0
 		centerY: 0
 		halfWidth: 4
-		halfHeight: 7.5
+		halfHeight: 7.518181818181818
 		items: [
 			""
 		]
@@ -177,7 +178,7 @@ actions = [
 					centerX: 0
 					centerY: 0
 					halfWidth: 5.75
-					halfHeight: 9.25
+					halfHeight: 9.268181818181818
 				}
 			}, 
 			Move {
@@ -255,8 +256,8 @@ actions = [
 							texture: #explosionTexture
 							columns: 4
 							rows: 4
-							heightMul: 1.5
-							widthMul: 1.5
+							heightMul: 2
+							widthMul: 2
 						}
 						animationSpeed: 16
 						position: #ship
@@ -380,7 +381,7 @@ actions = [
 							Equate {
 								variable: #score
 								value: IntVariable(#8) {
-									value: -500
+									value: -1000
 								}
 							}, 
 							Equate {
@@ -457,11 +458,11 @@ actions = [
 								from: -5.75
 								to: 5.75
 							}
-							centerY: -9.25
+							centerY: -9.268181818181818
 						}
 						size: 3
 						angle: RandomFloat {
-							from: 360
+							from: 6.283185307179586
 						}
 						speed: RandomFloat {
 							from: 2
@@ -471,19 +472,24 @@ actions = [
 					}, 
 					AddAction {
 						sprite: #current
-						action: Rotate {
+						action: RotateImage {
 							object: #current
 							speed: RandomFloat {
 								from: -3.141592653589793
 								to: 3.141592653589793
 							}
 						}
+					}, 
+					SetField {
+						object: #current
+						fieldName: "type"
+						value: 0
 					}
 				]
 			}, 
 			Add {
 				variable: #score
-				value: 500
+				value: 1000
 			}
 		]
 	}, 
@@ -491,14 +497,193 @@ actions = [
 		object1: #bullets
 		object2: #asteroids
 		code: [
+			If {
+				condition: IntIsEqual {
+					value1: GetField {
+						object: #collisionSprite2
+						fieldName: "type"
+					}
+					value2: 0
+				}
+				code: [
+					CallFunction {
+						func: CustomFunction(#11) {
+							code: [
+								Create {
+									layer: #asteroids
+									image: #asteroidImages
+									animationSpeed: Mul {
+										value1: RandomFloat {
+											from: V {
+												index: 0
+											}
+											to: V {
+												index: 1
+											}
+										}
+										value2: RandomSign {}
+									}
+									position: #collisionSprite2
+									size: V {
+										index: 2
+									}
+									angle: #collisionSprite1
+									speed: RandomFloat {
+										from: V {
+											index: 3
+										}
+										to: V {
+											index: 4
+										}
+									}
+								}, 
+								AddAction {
+									sprite: #current
+									action: RotateImage {
+										object: #current
+										speed: RandomFloat {
+											from: -3.141592653589793
+											to: 3.141592653589793
+										}
+									}
+								}, 
+								SetField {
+									object: #current
+									fieldName: "type"
+									value: V {
+										index: 5
+									}
+								}, 
+								Turn {
+									object: #current
+									amount: Sum {
+										value1: V {
+											index: 6
+										}
+										value2: RandomFloat {
+											from: -0.2617993877991494
+											to: 0.2617993877991494
+										}
+									}
+								}
+							]
+						}
+						args: [
+							16, 
+							25, 
+							2, 
+							2.5, 
+							4, 
+							1, 
+							0
+						]
+					}, 
+					CallFunction {
+						func: #11
+						args: [
+							20, 
+							30, 
+							1, 
+							3, 
+							5, 
+							2, 
+							1.0471975511965976
+						]
+					}, 
+					CallFunction {
+						func: #11
+						args: [
+							20, 
+							30, 
+							1, 
+							3, 
+							5, 
+							2, 
+							-1.0471975511965976
+						]
+					}, 
+					Equate {
+						variable: IntVariable(#size) {
+							value: 0
+						}
+						value: 3
+					}, 
+					Add {
+						variable: #score
+						value: 100
+					}
+				]
+			}, 
+			If {
+				condition: IntIsEqual {
+					value1: GetField {
+						object: #collisionSprite2
+						fieldName: "type"
+					}
+					value2: 1
+				}
+				code: [
+					CallFunction {
+						func: #11
+						args: [
+							20, 
+							30, 
+							1, 
+							3, 
+							5, 
+							2, 
+							1.0471975511965976
+						]
+					}, 
+					CallFunction {
+						func: #11
+						args: [
+							20, 
+							30, 
+							1, 
+							3, 
+							5, 
+							2, 
+							-1.0471975511965976
+						]
+					}, 
+					Equate {
+						variable: #size
+						value: 2
+					}, 
+					Add {
+						variable: #score
+						value: 200
+					}
+				]
+			}, 
+			If {
+				condition: IntIsEqual {
+					value1: GetField {
+						object: #collisionSprite2
+						fieldName: "type"
+					}
+					value2: 2
+				}
+				code: [
+					Equate {
+						variable: #size
+						value: 1
+					}, 
+					Add {
+						variable: #score
+						value: 300
+					}
+				]
+			}, 
 			Create {
 				layer: #explosions
 				image: #explosionImages
 				animationSpeed: 16
 				position: #collisionSprite2
-				size: 3
+				size: #size
 				angle: RandomFloat {
-					from: 360
+					from: 6.283185307179586
 				}
 				speed: 0
 			}, 
@@ -517,10 +702,6 @@ actions = [
 			Remove {
 				object: #collisionSprite2
 				layer: #asteroids
-			}, 
-			Add {
-				variable: #score
-				value: 100
 			}
 		]
 	}
@@ -539,14 +720,14 @@ canvas = Canvas {
 	centerX: 0
 	centerY: 0
 	halfWidth: 4.5
-	halfHeight: 8
+	halfHeight: 8.018181818181818
 	angle: 0
 	speed: 0
-	viewport: Area(#14) {
+	viewport: Area(#15) {
 		leftX: 0
 		topY: 0
-		width: 360
-		height: 640
+		width: 385
+		height: 686
 	}
 }
 background = "rgb(9, 44, 84)"

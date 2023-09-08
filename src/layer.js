@@ -16,8 +16,12 @@ export default class Layer extends Renderable {
         this.items.forEach(item => item.move())
     }
 
-    rotate(angle) {
-        this.items.forEach(item => item.rotate(angle))
+    turn(angle) {
+        this.items.forEach(item => item.turn(angle))
+    }
+
+    turnImage(angle) {
+        this.items.forEach(item => item.turnImage(angle))
     }
 
     remove(sprite) {

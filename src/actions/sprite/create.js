@@ -20,10 +20,11 @@ export default class Create extends Action {
     execute() {
         let sprite = new Sprite(undefined, this.image)
         current.sprite = sprite
-        if(this.animationSpeed === undefined) {
+        let animSpeed = getValue(this.animationSpeed, "animationSpeed")
+        if(animSpeed === undefined) {
             sprite.image = this.image
         } else {
-            sprite.image = this.image[0]
+            sprite.image = this.image._images[0]
             sprite.actions.push(new Animate(sprite, this.image, getValue(this.animationSpeed)))
         }
         sprite.centerX = getValue(this.position, "centerX")

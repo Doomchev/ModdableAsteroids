@@ -27,7 +27,11 @@ export default class Sprite extends Shape {
         this.centerY += Math.sin(this.angle) * this.speed * apsk
     }
 
-    rotate(value) {
+    turn(value) {
+        this.angle += value
+    }
+
+    turnImage(value) {
         this.imageAngle += value
     }
 

@@ -3,6 +3,7 @@ import FloatFunction from "./functions/float.js"
 import Sprite from "./sprite.js"
 import SpriteVariable, {SpriteFunction} from "./variable/sprite.js"
 import {Value} from "./value.js"
+import IntFunction from "./functions/int.js"
 
 export let project = {
     textures: {},
@@ -24,7 +25,7 @@ export class Action {
 
 // global variables
 
-export let zk = 1.2, fps = 144.0, aps = 200.0, showCollisionShapes = false
+export let zk = 1.2, fps = 60.0, aps = 200.0, showCollisionShapes = false
 export let ctx, mousesx, mousesy, apsk = 1.0 / aps
 
 // enums
@@ -64,6 +65,9 @@ export function removeFromArray(item, array) {
 export function getValue(object, fieldName) {
     if(typeof object === "number") {
         return object
+    }
+    if(object instanceof IntFunction) {
+        return object.toInt()
     }
     if(object instanceof FloatFunction) {
         return object.toFloat()
@@ -134,10 +138,15 @@ export function loc(stringName) {
 // listeners
 
 document.addEventListener("DOMContentLoaded", function() {
+    let bodyHeight = document.body.clientHeight - 20
     let canvas = document.getElementById("canvas")
+    canvas.height = bodyHeight
+    canvas.width = bodyHeight * 9.0 / 16.0
     canvas.focus()
     ctx = canvas.getContext("2d")
-    project.canvas = Canvas.create(0, 0, canvas.clientWidth, canvas.clientHeight, 40.0)
+    ctx.font = canvas.width / 24 + "px monospace"
+    ctx.textBaseline = "top"
+    project.canvas = Canvas.create(9.0, 16.0, canvas.width, canvas.height)
     setCanvas(project.canvas)
 
     project.loadTextures()
@@ -174,10 +183,9 @@ document.addEventListener("DOMContentLoaded", function() {
                         fpsCounter++
                     }
                     currentCanvas.draw()
-                    ctx.font = "12px serif";
                     ctx.fillStyle = "white"
                     ctx.fillText(`fps: ${realFps}, aps: ${realAps}` , 5, 5)
-                }, 1000.0 / 144)
+                }, 1000.0 / 60)
             }
         }
         image.src = src

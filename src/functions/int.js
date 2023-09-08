@@ -1,13 +1,13 @@
 import SingleFunction from "./single.js"
 import {Value} from "../value.js"
 
-export default class FloatFunction extends SingleFunction {
+export default class IntFunction extends SingleFunction {
     getValue(fieldName) {
-        return this.toFloat()
+        return this.toInt()
     }
 
     getVal(value) {
-        if(value instanceof Value) return value.toFloat()
+        if(value instanceof Value) return value.toInt()
         return value
     }
 }

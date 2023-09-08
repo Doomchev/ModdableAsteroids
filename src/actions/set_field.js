@@ -1,6 +1,7 @@
 import {Action} from "../system.js"
 import {Value} from "../value.js"
 import {SpriteFunction} from "../variable/sprite.js"
+import {BooleanFunction} from "../functions/boolean.js"
 
 export default class SetField extends Action {
     constructor(object, fieldName, value) {
@@ -12,6 +13,16 @@ export default class SetField extends Action {
 
     execute() {
         let object = this.object instanceof SpriteFunction ? this.object.toSprite() : this.object
-        object[this.fieldName] = this.value instanceof Value ? this.value.toBoolean() : this.value
+        let value = this.value
+        if(this.value instanceof BooleanFunction) {
+            value = value.toBoolean()
+        } else if(this.value instanceof SpriteFunction) {
+            value = value.toSprite()
+        } else if(this.value instanceof SpriteFunction) {
+            value = value.toSprite()
+        } else if(this.value instanceof Value) {
+            value = value.toFloat()
+        }
+        object[this.fieldName] = value
     }
 }

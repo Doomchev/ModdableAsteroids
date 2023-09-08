@@ -1,6 +1,6 @@
 import FloatFunction from "./float.js"
 
-export default class Mul extends FloatFunction {
+export default class Sum extends FloatFunction {
     constructor(value1, value2) {
         super()
         this.value1 = value1
@@ -8,6 +8,6 @@ export default class Mul extends FloatFunction {
     }
 
     toFloat() {
-        return this.getVal(this.value1) * this.getVal(this.value2)
+        return this.getVal(this.value1) + this.getVal(this.value2)
     }
 }

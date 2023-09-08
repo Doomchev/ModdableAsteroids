@@ -1,6 +1,6 @@
 import Shape from "../shape.js"
 import {align, ctx} from "../system.js"
-import {xToScreen, yToScreen} from "../canvas.js"
+import {currentCanvas, xToScreen, yToScreen} from "../canvas.js"
 
 export default class Label extends Shape {
     constructor(sprite, items, horizontalAlign, verticalAlign) {
@@ -15,8 +15,6 @@ export default class Label extends Shape {
         this.items.forEach(item => text += typeof item === "string" ? item : item.toString())
 
         ctx.fillStyle = "white"
-        ctx.font = "16px monospace"
-        ctx.textBaseline = "top"
 
         let x, y
         const metrics = ctx.measureText(text)
