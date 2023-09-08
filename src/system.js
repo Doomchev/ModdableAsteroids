@@ -8,7 +8,8 @@ import IntVariable from "./variable/int.js"
 
 export let project = {
     textures: {},
-    loc: "ru",
+    locale: "ru",
+    locales: {},
     loadTextures: undefined,
     init: undefined,
     data: undefined,
@@ -41,7 +42,7 @@ export let align = {
 
 // global functions
 
-export function toRadians(angle) {
+export function rad(angle) {
     return Math.PI * angle / 180.0
 }
 
@@ -128,7 +129,7 @@ export class Loc extends Value {
     }
 
     toString() {
-        return project[project.loc][this.name]
+        return project.locales[project.locale][this.name]
     }
 }
 
@@ -196,7 +197,7 @@ document.addEventListener("DOMContentLoaded", function() {
 document.addEventListener("keydown", event => {
     switch (event.code) {
         case "KeyL":
-            project.loc = project.loc === "ru" ? "en" : "ru"
+            project.locale = project.locale === "ru" ? "en" : "ru"
             break
         case "KeyO":
             showCollisionShapes = !showCollisionShapes

@@ -3,7 +3,7 @@ import EnumVariable from "./src/variable/enum.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {addTextures, align, collisionSprite1, collisionSprite2, loc, project, toRadians} from "./src/system.js"
+import {addTextures, align, collisionSprite1, collisionSprite2, loc, project, rad} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Image from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -54,13 +54,13 @@ project.loadTextures = () => {
     })
 }
 
-project.en = {
+project.locales.en = {
     level: "LEVEL ",
     pressSpace: "PRESS SPACE",
     gameOver: "GAME OVER",
 }
 
-project.ru = {
+project.locales.ru = {
     level: "УРОВЕНЬ ",
     pressSpace: "НАЖМИТЕ ПРОБЕЛ",
     gameOver: "ИГРА ОКОНЧЕНА",
@@ -104,7 +104,7 @@ project.init = () => {
     let start = new Sprite("start")
 
     let flameImages = new ImageArray("flameImages", textures.flame, 3, 3)
-    let flame = new Sprite("flame", flameImages._images[0], -0.9, 0.0, 1.0, 1.0, toRadians(-90.0))
+    let flame = new Sprite("flame", flameImages._images[0], -0.9, 0.0, 1.0, 1.0, rad(-90.0))
 
     let gun = new Sprite("gun", undefined, 1.0, 0.0)
     let bullets = new Layer("bullets")
@@ -139,12 +139,12 @@ project.init = () => {
         new Create(asteroids, asteroidImages, new Mul(new RandomFloat(new V(minAstAnimSpeed), new V(maxAstAnimSpeed))
                 , new RandomSign()), collisionSprite2, new V(astSize), collisionSprite1
                 , new RandomFloat(new V(minAstSize), new V(maxAstSize), 0.0)),
-        new AddAction(current, new RotateImage(current, new RandomFloat(toRadians(-180.0), toRadians(180.0)))),
+        new AddAction(current, new RotateImage(current, new RandomFloat(rad(-180.0), rad(180.0)))),
         new SetField(current, "type", new V(astType)),
-        new Turn(current, new Sum(new V(astAngle), new RandomFloat(toRadians(-15.0), toRadians(15.0)))),
+        new Turn(current, new Sum(new V(astAngle), new RandomFloat(rad(-15.0), rad(15.0)))),
     ])
 
-    let acceleration = 25.0, deceleration = 15.0, limit = 7.5, dAngle = toRadians(180.0)
+    let acceleration = 25.0, deceleration = 15.0, limit = 7.5, dAngle = rad(180.0)
     project.actions = [
         new If(new IntIsEqual(currentState, state.alive), [
             new If(left, new LinearChange(ship,"angle", -dAngle)),
@@ -167,7 +167,7 @@ project.init = () => {
 
             new OnCollision(ship, asteroids, [
                 new Create(explosions, explosionImages, 16.0, ship, 2.5
-                    , new RandomFloat(toRadians(360.0))),
+                    , new RandomFloat(rad(360.0))),
                 new AddAction(current, new DelayedRemove(current, explosions,1.0)),
                 new SetField(ship, "visible", false),
                 new SetField(flame, "visible", false),
@@ -215,9 +215,9 @@ project.init = () => {
             new Repeat(level, [
                 new Create(asteroids, asteroidImages, new Mul(new RandomFloat(12.0, 20.0), new RandomSign())
                     , {centerX: new RandomFloat(bounds.leftX, bounds.rightX), centerY: bounds.topY}
-                    , 3.0, new RandomFloat(toRadians(360.0)), new RandomFloat(2.0, 3.0), 0.0),
+                    , 3.0, new RandomFloat(rad(360.0)), new RandomFloat(2.0, 3.0), 0.0),
                 new AddAction(current, new RotateImage(current
-                    , new RandomFloat(toRadians(-180.0), toRadians(180.0)))),
+                    , new RandomFloat(rad(-180.0), rad(180.0)))),
                 new SetField(current, "type", asteroidType.big),
             ]),
             new Add(score, levelBonus)
@@ -226,15 +226,15 @@ project.init = () => {
         new OnCollision(bullets, asteroids, [
             new If(new IntIsEqual(new GetField(collisionSprite2, "type"), asteroidType.big), [
                 new CallFunction(createAsteroid, [16.0, 25.0, 2.0, 2.5, 4.0, asteroidType.medium, 0.0]),
-                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(60.0)]),
-                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(-60.0)]),
+                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, rad(60.0)]),
+                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, rad(-60.0)]),
                 new Equate(oldAstSize, 3.0),
                 new Add(score, 100)
             ]),
 
             new If(new IntIsEqual(new GetField(collisionSprite2, "type"), asteroidType.medium), [
-                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(60.0)]),
-                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(-60.0)]),
+                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, rad(60.0)]),
+                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, rad(-60.0)]),
                 new Equate(oldAstSize, 2.0),
                 new Add(score, 200)
             ]),
@@ -244,7 +244,7 @@ project.init = () => {
                 new Add(score, 300)
             ]),
 
-            new Create(explosions, explosionImages, 16.0, collisionSprite2, oldAstSize, new RandomFloat(toRadians(360.0))),
+            new Create(explosions, explosionImages, 16.0, collisionSprite2, oldAstSize, new RandomFloat(rad(360.0))),
             new AddAction(current, new DelayedRemove(current, explosions,1.0)),
             new Remove(collisionSprite1, bullets),
             new Remove(collisionSprite2, asteroids),

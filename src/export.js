@@ -9,7 +9,7 @@ export function exportProject() {
         if(name === "data") continue
         if(object instanceof Function) continue
 
-        text += `\r\n${name} = `
+        text += `\r\n${name}: `
         if(!(object instanceof Object) || object instanceof Array) {
             exportValue(object)
         } else {
