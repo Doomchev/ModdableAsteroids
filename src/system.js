@@ -4,6 +4,7 @@ import Sprite from "./sprite.js"
 import SpriteVariable, {SpriteFunction} from "./variable/sprite.js"
 import {Value} from "./value.js"
 import IntFunction from "./functions/int.js"
+import IntVariable from "./variable/int.js"
 
 export let project = {
     textures: {},
@@ -66,7 +67,7 @@ export function getValue(object, fieldName) {
     if(typeof object === "number") {
         return object
     }
-    if(object instanceof IntFunction) {
+    if(object instanceof IntFunction || object instanceof IntVariable) {
         return object.toInt()
     }
     if(object instanceof FloatFunction) {
