@@ -225,16 +225,16 @@ project.init = () => {
 
         new OnCollision(bullets, asteroids, [
             new If(new IntIsEqual(new GetField(collisionSprite2, "type"), asteroidType.big), [
-                new CallFunction(createAsteroid, 16.0, 25.0, 2.0, 2.5, 4.0, asteroidType.medium, 0.0),
-                new CallFunction(createAsteroid, 20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(60.0)),
-                new CallFunction(createAsteroid, 20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(-60.0)),
+                new CallFunction(createAsteroid, [16.0, 25.0, 2.0, 2.5, 4.0, asteroidType.medium, 0.0]),
+                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(60.0)]),
+                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(-60.0)]),
                 new Equate(oldAstSize, 3.0),
                 new Add(score, 100)
             ]),
 
             new If(new IntIsEqual(new GetField(collisionSprite2, "type"), asteroidType.medium), [
-                new CallFunction(createAsteroid, 20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(60.0)),
-                new CallFunction(createAsteroid, 20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(-60.0)),
+                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(60.0)]),
+                new CallFunction(createAsteroid, [20.0, 30.0, 1.0, 3.0, 5.0, asteroidType.small, toRadians(-60.0)]),
                 new Equate(oldAstSize, 2.0),
                 new Add(score, 200)
             ]),

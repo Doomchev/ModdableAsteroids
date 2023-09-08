@@ -12,7 +12,6 @@ project.init = () => {
 }
 
 project.data = ` 
-
 textures = Object {
 	ship: Texture("textures/ship.png")
 	flame: Texture("textures/flame.png")
@@ -82,7 +81,7 @@ scene = [
 		centerX: 0
 		centerY: 0
 		halfWidth: 4
-		halfHeight: 7.518181818181818
+		halfHeight: 7.502638522427439
 		items: [
 			IntVariable(#score) {
 				value: -1000
@@ -96,7 +95,7 @@ scene = [
 		centerX: 0
 		centerY: 0
 		halfWidth: 4
-		halfHeight: 7.518181818181818
+		halfHeight: 7.502638522427439
 		items: [
 			Loc(level), 
 			IntVariable(#level) {
@@ -110,7 +109,7 @@ scene = [
 		centerX: 0
 		centerY: 0
 		halfWidth: 4
-		halfHeight: 7.518181818181818
+		halfHeight: 7.502638522427439
 		items: [
 			IntVariable(#lives) {
 				value: 3
@@ -124,7 +123,7 @@ scene = [
 		centerX: 0
 		centerY: 0
 		halfWidth: 4
-		halfHeight: 7.518181818181818
+		halfHeight: 7.502638522427439
 		items: [
 			""
 		]
@@ -178,7 +177,7 @@ actions = [
 					centerX: 0
 					centerY: 0
 					halfWidth: 5.75
-					halfHeight: 9.268181818181818
+					halfHeight: 9.25263852242744
 				}
 			}, 
 			Move {
@@ -458,7 +457,7 @@ actions = [
 								from: -5.75
 								to: 5.75
 							}
-							centerY: -9.268181818181818
+							centerY: -9.25263852242744
 						}
 						size: 3
 						angle: RandomFloat {
@@ -720,14 +719,14 @@ canvas = Canvas {
 	centerX: 0
 	centerY: 0
 	halfWidth: 4.5
-	halfHeight: 8.018181818181818
+	halfHeight: 8.00263852242744
 	angle: 0
 	speed: 0
 	viewport: Area(#15) {
 		leftX: 0
 		topY: 0
-		width: 385
-		height: 686
+		width: 379
+		height: 674
 	}
 }
 background = "rgb(9, 44, 84)"

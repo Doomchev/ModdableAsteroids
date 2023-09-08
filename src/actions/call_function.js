@@ -4,7 +4,7 @@ import FloatFunction from "../functions/float.js"
 let currentArgs = []
 
 export default class CallFunction extends Action {
-    constructor(func, ...args) {
+    constructor(func, args) {
         super()
         this.func = func
         this.args = args
