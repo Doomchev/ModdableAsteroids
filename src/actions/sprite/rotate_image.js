@@ -1,10 +1,10 @@
-import {Action, apsk, getValue} from "../../system.js"
+import {Action, apsk, getValue, num} from "../../system.js"
 
 export default class RotateImage extends Action {
     constructor(object, speed) {
         super()
         this.object = object
-        this.speed = speed
+        this.speed = num(speed)
     }
 
     execute() {

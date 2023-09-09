@@ -25,11 +25,11 @@ import AddAction from "./actions/sprite/add_action.js"
 import Repeat from "./actions/structure/repeat.js"
 import Label from "./gui/label.js"
 import SpriteVariable from "./variable/sprite.js"
-import IntVariable from "./variable/int.js"
+import NumericVariable from "./variable/number.js"
 import Increment from "./actions/variable/increment.js"
 import EnumVariable from "./variable/enum.js"
 import IntIsEqual from "./functions/equal.js"
-import Equate from "./actions/variable/int_equate.js"
+import Equate from "./actions/variable/equate.js"
 import RandomFloat from "./functions/random_float.js"
 import RandomSign from "./functions/random_sign.js"
 import Mul from "./functions/mul.js"
@@ -80,7 +80,7 @@ export let classes = {
     AddAction: function(o) {return new AddAction(o.sprite, o.action)},
     Repeat: function(o) {return new Repeat(o.times, o.code)},
     Label: function(o) {return new Label(classes.Sprite(o), o.items, o.horizontalAlign, o.verticalAlign)},
-    IntVariable: function(o) {return new IntVariable(o._name, o.value, o.format)},
+    IntVariable: function(o) {return new NumericVariable(o._name, o.value, o.format)},
     Increment: function(o) {return new Increment(o.variable)},
     EnumVariable: function(o) {return new EnumVariable(o._name, o.value)},
     IntIsEqual: function(o) {return new IntIsEqual(o.value1, o.value2)},

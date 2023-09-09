@@ -1,4 +1,4 @@
-import {Action, executeCode} from "../../system.js"
+import {Action, executeCode, num} from "../../system.js"
 
 export default class Repeat extends Action {
     constructor(times, code) {
@@ -8,7 +8,7 @@ export default class Repeat extends Action {
     }
 
     execute() {
-        let times = this.times.toInt()
+        let times = num(this.times)
         for(let i = 0; i < times; i++) {
             executeCode(this.code)
         }

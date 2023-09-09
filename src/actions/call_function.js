@@ -1,5 +1,5 @@
 import {Action, executeCode} from "../system.js"
-import FloatFunction from "../functions/float.js"
+import NumberFunction from "../functions/number_function.js"
 
 let currentArgs = []
 
@@ -22,13 +22,13 @@ export class CustomFunction {
     }
 }
 
-export class V extends FloatFunction {
+export class V extends NumberFunction {
     constructor(index) {
         super()
         this.index = index
     }
 
-    toFloat() {
+    toNumber() {
         return currentArgs[this.index]
     }
 }

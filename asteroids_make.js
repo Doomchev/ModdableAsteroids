@@ -1,4 +1,4 @@
-import IntVariable from "./src/variable/int.js"
+import NumericVariable from "./src/variable/number.js"
 import EnumVariable from "./src/variable/enum.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
@@ -24,7 +24,7 @@ import RandomFloat from "./src/functions/random_float.js"
 import AddAction from "./src/actions/sprite/add_action.js"
 import {current} from "./src/variable/sprite.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
-import Equate from "./src/actions/variable/int_equate.js"
+import Equate from "./src/actions/variable/equate.js"
 import Pressed from "./src/functions/pressed.js"
 import Decrement from "./src/actions/variable/decrement.js"
 import Clear from "./src/actions/layer/clear.js"
@@ -83,11 +83,11 @@ project.init = () => {
 
     let levelBonus = 1000
 
-    let score = new IntVariable("score", -levelBonus, "Z8")
-    let lives = new IntVariable("lives", 3, "R ∆")
-    let level = new IntVariable("level", 0)
+    let score = new NumericVariable("score", -levelBonus, "Z8")
+    let lives = new NumericVariable("lives", 3, "R ∆")
+    let level = new NumericVariable("level", 0)
     let currentState = new EnumVariable("state", state.alive)
-    let oldAstSize = new IntVariable("size", 0)
+    let oldAstSize = new NumericVariable("size", 0)
 
     let hudArea = new Shape("hudArea", 0.0, 0.0, currentCanvas.width - 1.0
         , currentCanvas.height - 1.0)
@@ -191,9 +191,9 @@ project.init = () => {
                 new If(new IntIsEqual(currentState, state.dead), [
                     new Decrement(lives),
                 ], [
-                    new Equate(lives, new IntVariable(undefined, 3)),
-                    new Equate(score, new IntVariable(undefined, -levelBonus)),
-                    new Equate(level, new IntVariable(undefined, 0)),
+                    new Equate(lives, 3),
+                    new Equate(score, -levelBonus),
+                    new Equate(level, 0),
                     new Clear(asteroids)
                 ]),
                 new Equate(currentState, state.alive),
@@ -244,7 +244,8 @@ project.init = () => {
                 new Add(score, 300)
             ]),
 
-            new Create(explosions, explosionImages, 16.0, collisionSprite2, oldAstSize, new RandomFloat(rad(360.0))),
+            new Create(explosions, explosionImages, 16.0, collisionSprite2, oldAstSize
+                , new RandomFloat(rad(360.0))),
             new AddAction(current, new DelayedRemove(current, explosions,1.0)),
             new Remove(collisionSprite1, bullets),
             new Remove(collisionSprite2, asteroids),

@@ -1,10 +1,9 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
-import FloatFunction from "./functions/float.js"
+import NumberFunction from "./functions/number_function.js"
 import Sprite from "./sprite.js"
 import SpriteVariable, {SpriteFunction} from "./variable/sprite.js"
 import {Value} from "./value.js"
-import IntFunction from "./functions/int.js"
-import IntVariable from "./variable/int.js"
+import NumericVariable from "./variable/number.js"
 
 export let project = {
     textures: {},
@@ -68,11 +67,8 @@ export function getValue(object, fieldName) {
     if(typeof object === "number") {
         return object
     }
-    if(object instanceof IntFunction || object instanceof IntVariable) {
-        return object.toInt()
-    }
-    if(object instanceof FloatFunction) {
-        return object.toFloat()
+    if(object instanceof NumberFunction || object instanceof NumericVariable) {
+        return object.toNumber()
     }
     if(object instanceof SpriteFunction || object instanceof Sprite) {
         return object.toSprite()[fieldName]
@@ -81,6 +77,10 @@ export function getValue(object, fieldName) {
         return getValue(object[fieldName])
     }
     return undefined
+}
+
+export function num(value) {
+    return typeof value === "number" ? value : value.toNumber()
 }
 
 // code, collisions

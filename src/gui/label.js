@@ -1,6 +1,6 @@
 import Shape from "../shape.js"
 import {align, ctx} from "../system.js"
-import {currentCanvas, xToScreen, yToScreen} from "../canvas.js"
+import {xToScreen, yToScreen} from "../canvas.js"
 
 export default class Label extends Shape {
     constructor(sprite, items, horizontalAlign, verticalAlign) {

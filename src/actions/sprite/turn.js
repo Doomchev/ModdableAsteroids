@@ -1,4 +1,4 @@
-import {Action, apsk, getValue} from "../../system.js"
+import {Action, num} from "../../system.js"
 
 export default class Turn extends Action {
     constructor(object, amount) {
@@ -8,10 +8,10 @@ export default class Turn extends Action {
     }
 
     execute() {
-        this.object.toSprite().turn(this.amount.toFloat())
+        this.object.toSprite().turn(num(this.amount))
     }
 
     copy() {
-        return new Turn(this.object.toSprite(), getValue(this.amount, "amount"))
+        return new Turn(this.object, this.amount)
     }
 }

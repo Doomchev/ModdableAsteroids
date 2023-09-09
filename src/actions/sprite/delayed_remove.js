@@ -1,11 +1,11 @@
-import {Action, apsk} from "../../system.js"
+import {Action, apsk, num} from "../../system.js"
 
 export default class DelayedRemove extends Action {
     constructor(sprite, layer, time) {
         super()
         this.sprite = sprite
         this.layer = layer
-        this.time = time
+        this.time = num(time)
     }
 
     execute() {

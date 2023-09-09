@@ -18,10 +18,8 @@ export default class SetField extends Action {
             value = value.toBoolean()
         } else if(this.value instanceof SpriteFunction) {
             value = value.toSprite()
-        } else if(this.value instanceof SpriteFunction) {
-            value = value.toSprite()
         } else if(this.value instanceof Value) {
-            value = value.toFloat()
+            value = value.toNumber()
         }
         object[this.fieldName] = value
     }

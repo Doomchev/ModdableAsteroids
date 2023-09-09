@@ -1,5 +1,4 @@
-import {Action} from "../../system.js"
-import {Value} from "../../value.js"
+import {Action, num} from "../../system.js"
 
 export default class Add extends Action {
     constructor(variable, value) {
@@ -9,6 +8,6 @@ export default class Add extends Action {
     }
 
     execute() {
-        this.variable.add(this.value instanceof Value ? this.value.toInt() : this.value)
+        this.variable.add(num(this.value))
     }
 }

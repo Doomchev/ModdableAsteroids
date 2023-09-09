@@ -9,7 +9,7 @@ export class Value {
         return null
     }
 
-    toFloat() {
+    toNumber() {
         return null
     }
 
