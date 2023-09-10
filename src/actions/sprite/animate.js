@@ -1,16 +1,17 @@
-import {Action, apsk, num} from "../../system.js"
+import {apsk, num} from "../../system.js"
+import {Action} from "../action.js"
 
 export default class Animate extends Action {
-    constructor(sprite, array, speed) {
+    constructor(sprite, images, speed) {
         super()
         this.sprite = sprite.toSprite()
-        this.array = array
+        this.images = images
         this.speed = num(speed)
-        this.frame = num(0.0)
+        this.frame = 0.0
     }
 
     execute() {
-        let images = this.array._images
+        let images = this.images._images
         this.frame += apsk * this.speed
         while(this.frame < 0.0) {
             this.frame += images.length
@@ -18,10 +19,10 @@ export default class Animate extends Action {
         while(this.frame > images.length) {
             this.frame -= images.length
         }
-        this.sprite.image = images[Math.floor(this.frame)];
+        this.sprite.image = images[Math.floor(this.frame)]
     }
 
-    copy() {
-        return new Animate(this.sprite, this.array, this.speed)
+    copy(from) {
+        return new Animate(from.sprite, from.images, this.speed)
     }
 }

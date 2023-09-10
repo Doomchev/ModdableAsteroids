@@ -1,4 +1,4 @@
-import {Action} from "../../system.js"
+import {Action} from "../action.js"
 
 export default class Move extends Action {
     constructor(object) {

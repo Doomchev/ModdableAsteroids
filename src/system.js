@@ -1,9 +1,6 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
-import NumberFunction from "./functions/number_function.js"
-import Sprite from "./sprite.js"
-import SpriteVariable, {SpriteFunction} from "./variable/sprite.js"
+import SpriteVariable from "./variable/sprite.js"
 import {Value} from "./value.js"
-import NumericVariable from "./variable/number.js"
 
 export let project = {
     textures: {},
@@ -15,13 +12,6 @@ export let project = {
     keys: [],
     scene: [],
     actions: [],
-}
-
-// basic classes
-
-export class Action {
-    execute() {}
-    copy() {return {}}
 }
 
 // global variables
@@ -63,21 +53,6 @@ export function removeFromArray(item, array) {
     array.splice(i, 1)
 }
 
-export function getValue(object, fieldName) {
-    if(typeof object === "number") {
-        return object
-    }
-    if(object instanceof NumberFunction || object instanceof NumericVariable) {
-        return object.toNumber()
-    }
-    if(object instanceof SpriteFunction || object instanceof Sprite) {
-        return object.toSprite()[fieldName]
-    }
-    if(object) {
-        return getValue(object[fieldName])
-    }
-    return undefined
-}
 
 export function num(value) {
     return typeof value === "number" ? value : value.toNumber()
@@ -85,21 +60,13 @@ export function num(value) {
 
 // code, collisions
 
-export function executeCode(code) {
-    if(code instanceof Array) {
-        code.forEach(item => item.execute())
-    } else {
-        code.execute()
-    }
-}
-
 export let collisionSprite1 = new SpriteVariable("collisionSprite1")
 export let collisionSprite2 = new SpriteVariable("collisionSprite2")
 
 export function executeCollisionCode(sprite1, sprite2, code) {
     collisionSprite1.sprite = sprite1
     collisionSprite2.sprite = sprite2
-    executeCode(code)
+    code.call()
 }
 
 // textures
@@ -140,15 +107,15 @@ export function loc(stringName) {
 // listeners
 
 document.addEventListener("DOMContentLoaded", function() {
-    let bodyHeight = document.body.clientHeight - 20
     let canvas = document.getElementById("canvas")
-    canvas.height = bodyHeight
-    canvas.width = bodyHeight * 9.0 / 16.0
+    let size = Math.min(document.body.clientWidth - 20, document.body.clientHeight - 20)
+    canvas.height = size
+    canvas.width = size
     canvas.focus()
     ctx = canvas.getContext("2d")
     ctx.font = canvas.width / 24 + "px monospace"
     ctx.textBaseline = "top"
-    project.canvas = Canvas.create(9.0, 16.0, canvas.width, canvas.height)
+    project.canvas = Canvas.create(16.0, 16.0, canvas.width, canvas.height)
     setCanvas(project.canvas)
 
     project.loadTextures()
@@ -163,7 +130,11 @@ document.addEventListener("DOMContentLoaded", function() {
                 let apsTime = 0, realAps = 0, apsCounter = 0
                 setInterval(function() {
                     project.actions.forEach(module => module.execute())
-                    project.keys.forEach(key => key._isPressed = false)
+                    project.update()
+                    for(const key of Object.values(project.key)) {
+                        if(!(key instanceof Object)) continue
+                        key._isPressed = false
+                    }
                     let time = new Date().getTime()
                     if(time >= apsTime) {
                         realAps = apsCounter
@@ -204,25 +175,28 @@ document.addEventListener("keydown", event => {
             break
     }
 
-    project.keys.forEach(key => {
+    for(const key of Object.values(project.key)) {
+        if(!(key instanceof Object)) continue
         if(event.code === key.code) {
             key._isDown = true
         }
-    })
+    }
 }, false)
 
 document.addEventListener("keyup", event => {
-    project.keys.forEach(key => {
+    for(const key of Object.values(project.key)) {
+        if(!(key instanceof Object)) continue
         if(event.code === key.code) {
             key._isDown = false
         }
-    })
+    }
 }, false)
 
 document.addEventListener("keypress", event => {
-    project.keys.forEach(key => {
+    for(const key of Object.values(project.key)) {
+        if(!(key instanceof Object)) continue
         if(event.code === key.code) {
             key._isPressed = true
         }
-    })
+    }
 }, false)

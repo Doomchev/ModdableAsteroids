@@ -8,8 +8,16 @@ export default class Layer extends Renderable {
         this.items = items
     }
 
+    isEmpty() {
+        return this.items.length === 0
+    }
+
     draw() {
         this.items.forEach(item => item.draw())
+    }
+
+    clear() {
+        this.items = []
     }
 
     move() {

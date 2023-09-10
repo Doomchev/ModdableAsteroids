@@ -1,4 +1,5 @@
-import {Action, apsk} from "../system.js"
+import {apsk} from "../system.js"
+import {Action} from "./action.js"
 
 export default class LinearChange extends Action {
     constructor(object, parameterName, speed, min, max) {
@@ -19,5 +20,16 @@ export default class LinearChange extends Action {
             value = this.min
         }
         this.object[this.parameterName] = value
+    }
+
+    static execute(object, parameterName, speed, min, max) {
+        let currentSpeed = speed * apsk
+        let value = object[parameterName] + currentSpeed
+        if(max !== undefined && value > max) {
+            value = max
+        } else if(min !== undefined && value < min) {
+            value = min
+        }
+        object[parameterName] = value
     }
 }

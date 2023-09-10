@@ -1,4 +1,4 @@
-import {Action} from "../../system.js"
+import {Action} from "../action.js"
 
 export default class AddAction extends Action {
     constructor(sprite, action) {

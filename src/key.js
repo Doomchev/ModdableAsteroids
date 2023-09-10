@@ -1,17 +1,16 @@
-import {Value} from "./value.js"
-import {project} from "./system.js"
-
-export default class Key extends Value {
+export default class Key {
     constructor(name, code) {
-        super()
         if(name) this._name = name
         this.code = code
         this._isPressed = false
         this._isDown = false
-        project.keys.push(this)
     }
 
-    toBoolean() {
+    get isDown() {
         return this._isDown
+    }
+
+    get isPressed() {
+        return this._isPressed
     }
 }

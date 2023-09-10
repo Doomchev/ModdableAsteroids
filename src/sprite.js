@@ -1,10 +1,12 @@
 import Shape from "./shape.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {apsk, executeCollisionCode} from "./system.js"
+import Animate from "./actions/sprite/animate.js"
 
 export default class Sprite extends Shape {
     constructor(name, image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
-                , angle = 0.0, speed = 0.0, imageAngle, active = true, visible = true) {
+                , angle = 0.0, speed = 0.0, animationSpeed, imageAngle
+                , active = true, visible = true) {
         super(name, centerX, centerY, width, height)
         this.image = image
         this.imageAngle = imageAngle
@@ -14,6 +16,10 @@ export default class Sprite extends Shape {
         this.active = active
         this.visible = visible
         this.actions = []
+        if(animationSpeed !== undefined) {
+            this.image = this.image._images[0]
+            this.actions.push(new Animate(this, this.image, animationSpeed))
+        }
     }
 
     draw() {
@@ -33,6 +39,21 @@ export default class Sprite extends Shape {
 
     turnImage(value) {
         this.imageAngle += value
+    }
+
+    hide() {
+        this.visible = false
+    }
+
+    show() {
+        this.visible = true
+    }
+
+    loop(bounds) {
+        if(this.centerX < bounds.leftX) this.centerX += bounds.width
+        if(this.centerX >= bounds.rightX) this.centerX -= bounds.width
+        if(this.centerY < bounds.topY) this.centerY += bounds.height
+        if(this.centerY >= bounds.bottomY) this.centerY -= bounds.height
     }
 
     collisionWith(object, code) {

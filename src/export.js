@@ -1,6 +1,6 @@
-import {Action, Loc, project} from "./system.js"
-import SingleFunction from "./functions/single.js"
+import {Loc, project} from "./system.js"
 import {dv} from "./classes.js"
+import {Action} from "./actions/action.js"
 
 let text = "", indent = "", currentIndex = -1
 
@@ -25,7 +25,7 @@ function exportObject(object, attachId = false) {
         return
     }
 
-    let single = object instanceof Action || object instanceof SingleFunction
+    let single = object instanceof Action
 
     if(!single) {
         if(object._name) {

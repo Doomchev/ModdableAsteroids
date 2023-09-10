@@ -1,9 +1,10 @@
-import {Action, apsk} from "../system.js"
+import {apsk} from "../system.js"
+import {Action} from "./action.js"
 
 export default class Delayed extends Action {
-    constructor(condition, coolDown) {
+    constructor(key, coolDown) {
         super()
-        this.condition = condition
+        this.key = key
         this.coolDown = coolDown
         this.time = 0.0
     }
@@ -13,7 +14,7 @@ export default class Delayed extends Action {
             this.time -= apsk
             return false
         } else {
-            if(!this.condition.toBoolean()) return false
+            if(!this.key.isDown) return false
             this.time = this.coolDown
             return true
         }
