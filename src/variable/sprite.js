@@ -1,4 +1,5 @@
 import {Value} from "../value.js"
+import {project} from "../project.js"
 
 export class SpriteFunction extends Value {
     toSprite() {
@@ -9,7 +10,7 @@ export class SpriteFunction extends Value {
 export default class SpriteVariable extends SpriteFunction {
     constructor(name) {
         super()
-        if(name) this._name = name
+        if(name) project._object[name] = this
         this._id = name
         this.sprite = null
     }

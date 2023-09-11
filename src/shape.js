@@ -1,9 +1,8 @@
 import {Renderable} from "./renderable.js"
 
 export default class Shape extends Renderable {
-    constructor(name, centerX = 0.0, centerY = 0.0,  width = 1.0, height = 1.0) {
+    constructor(centerX = 0.0, centerY = 0.0,  width = 1.0, height = 1.0) {
         super()
-        if(name) this._name = name
         this.centerX = centerX
         this.centerY = centerY
         this.halfWidth = 0.5 * width

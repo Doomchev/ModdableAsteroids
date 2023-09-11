@@ -1,6 +1,7 @@
-import {Loc, project} from "./system.js"
+import {Loc} from "./system.js"
 import {dv} from "./classes.js"
 import {Action} from "./actions/action.js"
+import {project} from "./project.js"
 
 let text = "", indent = "", currentIndex = -1
 
@@ -36,7 +37,7 @@ function exportObject(object, attachId = false) {
         }
     }
 
-    let id = single ? "" : (attachId ? `(#${object._id})` : "")
+    let id = single || object.constructor.name === "Object" ? "" : (attachId ? `(#${object._id})` : "")
     text += `${object.constructor.name}${id} {`
     indent += "\t"
     let hasValue = false

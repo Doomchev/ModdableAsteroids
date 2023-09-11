@@ -1,24 +1,37 @@
 import {removeFromArray} from "./system.js"
 import {Renderable} from "./renderable.js"
+import {project} from "./project.js"
 
 export default class Layer extends Renderable {
     constructor(name, items = []) {
         super()
-        if(name) this._name = name
+        if(name) project._object[name] = this
         this.items = items
-    }
-
-    isEmpty() {
-        return this.items.length === 0
     }
 
     draw() {
         this.items.forEach(item => item.draw())
     }
 
+    // items management
+
+    isEmpty() {
+        return this.items.length === 0
+    }
+
     clear() {
         this.items = []
     }
+
+    add(sprite) {
+        this.items.push(sprite)
+    }
+
+    remove(sprite) {
+        removeFromArray(sprite.toSprite(), this.items)
+    }
+
+    // sprite manipulations
 
     move() {
         this.items.forEach(item => item.move())
@@ -34,10 +47,6 @@ export default class Layer extends Renderable {
 
     turnImage(angle) {
         this.items.forEach(item => item.turnImage(angle))
-    }
-
-    remove(sprite) {
-        removeFromArray(sprite.toSprite(), this.items)
     }
 
     collisionWith(object, code) {

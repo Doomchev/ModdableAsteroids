@@ -1,18 +1,7 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import SpriteVariable from "./variable/sprite.js"
 import {Value} from "./value.js"
-
-export let project = {
-    textures: {},
-    locale: "ru",
-    locales: {},
-    loadTextures: undefined,
-    init: undefined,
-    data: undefined,
-    keys: [],
-    scene: [],
-    actions: [],
-}
+import {project} from "./project.js"
 
 // global variables
 
@@ -53,7 +42,6 @@ export function removeFromArray(item, array) {
     array.splice(i, 1)
 }
 
-
 export function num(value) {
     return typeof value === "number" ? value : value.toNumber()
 }
@@ -77,12 +65,12 @@ export function addTextures(textureMap) {
         let texture = new Image();
         texture._name = name
         textureSource.set(texture, src)
-        project.textures[name] = texture
+        project.texture[name] = texture
     }
 }
 
 export function addTexturesToObjects(objects) {
-    for(let [name, texture] of Object.entries(project.textures)) {
+    for(let [name, texture] of Object.entries(project.texture)) {
         objects.set(name + "Texture", texture)
     }
 }

@@ -1,6 +1,7 @@
 import Sprite from "./sprite.js"
 import Area from "./area.js"
-import {ctx, mousesx, mousesy, project} from "./system.js"
+import {ctx, mousesx, mousesy} from "./system.js"
+import {project} from "./project.js"
 
 export let currentCanvas, zk = 1.2
 
@@ -10,7 +11,7 @@ export function setCurrentCanvas(canvas) {
 
 export default class Canvas extends Sprite {
     constructor(centerX, centerY, width, height, active, viewport) {
-        super(undefined, undefined, centerX, centerY, width, height, 0.0, 0.0, undefined, active)
+        super(undefined, centerX, centerY, width, height, 0.0, 0.0, undefined, active)
         this.viewport = viewport
         this._vdx = 1.0
         this._vdy = 1.0
@@ -19,10 +20,9 @@ export default class Canvas extends Sprite {
         this._defaultPosition = this
         this.update()
     }
-    
-    
+
     static create(fwidth, fheight, swidth, sheight, active = true) {
-        return  new Canvas(0.0, 0.0, fwidth, fheight, active, new Area(0, 0
+        return new Canvas(0.0, 0.0, fwidth, fheight, active, new Area(0, 0
             , swidth, sheight))
     }
 

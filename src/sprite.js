@@ -4,10 +4,10 @@ import {apsk, executeCollisionCode} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 
 export default class Sprite extends Shape {
-    constructor(name, image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
+    constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
                 , angle = 0.0, speed = 0.0, animationSpeed, imageAngle
                 , active = true, visible = true) {
-        super(name, centerX, centerY, width, height)
+        super(centerX, centerY, width, height)
         this.image = image
         this.imageAngle = imageAngle
         this.angle = angle
@@ -52,6 +52,10 @@ export default class Sprite extends Shape {
 
     show() {
         this.visible = true
+    }
+
+    add(action) {
+        this.actions.push(action)
     }
 
     loop(bounds) {

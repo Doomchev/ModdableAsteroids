@@ -1,10 +1,11 @@
 import {Value} from "../value.js"
 import {num} from "../system.js"
+import {project} from "../project.js"
 
 export default class NumericVariable extends Value {
     constructor(name, value, format) {
         super()
-        if(name) this._name = name
+        if(name) project._object[name] = this
         this.value = num(value)
         this.format = format
     }
