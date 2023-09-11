@@ -12,13 +12,13 @@ export default class Sprite extends Shape {
         this.imageAngle = imageAngle
         this.angle = angle
         this.speed = speed
-        this.visible = true
-        this.active = active
         this.visible = visible
-        this.actions = []
+        this.active = active
         if(animationSpeed !== undefined) {
-            this.actions.push(new Animate(this, this.image, animationSpeed))
+            this.actions = [new Animate(this, this.image, animationSpeed)]
             this.image = this.image._images[0]
+        } else {
+            this.actions = []
         }
     }
 
@@ -31,6 +31,11 @@ export default class Sprite extends Shape {
     move() {
         this.centerX += Math.cos(this.angle) * this.speed * apsk
         this.centerY += Math.sin(this.angle) * this.speed * apsk
+    }
+
+    moveTo(x, y) {
+        this.centerX = x
+        this.centerY = y
     }
 
     turn(value) {

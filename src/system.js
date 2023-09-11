@@ -36,10 +36,10 @@ export function rad(angle) {
 }
 
 export function randomInt(from, to) {
-    return Math.floor(randomFloat(from, to))
+    return Math.floor(rnd(from, to))
 }
 
-export function randomFloat(from, to) {
+export function rnd(from, to) {
     return to === undefined ? Math.random() * from : Math.random() * (to - from) + from
 }
 

@@ -2,17 +2,7 @@ import NumericVariable from "./src/variable/number.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {
-    addTextures,
-    align,
-    collisionSprite1,
-    collisionSprite2,
-    loc,
-    project,
-    rad,
-    randomFloat,
-    randomSign
-} from "./src/system.js"
+import {addTextures, align, collisionSprite1, collisionSprite2, loc, project, rad, rnd, randomSign} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Image from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -24,7 +14,6 @@ import Move from "./src/actions/sprite/move.js"
 import Animate from "./src/actions/sprite/animate.js"
 import Constraint from "./src/constraint.js"
 import Delayed from "./src/actions/delayed.js"
-import AddAction from "./src/actions/sprite/add_action.js"
 import {current} from "./src/variable/sprite.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 import SetBounds from "./src/actions/sprite/set_bounds.js"
@@ -89,11 +78,34 @@ project.enum = {
         gameOver: 2,
     },
     asteroidType: {
-        big: 0,
-        medium: 1,
-        small: 2,
+        big: {
+            size: 3,
+            minSpeed: 2,
+            maxSpeed: 3,
+            minAnimSpeed: 12,
+            maxAnimSpeed: 20,
+            score: 100,
+        },
+        medium: {
+            size: 2,
+            minSpeed: 2,
+            maxSpeed: 2.5,
+            minAnimSpeed: 16,
+            maxAnimSpeed: 25,
+            score: 200,
+        },
+        small: {
+            size: 1,
+            minSpeed: 3,
+            maxSpeed: 5,
+            minAnimSpeed: 16,
+            maxAnimSpeed: 25,
+            score: 300,
+        },
     }
 }
+
+
 
 project.key = {
     left: new Key("left", "ArrowLeft"),
@@ -160,6 +172,33 @@ project.init = () => {
         },
     }
 
+    let asteroidType = project.enum.asteroidType
+    asteroidType.big.pieces = [
+        {
+            type: asteroidType.medium,
+            angle: 0,
+        },
+        {
+            type: asteroidType.small,
+            angle: rad(60),
+        },
+        {
+            type: asteroidType.small,
+            angle: rad(-60),
+        },
+    ]
+    asteroidType.medium.pieces = [
+        {
+            type: asteroidType.small,
+            angle: rad(60),
+        },
+        {
+            type: asteroidType.small,
+            angle: rad(-60),
+        },
+    ]
+    asteroidType.small.pieces = []
+
     project.actions = [
         new LoopArea(shipSprite, bounds),
         new Move(shipSprite),
@@ -180,19 +219,19 @@ project.init = () => {
         new ExecuteActions(explosions),
     ]
 
-    function createAsteroid(pos, astSize, minAstSpeed, maxAstSpeed, astType, astAngle, minAstAnimSpeed, maxAstAnimSpeed) {
-        let asteroid = new Sprite(asteroids, asteroidImages, pos.centerX, pos.centerY, astSize, astSize, undefined
-            , randomFloat(minAstSpeed, maxAstSpeed), randomFloat(minAstAnimSpeed, maxAstAnimSpeed) * randomSign())
-        asteroid.actions.push(new RotateImage(current, randomFloat(rad(-180.0), rad(180.0))))
-        asteroid.type = astType
-        asteroid.turn(astAngle + randomFloat(rad(-15.0), rad(15.0)))
+    function createAsteroid(pos, type, piece, angle = 0) {
+        let asteroid = new Sprite(asteroids, asteroidImages, pos.centerX, pos.centerY, type.size, type.size
+            , angle + rnd(rad(-15.0), rad(15.0)), rnd(type.minSpeed, type.maxSpeed)
+            , rnd(type.minAnimSpeed, type.maxAnimSpeed) * randomSign())
+        asteroid.actions.push(new RotateImage(current, rnd(rad(-180.0), rad(180.0))))
+        asteroid.type = type
         asteroids.items.push(asteroid)
         return asteroid
     }
 
     function createExplosion(sprite, size) {
         let explosion = new Sprite(explosions, explosionImages, sprite.centerX, sprite.centerY
-            , size, size, randomFloat(rad(360.0)), 0, 16)
+            , size, size, rnd(rad(360.0)), 0, 16)
         explosion.actions.push(new DelayedRemove(explosion, explosions, 1.0))
         explosions.items.push(explosion)
     }
@@ -204,7 +243,6 @@ project.init = () => {
         let val = project.registry
         let ship = val.ship
         let state = project.enum.state
-        let asteroidType = project.enum.asteroidType
 
         if(currentState === state.alive) {
             if(key.left._isDown) {
@@ -242,8 +280,7 @@ project.init = () => {
             shipSprite.show()
             flameSprite.show()
             messageLabel.items = []
-            shipSprite.centerX = 0
-            shipSprite.centerY = 0
+            shipSprite.moveTo(0, 0)
             shipSprite.angle = 0
             shipSprite.speed = 0
             if(currentState === state.dead) {
@@ -259,9 +296,8 @@ project.init = () => {
         if(asteroids.isEmpty()) {
             level.value++
             for(let i = 0; i < level.value; i++) {
-                let pos = {centerX: randomFloat(bounds.leftX, bounds.rightX), centerY: bounds.topY}
-                createAsteroid(pos, 3.0, 2.0, 3.0, enums.asteroidType.big
-                    , randomFloat(360), 12.0, 20.0)
+                let pos = {centerX: rnd(bounds.leftX, bounds.rightX), centerY: bounds.topY}
+                createAsteroid(pos, enums.asteroidType.big, undefined, rnd(rad(360)))
             }
             if(level > 1) score.value += val.levelBonus
         }
@@ -269,28 +305,12 @@ project.init = () => {
         bullets.collisionWith(asteroids, () => {
             let bullet = collisionSprite1.sprite
             let asteroid = collisionSprite2.sprite
+            let type = asteroid.type
 
-            switch (asteroid.type) {
-                case asteroidType.big:
-                    createAsteroid(asteroid, 2, 2, 2.5, asteroidType.medium
-                        , shipSprite.angle, 20.0, 30.0)
-                    createAsteroid(asteroid, 1, 3, 5, asteroidType.small
-                        , shipSprite.angle + rad(60.0), 20.0, 30.0)
-                    createAsteroid(asteroid, 1, 3, 5, asteroidType.small
-                        , shipSprite.angle + rad(-60.0), 20.0, 30.0)
-                    score.value += 100
-                    break
-                case asteroidType.medium:
-                    createAsteroid(asteroid, 1, 3, 5, asteroidType.small
-                        , shipSprite.angle + rad(60.0), 20.0, 30.0)
-                    createAsteroid(asteroid, 1, 3, 5, asteroidType.small
-                        , shipSprite.angle + rad(-60.0), 20.0, 30.0)
-                    score.value += 200
-                    break
-                case asteroidType.small:
-                    score.value += 300
-                    break
-            }
+            type.pieces.forEach(piece =>  {
+                createAsteroid(asteroid, piece.type, piece, bullet.angle + piece.angle)
+            })
+            score.value += type.score
 
             createExplosion(asteroid, asteroid.width)
             bullets.remove(bullet)
