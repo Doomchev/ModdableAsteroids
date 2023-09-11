@@ -46,7 +46,7 @@ project.locales.en = {
     // hud
 
     level: "LEVEL ",
-    pressSpace: "PRESS SPACE",
+    pressEnter: "PRESS ENTER",
     gameOver: "GAME OVER",
 
     // keys
@@ -67,7 +67,7 @@ project.locales.en = {
 
 project.locales.ru = {
     level: "УРОВЕНЬ ",
-    pressSpace: "НАЖМИТЕ ПРОБЕЛ",
+    pressEnter: "НАЖМИТЕ ENTER",
     gameOver: "ИГРА ОКОНЧЕНА",
 
     left: "Повернуть влево",
@@ -180,21 +180,24 @@ project.init = () => {
         new ExecuteActions(explosions),
     ]
 
-    function createAsteroid(minAstAnimSpeed, maxAstAnimSpeed, astSize, minAstSpeed, maxAstSpeed, astType, astAngle) {
-        let asteroid = new Sprite(asteroids, asteroidImages, randomFloat(minAstAnimSpeed, maxAstAnimSpeed) * randomSign()
-            , collisionSprite2.sprite, astSize, collisionSprite1.sprite, randomFloat(minAstSpeed,maxAstSpeed, 0.0))
+    function createAsteroid(pos, astSize, minAstSpeed, maxAstSpeed, astType, astAngle, minAstAnimSpeed, maxAstAnimSpeed) {
+        let asteroid = new Sprite(asteroids, asteroidImages, pos.centerX, pos.centerY, astSize, astSize, undefined
+            , randomFloat(minAstSpeed, maxAstSpeed), randomFloat(minAstAnimSpeed, maxAstAnimSpeed) * randomSign())
         asteroid.actions.push(new RotateImage(current, randomFloat(rad(-180.0), rad(180.0))))
         asteroid.type = astType
         asteroid.turn(astAngle + randomFloat(rad(-15.0), rad(15.0)))
+        asteroids.items.push(asteroid)
         return asteroid
     }
 
-    function createExplosion(sprite) {
+    function createExplosion(sprite, size) {
         let explosion = new Sprite(explosions, explosionImages, sprite.centerX, sprite.centerY
-            , sprite.width, sprite.height, randomFloat(rad(360.0)), 0, 16)
-        new AddAction(explosion, new DelayedRemove(explosion, explosions, 1.0))
+            , size, size, randomFloat(rad(360.0)), 0, 16)
+        explosion.actions.push(new DelayedRemove(explosion, explosions, 1.0))
+        explosions.items.push(explosion)
     }
 
+    lives.value = project.registry.startingLives
     let delayed = new Delayed(key.fire, 0.15)
 
     project.update = () => {
@@ -224,44 +227,41 @@ project.init = () => {
             }
 
             shipSprite.collisionWith(asteroids, () => {
-                createExplosion(shipSprite)
+                createExplosion(shipSprite, 2)
                 shipSprite.hide()
                 flameSprite.hide()
                 if (lives.value === 0) {
                     messageLabel.items = [loc("gameOver")]
                     currentState = state.gameOver
                 } else {
-                    messageLabel.items = [loc("pressSpace")]
+                    messageLabel.items = [loc("pressEnter")]
                     currentState = state.dead
                 }
             })
-       } else if(key.continue._isPressed()) {
+       } else if(key.continue._isPressed) {
             shipSprite.show()
             flameSprite.show()
-            messageLabel.clear()
+            messageLabel.items = []
             shipSprite.centerX = 0
             shipSprite.centerY = 0
             shipSprite.angle = 0
             shipSprite.speed = 0
             if(currentState === state.dead) {
-                lives--
+                lives.value--
             } else {
                 lives.value = val.startingLives
-                score.value = -val.levelBonus
+                score.value = 0
                 asteroids.clear()
             }
             currentState = state.alive
         }
 
-        return
-
         if(asteroids.isEmpty()) {
-            level++
-            for(let i = 0; i < level; level++) {
-                let asteroid = createAsteroid(12.0, 20.0, 3.0, 2.0
-                    , 3.0, enums.asteroidType.big, 0.0)
-                asteroid.centerX = randomFloat(bounds.leftX, bounds.rightX)
-                asteroid.centerY = bounds.topY
+            level.value++
+            for(let i = 0; i < level.value; i++) {
+                let pos = {centerX: randomFloat(bounds.leftX, bounds.rightX), centerY: bounds.topY}
+                createAsteroid(pos, 3.0, 2.0, 3.0, enums.asteroidType.big
+                    , randomFloat(360), 12.0, 20.0)
             }
             if(level > 1) score.value += val.levelBonus
         }
@@ -272,27 +272,27 @@ project.init = () => {
 
             switch (asteroid.type) {
                 case asteroidType.big:
-                    createAsteroid(16.0, 25.0, 2.0, 2.5, 4.0
-                        , asteroidType.medium, 0.0)
-                    createAsteroid(20.0, 30.0, 1.0, 3.0, 5.0
-                        , asteroidType.small, rad(60.0))
-                    createAsteroid(20.0, 30.0, 1.0, 3.0, 5.0
-                        , asteroidType.small, rad(-60.0))
-                    score += 100
+                    createAsteroid(asteroid, 2, 2, 2.5, asteroidType.medium
+                        , shipSprite.angle, 20.0, 30.0)
+                    createAsteroid(asteroid, 1, 3, 5, asteroidType.small
+                        , shipSprite.angle + rad(60.0), 20.0, 30.0)
+                    createAsteroid(asteroid, 1, 3, 5, asteroidType.small
+                        , shipSprite.angle + rad(-60.0), 20.0, 30.0)
+                    score.value += 100
                     break
                 case asteroidType.medium:
-                    createAsteroid(0.0, 30.0, 1.0, 3.0, 5.0
-                        , asteroidType.small, rad(60.0))
-                    createAsteroid(20.0, 30.0, 1.0, 3.0, 5.0
-                        , asteroidType.small, rad(-60.0))
-                    score += 200
+                    createAsteroid(asteroid, 1, 3, 5, asteroidType.small
+                        , shipSprite.angle + rad(60.0), 20.0, 30.0)
+                    createAsteroid(asteroid, 1, 3, 5, asteroidType.small
+                        , shipSprite.angle + rad(-60.0), 20.0, 30.0)
+                    score.value += 200
                     break
                 case asteroidType.small:
-                    score += 300
+                    score.value += 300
                     break
             }
 
-            createExplosion(asteroid)
+            createExplosion(asteroid, asteroid.width)
             bullets.remove(bullet)
             asteroids.remove(asteroid)
         })

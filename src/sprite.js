@@ -17,8 +17,8 @@ export default class Sprite extends Shape {
         this.visible = visible
         this.actions = []
         if(animationSpeed !== undefined) {
-            this.image = this.image._images[0]
             this.actions.push(new Animate(this, this.image, animationSpeed))
+            this.image = this.image._images[0]
         }
     }
 

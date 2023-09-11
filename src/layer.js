@@ -24,6 +24,10 @@ export default class Layer extends Renderable {
         this.items.forEach(item => item.move())
     }
 
+    loop(bounds) {
+        this.items.forEach(item => item.loop(bounds))
+    }
+
     turn(angle) {
         this.items.forEach(item => item.turn(angle))
     }
