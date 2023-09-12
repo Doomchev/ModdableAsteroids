@@ -3,6 +3,7 @@ import {dv} from "./classes.js"
 import {Action} from "./actions/action.js"
 import {project} from "./project.js"
 import Sprite from "./sprite.js"
+import Shape from "./shape.js"
 
 let text = "", indent = "", currentIndex = -1
 
@@ -41,7 +42,7 @@ function exportObject(object, attachId = false) {
     text += `${object.constructor.name}${id} {`
     indent += "\t"
     let hasValue = false
-    let withAngle = object instanceof Sprite
+    let isShape = object instanceof Shape
     for(const[key, value] of Object.entries(object)) {
         if(key.startsWith("_") || value === undefined) continue
 
@@ -53,20 +54,25 @@ function exportObject(object, attachId = false) {
             text += "\r\n"
             hasValue = true
         }
-        switch (key) {
-            case "halfWidth":
-                text += `${indent}width: ${2 * value}`
-                break
-            case "halfHeight":
-                text += `${indent}height: ${2 * value}`
-                break
-            default:
-                text += `${indent}${key}: `
-                if(withAngle && key.endsWith("ngle")) {
-                    text += (180 * value / Math.PI)
-                } else {
+        if(isShape) {
+            switch (key) {
+                case "halfWidth":
+                    text += `${indent}width: ${2 * value}`
+                    break
+                case "halfHeight":
+                    text += `${indent}height: ${2 * value}`
+                    break
+                case "angle":
+                case "imageAngle":
+                    text += `${indent}${key}: ${180 * value / Math.PI}`
+                    break
+                default:
+                    text += `${indent}${key}: `
                     exportValue(value)
-                }
+            }
+        } else {
+            text += `${indent}${key}: `
+            exportValue(value)
         }
         text += "\r\n"
     }

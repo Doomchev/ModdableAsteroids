@@ -177,7 +177,7 @@ project._init = () => {
     let explosionImages = new ImageArray("explosionImages", textures.explosion
         , 4, 4, 0.5, 0.5, 2, 2)
 
-    let hudArea = new Shape("hudArea", 0.0, 0.0, currentCanvas.width - 2.0
+    let hudArea = Shape.create("hudArea", 0.0, 0.0, currentCanvas.width - 2.0
         , currentCanvas.height - 2.0)
 
     val.objects = [bulletImages, asteroidImages, explosionImages]
