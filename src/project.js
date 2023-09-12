@@ -6,6 +6,8 @@ export let project = {
     key: {},
     scene: [],
     actions: [],
+    registry: {},
+    modules: [],
     _data: "",
     _loadTextures: () => {},
     _init: () => {},

@@ -33,8 +33,6 @@ export function initUpdate() {
     let currentState = state.alive
     let delayed = new Delayed(key.fire, 0.15)
 
-    let nextLifeBonus = val.lifeBonus
-
     function createAsteroid(centerX, centerY, type, piece, angle = 0) {
         let asteroid = Sprite.create(undefined, asteroids, asteroidImages, centerX, centerY, type.size, type.size
             , angle + rad(rnd(-15.0, 15.0)), rnd(type.minSpeed, type.maxSpeed)
@@ -50,22 +48,16 @@ export function initUpdate() {
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
     }
 
-    function addScore(amount) {
-        score.value += amount
-        if(score.value >= nextLifeBonus) {
-            lives.value++
-            nextLifeBonus += val.lifeBonus
-        }
-    }
-
     project._update = () => {
         if(currentState === state.alive) {
             if(key.left.isDown) {
                 LinearChange.execute(shipSprite, "angle", -rad(ship.dAngle))
             }
+
             if(key.right.isDown) {
                 LinearChange.execute(shipSprite, "angle", rad(ship.dAngle))
             }
+
             if(key.forward.isDown) {
                 LinearChange.execute(shipSprite,"speed", ship.acceleration, 0, ship.limit)
             } else {
@@ -103,7 +95,6 @@ export function initUpdate() {
             } else {
                 lives.value = val.startingLives
                 score.value = 0
-                nextLifeBonus = val.lifeBonus
                 asteroids.clear()
             }
             currentState = state.alive
@@ -134,7 +125,7 @@ export function initUpdate() {
                 createAsteroid(asteroid, undefined, piece.type, piece, bullet.angle + rad(piece.angle))
             })
 
-            addScore(type.score)
+            score.value += type.score
 
             createExplosion(asteroid, asteroid.width)
             bullets.remove(bullet)

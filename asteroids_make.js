@@ -17,6 +17,7 @@ import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import {exportProject} from "./src/export.js"
 import {project} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
+import {LifeBonus} from "./mod/life_bonus.js"
 
 project._loadTextures = () => {
     addTextures({
@@ -118,6 +119,8 @@ project.registry = {
         },
     }
 }
+
+project.modules.push(new LifeBonus(25000))
 
 let val = project.registry
 let asteroidType = val.asteroidType

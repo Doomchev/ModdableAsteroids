@@ -121,15 +121,19 @@ document.addEventListener("DOMContentLoaded", function() {
             imagesToLoad--
             if(imagesToLoad <= 0) {
                 project._init()
+                project.modules.forEach(module => module._init())
                 
                 let apsTime = 0, realAps = 0, apsCounter = 0
                 setInterval(function() {
-                    project.actions.forEach(module => module.execute())
+                    project.actions.forEach(action => action.execute())
                     project._update()
+                    project.modules.forEach(module => module._update())
+
                     for(const key of Object.values(project.key)) {
                         if(!(key instanceof Object)) continue
                         key._isPressed = false
                     }
+
                     let time = new Date().getTime()
                     if(time >= apsTime) {
                         realAps = apsCounter
