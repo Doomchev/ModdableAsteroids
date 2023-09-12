@@ -1,11 +1,10 @@
-import {removeFromArray} from "./system.js"
+import {removeFromArray, setName} from "./system.js"
 import {Renderable} from "./renderable.js"
-import {project} from "./project.js"
 
 export default class Layer extends Renderable {
     constructor(name, items = []) {
         super()
-        if(name) project._object[name] = this
+        setName(this, name)
         this.items = items
     }
 

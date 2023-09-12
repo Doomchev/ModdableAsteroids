@@ -106,19 +106,19 @@ document.addEventListener("DOMContentLoaded", function() {
     project.canvas = Canvas.create(16.0, 16.0, canvas.width, canvas.height)
     setCanvas(project.canvas)
 
-    project.loadTextures()
+    project._loadTextures()
 
     let imagesToLoad = textureSource.size
     textureSource.forEach((src, image) => {
         image.onload = () => {
             imagesToLoad--
             if(imagesToLoad <= 0) {
-                project.init()
+                project._init()
                 
                 let apsTime = 0, realAps = 0, apsCounter = 0
                 setInterval(function() {
                     project.actions.forEach(module => module.execute())
-                    project.update()
+                    project._update()
                     for(const key of Object.values(project.key)) {
                         if(!(key instanceof Object)) continue
                         key._isPressed = false
@@ -188,3 +188,10 @@ document.addEventListener("keypress", event => {
         }
     }
 }, false)
+
+export function setName(object, name) {
+    if (name) {
+        project._object[name] = object
+        object._name = name
+    }
+}

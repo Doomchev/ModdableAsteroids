@@ -51,7 +51,7 @@ export function initUpdate() {
         explosions.add(explosion)
     }
 
-    project.update = () => {
+    project._update = () => {
         if(currentState === state.alive) {
             if(key.left._isDown) {
                 LinearChange.execute(shipSprite, "angle", -rad(ship.dAngle))

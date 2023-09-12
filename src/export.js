@@ -7,8 +7,7 @@ let text = "", indent = "", currentIndex = -1
 
 export function exportProject() {
     for(let [name, object] of Object.entries(project)) {
-        if(name === "data") continue
-        if(object instanceof Function) continue
+        if(name.startsWith("_")) continue
 
         text += `\r\n${name}: `
         if(!(object instanceof Object) || object instanceof Array) {
@@ -37,7 +36,7 @@ function exportObject(object, attachId = false) {
         }
     }
 
-    let id = single || object.constructor.name === "Object" ? "" : (attachId ? `(#${object._id})` : "")
+    let id = single ? "" : (attachId ? `(#${object._id})` : "")
     text += `${object.constructor.name}${id} {`
     indent += "\t"
     let hasValue = false

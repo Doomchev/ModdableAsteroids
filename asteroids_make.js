@@ -2,7 +2,7 @@ import NumericVariable from "./src/variable/number.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {addTextures, align, loc, rad} from "./src/system.js"
+import {addTextures, align, loc, rad, setName} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Image from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -18,7 +18,7 @@ import {exportProject} from "./src/export.js"
 import {project} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
 
-project.loadTextures = () => {
+project._loadTextures = () => {
     addTextures({
         ship: "textures/ship.png",
         flame: "textures/flame.png",
@@ -118,10 +118,9 @@ project.registry = {
     }
 }
 
-project.init = () => {
+project._init = () => {
     let textures = project.texture
     let registry = project.registry
-    let o = project._object
 
     let score = new NumericVariable("score", 0, "Z8")
     let lives = new NumericVariable("lives", 3, "R ∆")
@@ -129,18 +128,18 @@ project.init = () => {
 
     let bounds = new Shape(0.0, 0.0, currentCanvas.width + 2.5
         , currentCanvas.height + 2.5)
-    o.bounds = bounds
+    setName(bounds, "bounds")
 
     let shipSprite = new Sprite(new Image(textures.ship, 0, 0
         , undefined, undefined, 0.35, 0.5, 1.35, 1.9))
-    o.shipSprite = shipSprite
+    setName(shipSprite, "shipSprite")
 
     let flameImages = new ImageArray("flameImages", textures.flame, 3, 3)
     let flameSprite = new Sprite(flameImages._images[0], -0.9, 0.0, 1.0, 1.0, rad(-90.0))
-    o.flameSprite = flameSprite
+    setName(flameSprite, "flameSprite")
 
     let gun = new Sprite(1.0, 0.0)
-    o.gun = gun
+    setName(gun, "gun")
 
     let bullets = new Layer("bullets")
     let bulletImages = new ImageArray("bulletImages", textures.bullet
@@ -156,6 +155,9 @@ project.init = () => {
 
     let hudArea = new Shape(0.0, 0.0, currentCanvas.width - 2.0
         , currentCanvas.height - 2.0)
+    setName(hudArea, "hudArea")
+
+    project.registry.objects = [bulletImages, asteroidImages, explosionImages]
 
     let scoreLabel = new Label("scoreLabel", hudArea, [score], align.left, align.top)
     let levelLabel = new Label("levelLabel", hudArea, [loc("level"), level], align.center, align.top)

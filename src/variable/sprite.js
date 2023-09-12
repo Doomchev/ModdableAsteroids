@@ -1,16 +1,11 @@
 import {Value} from "../value.js"
 import {project} from "../project.js"
+import {setName} from "../system.js"
 
-export class SpriteFunction extends Value {
-    toSprite() {
-        return null
-    }
-}
-
-export default class SpriteVariable extends SpriteFunction {
+export default class SpriteVariable extends Value {
     constructor(name) {
         super()
-        if(name) project._object[name] = this
+        setName(this, name)
         this._id = name
         this.sprite = null
     }

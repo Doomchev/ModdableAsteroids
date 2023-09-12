@@ -8,10 +8,10 @@ let log = true
 let pos = 0, objects = new Map(), logText = "", data
 
 export function importTextures() {
-    data = project.data
+    data = project._data
 
     readId()
-    expect("=")
+    expect(":")
     addTextures(readValue())
 }
 
@@ -28,13 +28,12 @@ export function importProject() {
         if(name === "") break
 
         if(log) logText += " "
-        expect("=")
+        expect(":")
         if(log) logText += " "
 
         project[name] = readValue()
         if(name === "textures") {
             addTexturesToObjects(objects)
-
         }
 
         if(log) logText += "\r\n"
@@ -147,6 +146,7 @@ function readObject(object) {
     if(link !== "") {
         objects.set(link, object)
         object._name = link
+        if(!isDigit(link.substring(0, 1))) project._object[link] = object
     }
     return object
 }

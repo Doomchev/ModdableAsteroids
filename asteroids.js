@@ -1,19 +1,19 @@
 import {importProject, importTextures} from "./src/import.js"
 import {exportProject} from "./src/export.js"
 import {project} from "./src/project.js"
+import {initUpdate} from "./asteroids_code.js"
 
-project.loadTextures = () => {
+project._loadTextures = () => {
     importTextures()
 }
 
-project.init = () => {
+project._init = () => {
     importProject()
-    exportProject()
+    initUpdate()
 }
 
-project.data = ` 
-export.js:19 
-textures: Object {
+project._data = ` 
+texture: Object {
 	ship: Texture("textures/ship.png")
 	flame: Texture("textures/flame.png")
 	bullet: Texture("textures/bullet.png")
@@ -47,11 +47,27 @@ locales: Object {
 		startingLives: "Стартовые жизни"
 		acceleration: "Ускорение корабля"
 		deceleration: "Замедление корабля"
-		limit: "Максимальное ускорениекорабля"
+		limit: "Максимальное ускорение корабля"
 		dAngle: "Скорость вращения корабля"
 	}
 }
-keys: []
+key: Object {
+	left: Key(#left) {
+		code: "ArrowLeft"
+	}
+	right: Key(#right) {
+		code: "ArrowRight"
+	}
+	forward: Key(#forward) {
+		code: "ArrowUp"
+	}
+	fire: Key(#fire) {
+		code: "Space"
+	}
+	continue: Key(#continue) {
+		code: "Enter"
+	}
+}
 scene: [
 	Layer(#bullets) {
 		items: []
@@ -59,12 +75,12 @@ scene: [
 	Layer(#asteroids) {
 		items: []
 	}, 
-	Sprite(#flame) {
+	Sprite(#flameSprite) {
 		centerX: -0.9
 		centerY: 0
 		halfWidth: 0.5
 		halfHeight: 0.5
-		image: Image(#4) {
+		image: Image(#5) {
 			texture: #flameTexture
 			x: 0
 			y: 0
@@ -74,7 +90,7 @@ scene: [
 		angle: -1.5707963267948966
 		speed: 0
 	}, 
-	Sprite(#5) {
+	Sprite(#shipSprite) {
 		centerX: 0
 		centerY: 0
 		halfWidth: 0.5
@@ -95,7 +111,7 @@ scene: [
 	Layer(#explosions) {
 		items: []
 	}, 
-	Label(#7) {
+	Label(#scoreLabel) {
 		centerX: 0
 		centerY: 0
 		halfWidth: 7
@@ -109,7 +125,7 @@ scene: [
 		horizontalAlign: 0
 		verticalAlign: 0
 	}, 
-	Label(#8) {
+	Label(#levelLabel) {
 		centerX: 0
 		centerY: 0
 		halfWidth: 7
@@ -123,7 +139,7 @@ scene: [
 		horizontalAlign: 1
 		verticalAlign: 0
 	}, 
-	Label(#9) {
+	Label(#livesLabel) {
 		centerX: 0
 		centerY: 0
 		halfWidth: 7
@@ -137,7 +153,7 @@ scene: [
 		horizontalAlign: 2
 		verticalAlign: 0
 	}, 
-	Label(#10) {
+	Label(#messageLabel) {
 		centerX: 0
 		centerY: 0
 		halfWidth: 7
@@ -151,7 +167,7 @@ scene: [
 ]
 actions: [
 	LoopArea {
-		object: #5
+		object: #shipSprite
 		area: Shape(#bounds) {
 			centerX: 0
 			centerY: 0
@@ -160,10 +176,10 @@ actions: [
 		}
 	}, 
 	Move {
-		object: #5
+		object: #shipSprite
 	}, 
 	Animate {
-		sprite: #flame
+		sprite: #flameSprite
 		images: ImageArray(#flameImages) {
 			texture: #flameTexture
 			columns: 3
@@ -173,24 +189,25 @@ actions: [
 		frame: 0
 	}, 
 	Constraint {
-		sprite: #flame
-		parent: #5
+		sprite: #flameSprite
+		parent: #shipSprite
 		dAngle: -1.5707963267948966
 		distance: 0.9
 		dAngle2: 3.141592653589793
 	}, 
 	Constraint {
 		sprite: Sprite(#gun) {
-			centerX: 1
+			centerX: 0
 			centerY: 0
 			halfWidth: 0.5
 			halfHeight: 0.5
+			image: 1
 			angle: 0
 			speed: 0
 		}
-		parent: #5
+		parent: #shipSprite
 		dAngle: 0
-		distance: 1
+		distance: 0
 		dAngle2: 0
 	}, 
 	SetBounds {
@@ -217,14 +234,22 @@ actions: [
 		object: #explosions
 	}
 ]
-enum: Object {
-	state: Object(#12) {
+registry: Object {
+	startingLives: 3
+	levelBonus: 1000
+	ship: Object(#8) {
+		acceleration: 25
+		deceleration: 15
+		limit: 7.5
+		dAngle: 180
+	}
+	state: Object(#9) {
 		alive: 0
 		dead: 1
 		gameOver: 2
 	}
-	asteroidType: Object(#13) {
-		big: Object(#14) {
+	asteroidType: Object(#10) {
+		big: Object(#11) {
 			size: 3
 			minSpeed: 2
 			maxSpeed: 3
@@ -232,8 +257,8 @@ enum: Object {
 			maxAnimSpeed: 20
 			score: 100
 			pieces: [
-				Object(#15) {
-					type: Object(#16) {
+				Object(#12) {
+					type: Object(#13) {
 						size: 2
 						minSpeed: 2
 						maxSpeed: 2.5
@@ -241,8 +266,8 @@ enum: Object {
 						maxAnimSpeed: 25
 						score: 200
 						pieces: [
-							Object(#17) {
-								type: Object(#18) {
+							Object(#14) {
+								type: Object(#15) {
 									size: 1
 									minSpeed: 3
 									maxSpeed: 5
@@ -253,44 +278,52 @@ enum: Object {
 								}
 								angle: 1.0471975511965976
 							}, 
-							Object(#19) {
-								type: #18
+							Object(#16) {
+								type: #15
 								angle: -1.0471975511965976
 							}
 						]
 					}
 					angle: 0
 				}, 
-				Object(#20) {
-					type: #18
+				Object(#17) {
+					type: #15
 					angle: 1.0471975511965976
 				}, 
-				Object(#21) {
-					type: #18
+				Object(#18) {
+					type: #15
 					angle: -1.0471975511965976
 				}
 			]
 		}
-		medium: #16
-		small: #18
+		medium: #13
+		small: #15
 	}
-}
-key: Object {
-	left: Key(#left) {
-		code: "ArrowLeft"
-	}
-	right: Key(#right) {
-		code: "ArrowRight"
-	}
-	forward: Key(#forward) {
-		code: "ArrowUp"
-	}
-	fire: Key(#fire) {
-		code: "Space"
-	}
-	continue: Key(#continue) {
-		code: "Enter"
-	}
+	objects: [
+		ImageArray(#bulletImages) {
+			texture: #bulletTexture
+			columns: 1
+			rows: 16
+			xMul: 0.8958333333333334
+			yMul: 0.4583333333333333
+			heightMul: 3
+			widthMul: 10.5
+		}, 
+		ImageArray(#asteroidImages) {
+			texture: #asteroidTexture
+			columns: 8
+			rows: 4
+			heightMul: 1.5
+			widthMul: 1.5
+		}, 
+		ImageArray(#explosionImages) {
+			texture: #explosionTexture
+			columns: 4
+			rows: 4
+			heightMul: 2
+			widthMul: 2
+		}
+	]
 }
 canvas: Canvas {
 	centerX: 0
@@ -300,7 +333,7 @@ canvas: Canvas {
 	imageAngle: true
 	angle: 0
 	speed: 0
-	viewport: Area(#24) {
+	viewport: Area(#20) {
 		leftX: 0
 		topY: 0
 		width: 514
@@ -308,15 +341,4 @@ canvas: Canvas {
 	}
 }
 background: "rgb(9, 44, 84)"
-registry: Object {
-	startingLives: 3
-	levelBonus: 1000
-	bounds: #bounds
-	ship: Object(#26) {
-		acceleration: 25
-		deceleration: 15
-		limit: 7.5
-		dAngle: 180
-	}
-}
 `
