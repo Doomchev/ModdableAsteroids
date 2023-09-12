@@ -2,7 +2,7 @@ export default class Key {
     constructor(name, code) {
         if(name) this._name = name
         this.code = code
-        this._isPressed = false
+        this._wasPressed = false
         this._isDown = false
     }
 
@@ -10,7 +10,7 @@ export default class Key {
         return this._isDown
     }
 
-    get isPressed() {
-        return this._isPressed
+    get wasPressed() {
+        return this._wasPressed
     }
 }

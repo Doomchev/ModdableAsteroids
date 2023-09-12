@@ -1,12 +1,12 @@
-import {apsk, num} from "../../system.js"
+import {apsk} from "../../system.js"
 import {Action} from "../action.js"
 
 export default class Animate extends Action {
     constructor(sprite, images, speed) {
         super()
-        this.sprite = sprite.toSprite()
+        this.sprite = sprite
         this.images = images
-        this.speed = num(speed)
+        this.speed = speed
         this.frame = 0.0
     }
 

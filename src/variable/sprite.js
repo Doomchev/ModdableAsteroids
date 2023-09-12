@@ -1,5 +1,4 @@
 import {Value} from "../value.js"
-import {project} from "../project.js"
 import {setName} from "../system.js"
 
 export default class SpriteVariable extends Value {

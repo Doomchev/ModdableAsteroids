@@ -1,6 +1,5 @@
 import {Value} from "../value.js"
 import {num, setName} from "../system.js"
-import {project} from "../project.js"
 
 export default class NumericVariable extends Value {
     constructor(name, value, format) {

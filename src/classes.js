@@ -7,7 +7,6 @@ import ImageArray from "./image_array.js"
 import Constraint from "./constraint.js"
 import Animate from "./actions/sprite/animate.js"
 import Layer from "./layer.js"
-import Delayed from "./actions/delayed.js"
 import Area from "./area.js"
 import SetBounds from "./actions/sprite/set_bounds.js"
 import LoopArea from "./actions/sprite/loop_area.js"
@@ -27,7 +26,7 @@ export let classes = {
     Image: function(o) {return new Image(o.texture, o.x, o.y, o.width, o.height, o.xMul ?? dv.xMul
         , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
     Sprite: function(o) {return new Sprite(o.image, o.centerX, o.centerY, o.width, o.height
-        , o.angle, o.speed, undefined, o.imageAngle, o.active ?? dv.active, o.visible ?? dv.visible)},
+        , o.angle, o.speed, o.imageAngle, o.active ?? dv.active, o.visible ?? dv.visible)},
     Key: function(o) {return new Key(o._name, o.code)},
     LinearChange: function(o) {return new LinearChange(o.object, o.parameterName, o.speed, o.min, o.max)},
     Move: function(o) {return new Move(o.object)},

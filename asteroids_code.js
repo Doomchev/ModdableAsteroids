@@ -1,7 +1,6 @@
 import Sprite from "./src/sprite.js"
 import {collisionSprite1, collisionSprite2, loc, rad, randomSign, rnd} from "./src/system.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
-import {current} from "./src/variable/sprite.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 import Delayed from "./src/actions/delayed.js"
 import LinearChange from "./src/actions/linear_change.js"
@@ -36,42 +35,48 @@ export function initUpdate() {
 
     let nextLifeBonus = val.lifeBonus
 
-    function createAsteroid(pos, type, piece, angle = 0) {
-        let asteroid = new Sprite(asteroidImages, pos.centerX, pos.centerY, type.size, type.size
+    function createAsteroid(centerX, centerY, type, piece, angle = 0) {
+        let asteroid = Sprite.create(undefined, asteroids, asteroidImages, centerX, centerY, type.size, type.size
             , angle + rad(rnd(-15.0, 15.0)), rnd(type.minSpeed, type.maxSpeed)
-            , rnd(type.minAnimSpeed, type.maxAnimSpeed) * randomSign())
-        asteroid.add(new RotateImage(current, rad(rnd(-180.0, 180.0))))
+            , rnd(type.minAnimSpeed, type.maxAnimSpeed) * randomSign(), rad(rnd(360)))
+        asteroid.add(new RotateImage(asteroid, rad(rnd(-180, 180) / type.size)))
         asteroid.type = type
-        asteroids.add(asteroid)
         return asteroid
     }
 
     function createExplosion(sprite, size) {
-        let explosion = new Sprite(explosionImages, sprite.centerX, sprite.centerY
-            , size, size, rad(rnd(360.0)), 0, 16)
+        let explosion = Sprite.create(undefined, explosions, explosionImages, sprite.centerX, sprite.centerY, size, size
+            , rad(rnd(360)), 0, 16)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
-        explosions.add(explosion)
+    }
+
+    function addScore(amount) {
+        score.value += amount
+        if(score.value >= nextLifeBonus) {
+            lives.value++
+            nextLifeBonus += val.lifeBonus
+        }
     }
 
     project._update = () => {
         if(currentState === state.alive) {
-            if(key.left._isDown) {
+            if(key.left.isDown) {
                 LinearChange.execute(shipSprite, "angle", -rad(ship.dAngle))
             }
-            if(key.right._isDown) {
+            if(key.right.isDown) {
                 LinearChange.execute(shipSprite, "angle", rad(ship.dAngle))
             }
-            if(key.forward._isDown) {
-                LinearChange.execute(shipSprite,"speed", ship.acceleration, undefined, ship.limit)
+            if(key.forward.isDown) {
+                LinearChange.execute(shipSprite,"speed", ship.acceleration, 0, ship.limit)
             } else {
                 LinearChange.execute(shipSprite, "speed", -ship.deceleration, 0)
             }
 
-            flameSprite.visible = key.forward._isDown
+            flameSprite.visible = key.forward.isDown
 
             if(delayed.active()) {
-                bullets.add(new Sprite(bulletImages, gun.centerX, gun.centerY, 0.15, 0.15, shipSprite.angle
-                    , 15.0, 16.0))
+                Sprite.create(undefined, bullets, bulletImages, gun, undefined, 0.15, 0.15
+                    , shipSprite.angle, 15.0, 16.0)
             }
 
             shipSprite.collisionWith(asteroids, () => {
@@ -79,17 +84,17 @@ export function initUpdate() {
                 shipSprite.hide()
                 flameSprite.hide()
                 if (lives.value === 0) {
-                    messageLabel.items = [loc("gameOver")]
+                    messageLabel.show(loc("gameOver"))
                     currentState = state.gameOver
                 } else {
-                    messageLabel.items = [loc("pressEnter")]
+                    messageLabel.show(loc("pressEnter"))
                     currentState = state.dead
                 }
             })
-        } else if(key.continue._isPressed) {
+        } else if(key.continue.wasPressed) {
             shipSprite.show()
             flameSprite.show()
-            messageLabel.items = []
+            messageLabel.show()
             shipSprite.moveTo(0, 0)
             shipSprite.angle = 0
             shipSprite.speed = 0
@@ -98,7 +103,7 @@ export function initUpdate() {
             } else {
                 lives.value = val.startingLives
                 score.value = 0
-                nextLifeBonus =
+                nextLifeBonus = val.lifeBonus
                 asteroids.clear()
             }
             currentState = state.alive
@@ -107,8 +112,15 @@ export function initUpdate() {
         if(asteroids.isEmpty()) {
             level.value++
             for(let i = 0; i < level.value; i++) {
-                let pos = {centerX: rnd(bounds.leftX, bounds.rightX), centerY: bounds.topY}
-                createAsteroid(pos, asteroidType.big, undefined, rnd(rad(360)))
+                let x, y
+                if (rnd() < 0.5) {
+                    x = rnd(bounds.leftX, bounds.rightX)
+                    y = bounds.topY
+                } else {
+                    x = bounds.leftX
+                    y = rnd(bounds.topY, bounds.bottomY)
+                }
+                createAsteroid(x, y, asteroidType.big, undefined, rnd(rad(360)))
             }
             if(level > 1) score.value += val.levelBonus
         }
@@ -119,14 +131,10 @@ export function initUpdate() {
             let type = asteroid.type
 
             type.pieces.forEach(piece =>  {
-                createAsteroid(asteroid, piece.type, piece, bullet.angle + rad(piece.angle))
+                createAsteroid(asteroid, undefined, piece.type, piece, bullet.angle + rad(piece.angle))
             })
 
-            score.value += type.score
-            if(score.value >= nextLifeBonus) {
-                lives.value++
-                nextLifeBonus += val.lifeBonus
-            }
+            addScore(type.score)
 
             createExplosion(asteroid, asteroid.width)
             bullets.remove(bullet)

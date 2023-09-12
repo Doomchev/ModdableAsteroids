@@ -1,5 +1,4 @@
 import {importProject, importTextures} from "./src/import.js"
-import {exportProject} from "./src/export.js"
 import {project} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
 

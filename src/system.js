@@ -28,7 +28,7 @@ export function randomInt(from, to) {
     return Math.floor(rnd(from, to))
 }
 
-export function rnd(from, to) {
+export function rnd(from = 1, to) {
     return to === undefined ? Math.random() * from : Math.random() * (to - from) + from
 }
 
@@ -44,6 +44,13 @@ export function removeFromArray(item, array) {
 
 export function num(value) {
     return typeof value === "number" ? value : value.toNumber()
+}
+
+export function setName(object, name) {
+    if (name) {
+        project._object[name] = object
+        object._name = name
+    }
 }
 
 // code, collisions
@@ -184,14 +191,7 @@ document.addEventListener("keypress", event => {
     for(const key of Object.values(project.key)) {
         if(!(key instanceof Object)) continue
         if(event.code === key.code) {
-            key._isPressed = true
+            key._wasPressed = true
         }
     }
 }, false)
-
-export function setName(object, name) {
-    if (name) {
-        project._object[name] = object
-        object._name = name
-    }
-}

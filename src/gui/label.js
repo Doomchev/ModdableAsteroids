@@ -1,7 +1,6 @@
 import Shape from "../shape.js"
 import {align, ctx, setName} from "../system.js"
 import {xToScreen, yToScreen} from "../canvas.js"
-import {project} from "../project.js"
 
 export default class Label extends Shape {
     constructor(name, sprite, items, horizontalAlign, verticalAlign) {
@@ -45,5 +44,9 @@ export default class Label extends Shape {
                 break
         }
         ctx.fillText(text, x, y)
+    }
+
+    show(...objects) {
+        this.items = objects
     }
 }

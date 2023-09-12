@@ -1,11 +1,11 @@
 import Shape from "./shape.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {apsk, executeCollisionCode} from "./system.js"
+import {apsk, executeCollisionCode, setName} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 
 export default class Sprite extends Shape {
     constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
-                , angle = 0.0, speed = 0.0, animationSpeed, imageAngle
+                , angle = 0.0, speed = 0.0, imageAngle
                 , active = true, visible = true) {
         super(centerX, centerY, width, height)
         this.image = image
@@ -14,13 +14,25 @@ export default class Sprite extends Shape {
         this.speed = speed
         this.visible = visible
         this.active = active
-        if(animationSpeed !== undefined) {
-            this.actions = [new Animate(this, this.image, animationSpeed)]
-            this.image = this.image._images[0]
-        } else {
-            this.actions = []
-        }
+        this.actions = []
     }
+
+    static create(name, layer, image, centerX, centerY, width, height, angle, speed, animationSpeed, imageAngle, active, visible) {
+        if(typeof centerX === "object") {
+            let pos = centerX
+            centerX = pos.centerX
+            centerY = pos.centerY
+        }
+        let sprite = new Sprite(image, centerX, centerY, width, height, angle, speed, imageAngle, active, visible)
+        setName(sprite, name)
+        if(layer) layer.add(sprite)
+        if(animationSpeed !== undefined) {
+            sprite.actions = [new Animate(sprite, image, animationSpeed)]
+            sprite.image = image._images[0]
+        }
+        return sprite
+    }
+
 
     draw() {
         if(!this.image || !this.visible) return

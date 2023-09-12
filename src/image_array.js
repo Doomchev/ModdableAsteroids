@@ -1,5 +1,4 @@
 import Image from "./image.js"
-import {project} from "./project.js"
 import {setName} from "./system.js"
 
 export default class ImageArray {
