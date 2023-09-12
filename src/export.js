@@ -41,7 +41,8 @@ function exportObject(object, attachId = false) {
     indent += "\t"
     let hasValue = false
     for(const[key, value] of Object.entries(object)) {
-        if(key.charAt(0) === "_" || value === undefined) continue
+        if(key.startsWith("_") || value === undefined) continue
+
         let defValue = dv[key]
         if(defValue instanceof Array && value.length === 0) continue
         if(value === defValue) continue
@@ -50,8 +51,15 @@ function exportObject(object, attachId = false) {
             text += "\r\n"
             hasValue = true
         }
-        text += `${indent}${key}: `
-        exportValue(value)
+        if(key === "halfWidth") {
+            text += `${indent}width: ${2 * value}`
+        } else if(key === "halfHeight") {
+            text += `${indent}height: ${2 * value}`
+        } else {
+            text += `${indent}${key}: `
+            exportValue(value)
+        }
+
         text += "\r\n"
     }
     indent = indent.substring(1)

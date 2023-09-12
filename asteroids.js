@@ -78,8 +78,8 @@ scene: [
 	Sprite(#flameSprite) {
 		centerX: -0.9
 		centerY: 0
-		halfWidth: 0.5
-		halfHeight: 0.5
+		width: 1
+		height: 1
 		image: Image(#5) {
 			texture: #flameTexture
 			x: 0
@@ -93,8 +93,8 @@ scene: [
 	Sprite(#shipSprite) {
 		centerX: 0
 		centerY: 0
-		halfWidth: 0.5
-		halfHeight: 0.5
+		width: 1
+		height: 1
 		image: Image(#6) {
 			texture: #shipTexture
 			x: 0
@@ -114,8 +114,8 @@ scene: [
 	Label(#scoreLabel) {
 		centerX: 0
 		centerY: 0
-		halfWidth: 7
-		halfHeight: 7
+		width: 14
+		height: 14
 		items: [
 			NumericVariable(#score) {
 				value: 0
@@ -128,8 +128,8 @@ scene: [
 	Label(#levelLabel) {
 		centerX: 0
 		centerY: 0
-		halfWidth: 7
-		halfHeight: 7
+		width: 14
+		height: 14
 		items: [
 			Loc(level), 
 			NumericVariable(#level) {
@@ -142,8 +142,8 @@ scene: [
 	Label(#livesLabel) {
 		centerX: 0
 		centerY: 0
-		halfWidth: 7
-		halfHeight: 7
+		width: 14
+		height: 14
 		items: [
 			NumericVariable(#lives) {
 				value: 3
@@ -156,8 +156,8 @@ scene: [
 	Label(#messageLabel) {
 		centerX: 0
 		centerY: 0
-		halfWidth: 7
-		halfHeight: 7
+		width: 14
+		height: 14
 		items: [
 			""
 		]
@@ -171,8 +171,8 @@ actions: [
 		area: Shape(#bounds) {
 			centerX: 0
 			centerY: 0
-			halfWidth: 9.25
-			halfHeight: 9.25
+			width: 18.5
+			height: 18.5
 		}
 	}, 
 	Move {
@@ -199,8 +199,8 @@ actions: [
 		sprite: Sprite(#gun) {
 			centerX: 0
 			centerY: 0
-			halfWidth: 0.5
-			halfHeight: 0.5
+			width: 1
+			height: 1
 			image: 1
 			angle: 0
 			speed: 0
@@ -328,8 +328,8 @@ registry: Object {
 canvas: Canvas {
 	centerX: 0
 	centerY: 0
-	halfWidth: 8
-	halfHeight: 8
+	width: 16
+	height: 16
 	imageAngle: true
 	angle: 0
 	speed: 0
