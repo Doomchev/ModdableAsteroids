@@ -34,11 +34,13 @@ export function initUpdate() {
     let currentState = state.alive
     let delayed = new Delayed(key.fire, 0.15)
 
+    let nextLifeBonus = val.lifeBonus
+
     function createAsteroid(pos, type, piece, angle = 0) {
         let asteroid = new Sprite(asteroidImages, pos.centerX, pos.centerY, type.size, type.size
-            , angle + rnd(rad(-15.0), rad(15.0)), rnd(type.minSpeed, type.maxSpeed)
+            , angle + rad(rnd(-15.0, 15.0)), rnd(type.minSpeed, type.maxSpeed)
             , rnd(type.minAnimSpeed, type.maxAnimSpeed) * randomSign())
-        asteroid.add(new RotateImage(current, rnd(rad(-180.0), rad(180.0))))
+        asteroid.add(new RotateImage(current, rad(rnd(-180.0, 180.0))))
         asteroid.type = type
         asteroids.add(asteroid)
         return asteroid
@@ -46,7 +48,7 @@ export function initUpdate() {
 
     function createExplosion(sprite, size) {
         let explosion = new Sprite(explosionImages, sprite.centerX, sprite.centerY
-            , size, size, rnd(rad(360.0)), 0, 16)
+            , size, size, rad(rnd(360.0)), 0, 16)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
         explosions.add(explosion)
     }
@@ -67,7 +69,7 @@ export function initUpdate() {
 
             flameSprite.visible = key.forward._isDown
 
-            if(delayed.toBoolean()) {
+            if(delayed.active()) {
                 bullets.add(new Sprite(bulletImages, gun.centerX, gun.centerY, 0.15, 0.15, shipSprite.angle
                     , 15.0, 16.0))
             }
@@ -96,6 +98,7 @@ export function initUpdate() {
             } else {
                 lives.value = val.startingLives
                 score.value = 0
+                nextLifeBonus =
                 asteroids.clear()
             }
             currentState = state.alive
@@ -116,9 +119,14 @@ export function initUpdate() {
             let type = asteroid.type
 
             type.pieces.forEach(piece =>  {
-                createAsteroid(asteroid, piece.type, piece, bullet.angle + piece.angle)
+                createAsteroid(asteroid, piece.type, piece, bullet.angle + rad(piece.angle))
             })
+
             score.value += type.score
+            if(score.value >= nextLifeBonus) {
+                lives.value++
+                nextLifeBonus += val.lifeBonus
+            }
 
             createExplosion(asteroid, asteroid.width)
             bullets.remove(bullet)

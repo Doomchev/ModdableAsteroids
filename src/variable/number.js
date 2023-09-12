@@ -10,14 +10,6 @@ export default class NumericVariable extends Value {
         this.format = format
     }
 
-    equateTo(value) {
-        this.value = num(value)
-    }
-
-    add(value) {
-        this.value += value
-    }
-
     toNumber() {
         return this.value
     }

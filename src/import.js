@@ -137,7 +137,11 @@ function readObject(object) {
         let name = readId()
         expect(":")
         if(log) logText += " "
-        map[name] = readValue()
+        if(name.endsWith("ngle")) {
+            map[name] = readValue() * Math.PI / 180
+        } else {
+            map[name] = readValue()
+        }
     }
     if(log) logText += "}"
     pos++

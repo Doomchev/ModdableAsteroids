@@ -11,7 +11,7 @@ export function setCurrentCanvas(canvas) {
 
 export default class Canvas extends Sprite {
     constructor(centerX, centerY, width, height, active, viewport) {
-        super(undefined, centerX, centerY, width, height, 0.0, 0.0, undefined, active)
+        super(undefined, centerX, centerY, width, height, 0.0, 0.0, undefined, 0, active)
         this.viewport = viewport
         this._vdx = 1.0
         this._vdy = 1.0

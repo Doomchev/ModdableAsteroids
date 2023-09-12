@@ -2,6 +2,7 @@ import {Loc} from "./system.js"
 import {dv} from "./classes.js"
 import {Action} from "./actions/action.js"
 import {project} from "./project.js"
+import Sprite from "./sprite.js"
 
 let text = "", indent = "", currentIndex = -1
 
@@ -40,6 +41,7 @@ function exportObject(object, attachId = false) {
     text += `${object.constructor.name}${id} {`
     indent += "\t"
     let hasValue = false
+    let withAngle = object instanceof Sprite
     for(const[key, value] of Object.entries(object)) {
         if(key.startsWith("_") || value === undefined) continue
 
@@ -51,15 +53,21 @@ function exportObject(object, attachId = false) {
             text += "\r\n"
             hasValue = true
         }
-        if(key === "halfWidth") {
-            text += `${indent}width: ${2 * value}`
-        } else if(key === "halfHeight") {
-            text += `${indent}height: ${2 * value}`
-        } else {
-            text += `${indent}${key}: `
-            exportValue(value)
+        switch (key) {
+            case "halfWidth":
+                text += `${indent}width: ${2 * value}`
+                break
+            case "halfHeight":
+                text += `${indent}height: ${2 * value}`
+                break
+            default:
+                text += `${indent}${key}: `
+                if(withAngle && key.endsWith("ngle")) {
+                    text += (180 * value / Math.PI)
+                } else {
+                    exportValue(value)
+                }
         }
-
         text += "\r\n"
     }
     indent = indent.substring(1)

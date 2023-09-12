@@ -87,7 +87,7 @@ scene: [
 			height: 64
 			width: 64
 		}
-		angle: -1.5707963267948966
+		angle: -90
 		speed: 0
 	}, 
 	Sprite(#shipSprite) {
@@ -276,11 +276,11 @@ registry: Object {
 									score: 300
 									pieces: []
 								}
-								angle: 1.0471975511965976
+								angle: 59.99999999999999
 							}, 
 							Object(#16) {
 								type: #15
-								angle: -1.0471975511965976
+								angle: -59.99999999999999
 							}
 						]
 					}
@@ -288,11 +288,11 @@ registry: Object {
 				}, 
 				Object(#17) {
 					type: #15
-					angle: 1.0471975511965976
+					angle: 59.99999999999999
 				}, 
 				Object(#18) {
 					type: #15
-					angle: -1.0471975511965976
+					angle: -59.99999999999999
 				}
 			]
 		}
@@ -330,7 +330,7 @@ canvas: Canvas {
 	centerY: 0
 	width: 16
 	height: 16
-	imageAngle: true
+	imageAngle: 0
 	angle: 0
 	speed: 0
 	viewport: Area(#20) {

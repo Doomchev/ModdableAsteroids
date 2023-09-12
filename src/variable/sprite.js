@@ -10,20 +10,12 @@ export default class SpriteVariable extends Value {
         this.sprite = null
     }
 
-    equateTo(value) {
-        this.value = value.toSprite()
-    }
-
     collisionWith(object, code) {
         this.sprite.collisionWith(object, code)
     }
 
     collisionWithSprite(sprite, code) {
         this.sprite.collisionWithSprite(sprite, code)
-    }
-
-    toBoolean() {
-        return this.sprite
     }
 
     toSprite() {

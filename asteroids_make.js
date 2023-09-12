@@ -79,6 +79,7 @@ project.key = {
 project.registry = {
     startingLives: 3,
     levelBonus: 1000,
+    lifeBonus: 25000,
     ship: {
         acceleration: 25.0,
         deceleration: 15.0,
@@ -118,16 +119,43 @@ project.registry = {
     }
 }
 
+let registry = project.registry
+let asteroidType = registry.asteroidType
+asteroidType.big.pieces = [
+    {
+        type: asteroidType.medium,
+        angle: 0,
+    },
+    {
+        type: asteroidType.small,
+        angle: 60,
+    },
+    {
+        type: asteroidType.small,
+        angle: -60,
+    },
+]
+asteroidType.medium.pieces = [
+    {
+        type: asteroidType.small,
+        angle: 60,
+    },
+    {
+        type: asteroidType.small,
+        angle: -60,
+    },
+]
+asteroidType.small.pieces = []
+
 project._init = () => {
     let textures = project.texture
-    let registry = project.registry
 
     let score = new NumericVariable("score", 0, "Z8")
     let lives = new NumericVariable("lives", 3, "R ∆")
     let level = new NumericVariable("level", 0)
 
-    let bounds = new Shape(0.0, 0.0, currentCanvas.width + 2.5
-        , currentCanvas.height + 2.5)
+    let bounds = new Shape(0, 0, currentCanvas.width + 3
+        , currentCanvas.height + 3)
     setName(bounds, "bounds")
 
     let shipSprite = new Sprite(new Image(textures.ship, 0, 0
@@ -135,10 +163,10 @@ project._init = () => {
     setName(shipSprite, "shipSprite")
 
     let flameImages = new ImageArray("flameImages", textures.flame, 3, 3)
-    let flameSprite = new Sprite(flameImages._images[0], -0.9, 0.0, 1.0, 1.0, rad(-90.0))
+    let flameSprite = new Sprite(flameImages._images[0], -0.9, 0, 1, 1, rad(-90))
     setName(flameSprite, "flameSprite")
 
-    let gun = new Sprite(1.0, 0.0)
+    let gun = new Sprite(undefined, 1.0, 0.0)
     setName(gun, "gun")
 
     let bullets = new Layer("bullets")
@@ -157,7 +185,7 @@ project._init = () => {
         , currentCanvas.height - 2.0)
     setName(hudArea, "hudArea")
 
-    project.registry.objects = [bulletImages, asteroidImages, explosionImages]
+    registry.objects = [bulletImages, asteroidImages, explosionImages]
 
     let scoreLabel = new Label("scoreLabel", hudArea, [score], align.left, align.top)
     let levelLabel = new Label("levelLabel", hudArea, [loc("level"), level], align.center, align.top)
@@ -167,33 +195,6 @@ project._init = () => {
     project.background = "rgb(9, 44, 84)"
     project.scene = [bullets, asteroids, flameSprite, shipSprite, explosions, scoreLabel, levelLabel, livesLabel
         , messageLabel]
-
-    let asteroidType = registry.asteroidType
-    asteroidType.big.pieces = [
-        {
-            type: asteroidType.medium,
-            angle: 0,
-        },
-        {
-            type: asteroidType.small,
-            angle: rad(60),
-        },
-        {
-            type: asteroidType.small,
-            angle: rad(-60),
-        },
-    ]
-    asteroidType.medium.pieces = [
-        {
-            type: asteroidType.small,
-            angle: rad(60),
-        },
-        {
-            type: asteroidType.small,
-            angle: rad(-60),
-        },
-    ]
-    asteroidType.small.pieces = []
 
     project.actions = [
         new LoopArea(shipSprite, bounds),

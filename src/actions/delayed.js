@@ -2,20 +2,20 @@ import {apsk} from "../system.js"
 import {Action} from "./action.js"
 
 export default class Delayed extends Action {
-    constructor(key, coolDown) {
+    constructor(key, cooldown) {
         super()
         this.key = key
-        this.coolDown = coolDown
+        this.cooldown = cooldown
         this.time = 0.0
     }
 
-    toBoolean() {
-        if(this.time >= 0.0) {
+    active() {
+        if(this.time > 0.0) {
             this.time -= apsk
             return false
         } else {
             if(!this.key.isDown) return false
-            this.time = this.coolDown
+            this.time = this.cooldown
             return true
         }
     }
