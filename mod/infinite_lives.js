@@ -1,6 +1,5 @@
-import {Mod} from "../src/mod.js"
-import {get} from "../src/system.js"
-import {project} from "../src/project.js"
+import Mod from "../src/mod.js"
+import {pobj, project, val} from "../src/project.js"
 
 export default class InfiniteLives extends Mod {
     get name() {
@@ -12,12 +11,9 @@ export default class InfiniteLives extends Mod {
         }
     }
 
-    init() {
-        this._lives = get("lives")
-        this._startingLives = project.registry.startingLives
-    }
-
     update() {
-        if(this._lives.value < this._startingLives) this._lives.value = this._startingLives
+        let lives = pobj.lives
+        let startingLives = val.startingLives
+        if(lives.value < startingLives) lives.value = startingLives
     }
 }

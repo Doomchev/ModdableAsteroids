@@ -1,6 +1,5 @@
-import {Mod} from "../src/mod.js"
-import {get} from "../src/system.js"
-import {project} from "../src/project.js"
+import Mod from "../src/mod.js"
+import {pobj, project} from "../src/project.js"
 
 export default class BonusForLevel extends Mod {
     constructor(bonus) {
@@ -16,11 +15,7 @@ export default class BonusForLevel extends Mod {
         }
     }
 
-    init() {
-        this._score = get("score")
-    }
-
     initLevel(level) {
-        if(level > 1) this._score.value += this.bonus
+        if(level > 1) pobj.score.value += this.bonus
     }
 }

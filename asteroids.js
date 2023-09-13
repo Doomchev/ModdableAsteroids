@@ -2,11 +2,11 @@ import {importProject, importTextures} from "./src/import.js"
 import {project} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
 
-project._loadTextures = () => {
+project.loadTextures = () => {
     importTextures()
 }
 
-project._init = () => {
+project.init = () => {
     importProject()
     initUpdate()
 }

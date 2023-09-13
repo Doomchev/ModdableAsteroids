@@ -1,22 +1,21 @@
 import Sprite from "./src/sprite.js"
-import {collisionSprite1, collisionSprite2, get, loc, rad} from "./src/system.js"
+import {loc, rad} from "./src/system.js"
 import Delayed from "./src/actions/delayed.js"
 import LinearChange from "./src/actions/linear_change.js"
-import {project} from "./src/project.js"
+import {pobj, project, val} from "./src/project.js"
 
 export function initUpdate() {
-    let asteroids = get("asteroids")
-    let shipSprite = get("shipSprite")
-    let flameSprite = get("flameSprite")
-    let bullets = get("bullets")
-    let bulletImages = get("bulletImages")
-    let gun = get("gun")
-    let lives = get("lives")
-    let messageLabel = get("messageLabel")
-    let level = get("level")
-    let score = get("score")
+    let asteroids = pobj.asteroids
+    let shipSprite = pobj.shipSprite
+    let flameSprite = pobj.flameSprite
+    let bullets = pobj.bullets
+    let bulletImages = pobj.bulletImages
+    let gun = pobj.gun
+    let lives = pobj.lives
+    let messageLabel = pobj.messageLabel
+    let level = pobj.level
+    let score = pobj.score
 
-    let val = project.registry
     let ship = val.ship
     let state = val.state
     let key = project.key
@@ -24,9 +23,14 @@ export function initUpdate() {
     let currentState = state.alive
     let delayed = new Delayed(key.fire, 0.15)
 
+    function destroyAsteroid(asteroid, angle) {
+        project.modules.forEach(module => module.destroyAsteroid(asteroid, angle))
+        asteroids.remove(asteroid)
+    }
+
     project.update = () => {
-        let createAsteroid = project.registry.createAsteroid
-        let createExplosion = project.registry.createExplosion
+        let createAsteroid = val.createAsteroid
+        let createExplosion = val.createExplosion
 
         if(currentState === state.alive) {
             if(key.left.isDown) {
@@ -50,7 +54,7 @@ export function initUpdate() {
                     , shipSprite.angle, 15.0, 16.0)
             }
 
-            shipSprite.collisionWith(asteroids, () => {
+            shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
                 createExplosion(shipSprite, 2)
                 shipSprite.hide()
                 flameSprite.hide()
@@ -61,6 +65,7 @@ export function initUpdate() {
                     messageLabel.show(loc("pressEnter"))
                     currentState = state.dead
                 }
+                destroyAsteroid(asteroid, 0)
             })
         } else if(key.continue.wasPressed) {
             shipSprite.show()
@@ -75,6 +80,8 @@ export function initUpdate() {
                 lives.value = val.startingLives
                 score.value = 0
                 asteroids.clear()
+                level.value = 0
+                project.modules.forEach(module => module.reset(level.value))
             }
             currentState = state.alive
         }
@@ -84,16 +91,12 @@ export function initUpdate() {
             project.modules.forEach(module => module.initLevel(level.value))
         }
 
-        bullets.collisionWith(asteroids, () => {
-            let bullet = collisionSprite1.sprite
-            let asteroid = collisionSprite2.sprite
-
-            project.modules.forEach(module => module.destroyAsteroid(asteroid, bullet))
+        bullets.collisionWith(asteroids, (bullet, asteroid) => {
+            destroyAsteroid(asteroid, bullet.angle)
 
             score.value += asteroid.type.score
 
             bullets.remove(bullet)
-            asteroids.remove(asteroid)
         })
     }
 }

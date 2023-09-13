@@ -1,8 +1,8 @@
-import {Mod} from "../src/mod.js"
+import Mod from "../src/mod.js"
 import Sprite from "../src/sprite.js"
-import {get, rad, rnd} from "../src/system.js"
+import {rad, rnd} from "../src/system.js"
 import DelayedRemove from "../src/actions/sprite/delayed_remove.js"
-import {project} from "../src/project.js"
+import {pobj, project, val} from "../src/project.js"
 
 export default class DefaultExplosion extends Mod {
     get name() {
@@ -15,10 +15,10 @@ export default class DefaultExplosion extends Mod {
     }
 
     init() {
-        let explosions = get("explosions")
-        let explosionImages = get("explosionImages")
+        let explosions = pobj.explosions
+        let explosionImages = pobj.explosionImages
 
-        project.registry.createExplosion = function (sprite, size) {
+        val.createExplosion = function (sprite, size) {
             let explosion = Sprite.create(undefined, explosions, explosionImages, sprite.centerX, sprite.centerY
                 , size, size, rad(rnd(360)), 0, 16)
             explosion.add(new DelayedRemove(explosion, explosions, 1.0))

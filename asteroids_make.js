@@ -14,9 +14,9 @@ import Animate from "./src/actions/sprite/animate.js"
 import Constraint from "./src/constraint.js"
 import SetBounds from "./src/actions/sprite/set_bounds.js"
 import ExecuteActions from "./src/actions/sprite/execute_actions.js"
-import {project} from "./src/project.js"
+import {project, setRegistry, val} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
-import LifeBonus from "./mod/life_bonus.js"
+import ExtraLifeBonus from "./mod/extra_life_bonus.js"
 import DefaultAsteroidCreation from "./mod/default_asteroid_creation.js"
 import AsteroidsPerimeter from "./mod/asteroids_perimeter.js"
 import DefaultExplosion from "./mod/default_explosion.js"
@@ -24,7 +24,7 @@ import BonusForLevel from "./mod/bonus_for_level.js"
 import AsteroidPieces from "./mod/asteroid_pieces.js"
 import DefaultAsteroidDestruction from "./mod/default_asteroid_destruction.js"
 
-project._loadTextures = () => {
+project.loadTextures = () => {
     addTextures({
         ship: "textures/ship.png",
         flame: "textures/flame.png",
@@ -82,7 +82,7 @@ project.key = {
     continue: new Key("continue", "Enter"),
 }
 
-project.registry = {
+setRegistry({
     startingLives: 3,
     levelBonus: 1000,
     lifeBonus: 25000,
@@ -107,7 +107,7 @@ project.registry = {
             score: 100,
         },
     }
-}
+})
 
 project.modules = [
     new DefaultAsteroidCreation(),
@@ -115,11 +115,9 @@ project.modules = [
     new DefaultExplosion(),
     new AsteroidsPerimeter(),
     new AsteroidPieces(),
-    new LifeBonus(25000),
+    new ExtraLifeBonus(25000),
     new BonusForLevel(1000),
 ]
-
-let val = project.registry
 
 project.init = () => {
     let textures = project.texture

@@ -1,6 +1,6 @@
-import {get, rad, rnd} from "../src/system.js"
-import {Mod} from "../src/mod.js"
-import {project} from "../src/project.js"
+import {rad, rnd} from "../src/system.js"
+import Mod from "../src/mod.js"
+import {pobj, project, val} from "../src/project.js"
 
 export default class AsteroidsPerimeter extends Mod {
     get name() {
@@ -13,7 +13,7 @@ export default class AsteroidsPerimeter extends Mod {
     }
 
     initLevel(num) {
-        let bounds = get("bounds")
+        let bounds = pobj.bounds
         for(let i = 0; i < num; i++) {
             let x, y
             if (rnd() < 0.5) {
@@ -23,7 +23,7 @@ export default class AsteroidsPerimeter extends Mod {
                 x = bounds.leftX
                 y = rnd(bounds.topY, bounds.bottomY)
             }
-            project.registry.createAsteroid(x, y, project.registry.asteroidType.default, undefined, rnd(rad(360)))
+            val.createAsteroid(x, y, val.asteroidType.default, undefined, rnd(rad(360)))
         }
     }
 }

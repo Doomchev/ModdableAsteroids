@@ -1,5 +1,5 @@
-import {Mod} from "../src/mod.js"
-import {project} from "../src/project.js"
+import Mod from "../src/mod.js"
+import {project, val} from "../src/project.js"
 
 export default class DefaultAsteroidDestruction extends Mod {
     get name() {
@@ -12,6 +12,6 @@ export default class DefaultAsteroidDestruction extends Mod {
     }
 
     destroyAsteroid(asteroid) {
-        project.registry.createExplosion(asteroid, asteroid.width)
+        val.createExplosion(asteroid, asteroid.width)
     }
 }

@@ -1,6 +1,6 @@
 import Shape from "./shape.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {apsk, executeCollisionCode, setName} from "./system.js"
+import {apsk, setName} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 
 export default class Sprite extends Shape {
@@ -32,7 +32,6 @@ export default class Sprite extends Shape {
         }
         return sprite
     }
-
 
     draw() {
         if(!this.image || !this.visible) return
@@ -83,7 +82,7 @@ export default class Sprite extends Shape {
 
     collisionWithSprite(sprite, code) {
         if(sprite.collidesWithSprite(this)) {
-            executeCollisionCode(sprite, this, code)
+            code.call(null, sprite, this)
         }
     }
 

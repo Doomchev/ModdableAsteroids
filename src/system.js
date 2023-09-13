@@ -1,5 +1,4 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
-import SpriteVariable from "./variable/sprite.js"
 import {Value} from "./value.js"
 import {project} from "./project.js"
 import {exportProject} from "./export.js"
@@ -54,21 +53,6 @@ export function setName(object, name) {
     }
 }
 
-export function get(name) {
-    return project._object[name]
-}
-
-// code, collisions
-
-export let collisionSprite1 = new SpriteVariable("collisionSprite1")
-export let collisionSprite2 = new SpriteVariable("collisionSprite2")
-
-export function executeCollisionCode(sprite1, sprite2, code) {
-    collisionSprite1.sprite = sprite1
-    collisionSprite2.sprite = sprite2
-    code.call()
-}
-
 // textures
 
 let textureSource = new Map()
@@ -118,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function() {
     project.canvas = Canvas.create(16.0, 16.0, canvas.width, canvas.height)
     setCanvas(project.canvas)
 
-    project._loadTextures()
+    project.loadTextures()
 
     let imagesToLoad = textureSource.size
     textureSource.forEach((src, image) => {

@@ -13,3 +13,10 @@ export let project = {
     init: () => {},
     update: () => {},
 }
+
+export let val = project.registry, pobj = project._object
+
+export function setRegistry(newRegistry) {
+    project.registry = newRegistry
+    val = newRegistry
+}
