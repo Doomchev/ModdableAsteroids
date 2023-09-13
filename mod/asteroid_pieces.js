@@ -74,8 +74,4 @@ export default class AsteroidPieces extends Mod {
             val.createAsteroid(asteroid, undefined, piece.type, piece, angle + rad(piece.angle))
         })
     }
-
-    update() {
-        super.update()
-    }
 }

@@ -24,7 +24,7 @@ export function rad(angle) {
     return Math.PI * angle / 180.0
 }
 
-export function randomInt(from, to) {
+export function rndi(from, to) {
     return Math.floor(rnd(from, to))
 }
 
@@ -33,7 +33,7 @@ export function rnd(from = 1, to) {
 }
 
 export function randomSign() {
-    return 2 * randomInt(2) - 1
+    return 2 * rndi(2) - 1
 }
 
 export function removeFromArray(item, array) {

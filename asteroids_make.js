@@ -23,6 +23,7 @@ import DefaultExplosion from "./mod/default_explosion.js"
 import BonusForLevel from "./mod/bonus_for_level.js"
 import AsteroidPieces from "./mod/asteroid_pieces.js"
 import DefaultAsteroidDestruction from "./mod/default_asteroid_destruction.js"
+import MultiExplosion from "./mod/multi_explosion.js"
 
 project.loadTextures = () => {
     addTextures({
@@ -112,7 +113,7 @@ setRegistry({
 project.modules = [
     new DefaultAsteroidCreation(),
     new DefaultAsteroidDestruction(),
-    new DefaultExplosion(),
+    new MultiExplosion(),
     new AsteroidsPerimeter(),
     new AsteroidPieces(),
     new ExtraLifeBonus(25000),
@@ -126,7 +127,8 @@ project.init = () => {
     let lives = new NumericVariable("lives", val.startingLives, "R ∆")
     let level = new NumericVariable("level", 0)
 
-    let bounds = Shape.create("bounds", 0, 0, currentCanvas.width + 3, currentCanvas.height + 3)
+    let bounds = Shape.create("bounds", 0, 0, currentCanvas.width + 3
+        , currentCanvas.height + 3)
 
     let shipSprite = Sprite.create("shipSprite", undefined, new Image(textures.ship, 0, 0
         , undefined, undefined, 0.35, 0.5, 1.35, 1.9))
