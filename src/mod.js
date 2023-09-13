@@ -1,5 +1,7 @@
 export class Mod {
-    _init() {}
-    _draw() {}
-    _update() {}
+    init() {}
+    initLevel() {}
+    destroyAsteroid() {}
+    draw() {}
+    update() {}
 }

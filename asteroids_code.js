@@ -1,54 +1,33 @@
 import Sprite from "./src/sprite.js"
-import {collisionSprite1, collisionSprite2, loc, rad, randomSign, rnd} from "./src/system.js"
-import RotateImage from "./src/actions/sprite/rotate_image.js"
-import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
+import {collisionSprite1, collisionSprite2, get, loc, rad} from "./src/system.js"
 import Delayed from "./src/actions/delayed.js"
 import LinearChange from "./src/actions/linear_change.js"
 import {project} from "./src/project.js"
 
 export function initUpdate() {
-    let o = project._object
-
-    let asteroidImages = o.asteroidImages
-    let asteroids = o.asteroids
-    let explosionImages = o.explosionImages
-    let explosions = o.explosions
-    let shipSprite = o.shipSprite
-    let flameSprite = o.flameSprite
-    let bullets = o.bullets
-    let bulletImages = o.bulletImages
-    let gun = o.gun
-    let lives = o.lives
-    let messageLabel = o.messageLabel
-    let level = o.level
-    let bounds = o.bounds
-    let score = o.score
+    let asteroids = get("asteroids")
+    let shipSprite = get("shipSprite")
+    let flameSprite = get("flameSprite")
+    let bullets = get("bullets")
+    let bulletImages = get("bulletImages")
+    let gun = get("gun")
+    let lives = get("lives")
+    let messageLabel = get("messageLabel")
+    let level = get("level")
+    let score = get("score")
 
     let val = project.registry
     let ship = val.ship
     let state = val.state
-    let asteroidType = val.asteroidType
     let key = project.key
 
     let currentState = state.alive
     let delayed = new Delayed(key.fire, 0.15)
 
-    function createAsteroid(centerX, centerY, type, piece, angle = 0) {
-        let asteroid = Sprite.create(undefined, asteroids, asteroidImages, centerX, centerY, type.size, type.size
-            , angle + rad(rnd(-15.0, 15.0)), rnd(type.minSpeed, type.maxSpeed)
-            , rnd(type.minAnimSpeed, type.maxAnimSpeed) * randomSign(), rad(rnd(360)))
-        asteroid.add(new RotateImage(asteroid, rad(rnd(-180, 180) / type.size)))
-        asteroid.type = type
-        return asteroid
-    }
+    project.update = () => {
+        let createAsteroid = project.registry.createAsteroid
+        let createExplosion = project.registry.createExplosion
 
-    function createExplosion(sprite, size) {
-        let explosion = Sprite.create(undefined, explosions, explosionImages, sprite.centerX, sprite.centerY, size, size
-            , rad(rnd(360)), 0, 16)
-        explosion.add(new DelayedRemove(explosion, explosions, 1.0))
-    }
-
-    project._update = () => {
         if(currentState === state.alive) {
             if(key.left.isDown) {
                 LinearChange.execute(shipSprite, "angle", -rad(ship.dAngle))
@@ -102,32 +81,17 @@ export function initUpdate() {
 
         if(asteroids.isEmpty()) {
             level.value++
-            for(let i = 0; i < level.value; i++) {
-                let x, y
-                if (rnd() < 0.5) {
-                    x = rnd(bounds.leftX, bounds.rightX)
-                    y = bounds.topY
-                } else {
-                    x = bounds.leftX
-                    y = rnd(bounds.topY, bounds.bottomY)
-                }
-                createAsteroid(x, y, asteroidType.big, undefined, rnd(rad(360)))
-            }
-            if(level > 1) score.value += val.levelBonus
+            project.modules.forEach(module => module.initLevel(level.value))
         }
 
         bullets.collisionWith(asteroids, () => {
             let bullet = collisionSprite1.sprite
             let asteroid = collisionSprite2.sprite
-            let type = asteroid.type
 
-            type.pieces.forEach(piece =>  {
-                createAsteroid(asteroid, undefined, piece.type, piece, bullet.angle + rad(piece.angle))
-            })
+            project.modules.forEach(module => module.destroyAsteroid(asteroid, bullet))
 
-            score.value += type.score
+            score.value += asteroid.type.score
 
-            createExplosion(asteroid, asteroid.width)
             bullets.remove(bullet)
             asteroids.remove(asteroid)
         })

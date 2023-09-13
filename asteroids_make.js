@@ -14,10 +14,15 @@ import Animate from "./src/actions/sprite/animate.js"
 import Constraint from "./src/constraint.js"
 import SetBounds from "./src/actions/sprite/set_bounds.js"
 import ExecuteActions from "./src/actions/sprite/execute_actions.js"
-import {exportProject} from "./src/export.js"
 import {project} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
-import {LifeBonus} from "./mod/life_bonus.js"
+import LifeBonus from "./mod/life_bonus.js"
+import DefaultAsteroidCreation from "./mod/default_asteroid_creation.js"
+import AsteroidsPerimeter from "./mod/asteroids_perimeter.js"
+import DefaultExplosion from "./mod/default_explosion.js"
+import BonusForLevel from "./mod/bonus_for_level.js"
+import AsteroidPieces from "./mod/asteroid_pieces.js"
+import DefaultAsteroidDestruction from "./mod/default_asteroid_destruction.js"
 
 project._loadTextures = () => {
     addTextures({
@@ -93,7 +98,7 @@ project.registry = {
         gameOver: 2,
     },
     asteroidType: {
-        big: {
+        default: {
             size: 3,
             minSpeed: 2,
             maxSpeed: 3,
@@ -101,60 +106,26 @@ project.registry = {
             maxAnimSpeed: 20,
             score: 100,
         },
-        medium: {
-            size: 2,
-            minSpeed: 2,
-            maxSpeed: 2.5,
-            minAnimSpeed: 16,
-            maxAnimSpeed: 25,
-            score: 200,
-        },
-        small: {
-            size: 1,
-            minSpeed: 3,
-            maxSpeed: 5,
-            minAnimSpeed: 16,
-            maxAnimSpeed: 25,
-            score: 300,
-        },
     }
 }
 
-project.modules.push(new LifeBonus(25000))
+project.modules = [
+    new DefaultAsteroidCreation(),
+    new DefaultAsteroidDestruction(),
+    new DefaultExplosion(),
+    new AsteroidsPerimeter(),
+    new AsteroidPieces(),
+    new LifeBonus(25000),
+    new BonusForLevel(1000),
+]
 
 let val = project.registry
-let asteroidType = val.asteroidType
-asteroidType.big.pieces = [
-    {
-        type: asteroidType.medium,
-        angle: 0,
-    },
-    {
-        type: asteroidType.small,
-        angle: 60,
-    },
-    {
-        type: asteroidType.small,
-        angle: -60,
-    },
-]
-asteroidType.medium.pieces = [
-    {
-        type: asteroidType.small,
-        angle: 60,
-    },
-    {
-        type: asteroidType.small,
-        angle: -60,
-    },
-]
-asteroidType.small.pieces = []
 
-project._init = () => {
+project.init = () => {
     let textures = project.texture
 
     let score = new NumericVariable("score", 0, "Z8")
-    let lives = new NumericVariable("lives", 3, "R ∆")
+    let lives = new NumericVariable("lives", val.startingLives, "R ∆")
     let level = new NumericVariable("level", 0)
 
     let bounds = Shape.create("bounds", 0, 0, currentCanvas.width + 3, currentCanvas.height + 3)
@@ -215,6 +186,4 @@ project._init = () => {
     ]
 
     initUpdate()
-
-    exportProject()
 }

@@ -9,7 +9,7 @@ export let project = {
     registry: {},
     modules: [],
     _data: "",
-    _loadTextures: () => {},
-    _init: () => {},
-    _update: () => {},
+    loadTextures: () => {},
+    init: () => {},
+    update: () => {},
 }

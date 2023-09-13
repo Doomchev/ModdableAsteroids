@@ -2,6 +2,7 @@ import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import SpriteVariable from "./variable/sprite.js"
 import {Value} from "./value.js"
 import {project} from "./project.js"
+import {exportProject} from "./export.js"
 
 // global variables
 
@@ -51,6 +52,10 @@ export function setName(object, name) {
         project._object[name] = object
         object._name = name
     }
+}
+
+export function get(name) {
+    return project._object[name]
 }
 
 // code, collisions
@@ -120,14 +125,15 @@ document.addEventListener("DOMContentLoaded", function() {
         image.onload = () => {
             imagesToLoad--
             if(imagesToLoad <= 0) {
-                project._init()
-                project.modules.forEach(module => module._init())
-                
+                project.init()
+                project.modules.forEach(module => module.init())
+                exportProject()
+
                 let apsTime = 0, realAps = 0, apsCounter = 0
                 setInterval(function() {
                     project.actions.forEach(action => action.execute())
-                    project._update()
-                    project.modules.forEach(module => module._update())
+                    project.update()
+                    project.modules.forEach(module => module.update())
 
                     for(const key of Object.values(project.key)) {
                         if(!(key instanceof Object)) continue

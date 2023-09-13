@@ -2,7 +2,6 @@ import {Loc} from "./system.js"
 import {dv} from "./classes.js"
 import {Action} from "./actions/action.js"
 import {project} from "./project.js"
-import Sprite from "./sprite.js"
 import Shape from "./shape.js"
 
 let text = "", indent = "", currentIndex = -1
