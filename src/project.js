@@ -1,5 +1,6 @@
 export let project = {
     texture: {},
+    sound: {},
     locale: "ru",
     locales: {},
     _object: {},

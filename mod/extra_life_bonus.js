@@ -20,6 +20,7 @@ export default class ExtraLifeBonus extends Mod {
     update() {
         if(pobj.score.value >= this.nextLifeBonus) {
             pobj.lives.value++
+            new Audio(project.sound.extraLife).play()
             this.nextLifeBonus += this.lifeBonus
         }
     }

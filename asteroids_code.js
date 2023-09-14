@@ -26,7 +26,20 @@ export function initUpdate() {
     function destroyAsteroid(asteroid, angle) {
         project.modules.forEach(module => module.destroyAsteroid(asteroid, angle))
         asteroids.remove(asteroid)
+        new Audio(project.sound.explosion).play()
     }
+
+    let music = new Audio(project.sound.music)
+    let length = 1.81
+    setInterval(function() {
+        if(music.currentTime > length) music.currentTime -= length
+    }, 50)
+    music.play()
+
+    let flameSound = new Audio(project.sound.flame)
+    setInterval(function() {
+        if(flameSound.currentTime > 1) flameSound.currentTime -= 1
+    }, 50)
 
     project.update = () => {
        if(currentState === state.alive) {
@@ -40,8 +53,10 @@ export function initUpdate() {
 
             if(key.forward.isDown) {
                 LinearChange.execute(shipSprite,"speed", ship.acceleration, 0, ship.limit)
+                if(flameSound.paused) flameSound.play()
             } else {
                 LinearChange.execute(shipSprite, "speed", -ship.deceleration, 0)
+                if(!flameSound.paused) flameSound.pause()
             }
 
             flameSprite.visible = key.forward.isDown
@@ -49,15 +64,18 @@ export function initUpdate() {
             if(delayed.active()) {
                 Sprite.create(undefined, bullets, bulletImages, gun, undefined, 0.15, 0.15
                     , shipSprite.angle, 15.0, 16.0)
+                new Audio(project.sound.shooting).play()
             }
 
             shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
+                new Audio(project.sound.death).play()
                 val.createExplosion(shipSprite, 2)
                 shipSprite.hide()
                 flameSprite.hide()
                 if (lives.value === 0) {
                     messageLabel.show(loc("gameOver"))
                     currentState = state.gameOver
+                    new Audio(project.sound.gameOver).play()
                 } else {
                     messageLabel.show(loc("pressEnter"))
                     currentState = state.dead
@@ -86,6 +104,7 @@ export function initUpdate() {
         if(asteroids.isEmpty()) {
             level.value++
             project.modules.forEach(module => module.initLevel(level.value))
+            new Audio(project.sound.newLevel).play()
         }
 
         bullets.collisionWith(asteroids, (bullet, asteroid) => {

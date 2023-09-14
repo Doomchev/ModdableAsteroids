@@ -105,9 +105,9 @@ document.addEventListener("DOMContentLoaded", function() {
         [new DefaultAsteroidCreation(), true],
         [new AsteroidsPerimeter(), true],
         [new DefaultAsteroidDestruction(), true],
-        [new AsteroidPieces(), false],
-        [new DefaultExplosion(), true],
-        [new MultiExplosion(), false],
+        [new AsteroidPieces(), true],
+        [new DefaultExplosion(), false],
+        [new MultiExplosion(), true],
         [new CameraMovement(), false],
         [new ExtraLifeBonus(25000), true],
         [new BonusForLevel(1000), true],
@@ -202,8 +202,9 @@ document.addEventListener("DOMContentLoaded", function() {
                             fpsCounter++
                         }
                         currentCanvas.draw()
+
                         ctx.fillStyle = "white"
-                        ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
+                        //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
                     }, 1000.0 / 60)
                 }
             }
