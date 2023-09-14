@@ -2,7 +2,7 @@ import {removeFromArray, setName} from "./system.js"
 import {Renderable} from "./renderable.js"
 
 export default class Layer extends Renderable {
-    constructor(name, items = []) {
+    constructor(name, ...items) {
         super()
         setName(this, name)
         this.items = items
@@ -36,6 +36,10 @@ export default class Layer extends Renderable {
         this.items.forEach(item => item.move())
     }
 
+    setPositionAs(sprite) {
+        this.items.forEach(item => item.setPositionAs(sprite))
+    }
+
     loop(bounds) {
         this.items.forEach(item => item.loop(bounds))
     }
@@ -47,6 +51,8 @@ export default class Layer extends Renderable {
     turnImage(angle) {
         this.items.forEach(item => item.turnImage(angle))
     }
+
+    // collisions
 
     collisionWith(object, code) {
         this.items.forEach(item => item.collisionWith(object, code))

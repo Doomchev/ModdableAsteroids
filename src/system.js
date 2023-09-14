@@ -11,6 +11,7 @@ import ExtraLifeBonus from "../mod/extra_life_bonus.js"
 import BonusForLevel from "../mod/bonus_for_level.js"
 import InfiniteLives from "../mod/infinite_lives.js"
 import DefaultExplosion from "../mod/default_explosion.js"
+import CameraMovement from "../mod/camera_movement.js"
 
 // global variables
 
@@ -101,15 +102,16 @@ export function loc(stringName) {
 
 document.addEventListener("DOMContentLoaded", function() {
     let modules = [
-        new DefaultAsteroidCreation(),
-        new DefaultAsteroidDestruction(),
-        new DefaultExplosion(),
-        new MultiExplosion(),
-        new AsteroidsPerimeter(),
-        new AsteroidPieces(),
-        new ExtraLifeBonus(25000),
-        new BonusForLevel(1000),
-        new InfiniteLives(),
+        [new DefaultAsteroidCreation(), true],
+        [new AsteroidsPerimeter(), true],
+        [new DefaultAsteroidDestruction(), true],
+        [new AsteroidPieces(), false],
+        [new DefaultExplosion(), true],
+        [new MultiExplosion(), false],
+        [new CameraMovement(), false],
+        [new ExtraLifeBonus(25000), true],
+        [new BonusForLevel(1000), true],
+        [new InfiniteLives(), false],
     ]
 
     let mods = document.getElementById("mods")
@@ -118,16 +120,18 @@ document.addEventListener("DOMContentLoaded", function() {
         div = document.createElement("div")
 
         let checkbox = document.createElement("input")
+        let moduleObject = module[0]
+
         checkbox.type = "checkbox"
-        checkbox.name = module.constructor.name
-        //checkbox.checked = true
-        checkbox.module = module
+        checkbox.name = moduleObject.constructor.name
+        checkbox.checked = module[1]
+        checkbox.module = moduleObject
 
         div.appendChild(checkbox)
 
         let label = document.createElement("label")
-        label.for = module.constructor.name
-        label.textContent = module.name
+        label.for = moduleObject.constructor.name
+        label.textContent = moduleObject.name
         div.appendChild(label)
 
         mods.appendChild(div)

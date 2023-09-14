@@ -16,14 +16,6 @@ import SetBounds from "./src/actions/sprite/set_bounds.js"
 import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import {project, setRegistry, val} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
-import ExtraLifeBonus from "./mod/extra_life_bonus.js"
-import DefaultAsteroidCreation from "./mod/default_asteroid_creation.js"
-import AsteroidsPerimeter from "./mod/asteroids_perimeter.js"
-import DefaultExplosion from "./mod/default_explosion.js"
-import BonusForLevel from "./mod/bonus_for_level.js"
-import AsteroidPieces from "./mod/asteroid_pieces.js"
-import DefaultAsteroidDestruction from "./mod/default_asteroid_destruction.js"
-import MultiExplosion from "./mod/multi_explosion.js"
 
 project.loadTextures = () => {
     addTextures({
@@ -148,10 +140,10 @@ project.init = () => {
     let levelLabel = new Label("levelLabel", hudArea, [loc("level"), level], align.center, align.top)
     let livesLabel = new Label("livesLabel", hudArea, [lives], align.right, align.top)
     let messageLabel = new Label("messageLabel", hudArea, [""], align.center, align.center)
+    let hud = new Layer("hud", scoreLabel, levelLabel, livesLabel, messageLabel)
 
     project.background = "rgb(9, 44, 84)"
-    project.scene = [bullets, asteroids, flameSprite, shipSprite, explosions, scoreLabel, levelLabel, livesLabel
-        , messageLabel]
+    project.scene = [bullets, asteroids, flameSprite, shipSprite, explosions, hud]
 
     project.actions = [
         new LoopArea(shipSprite, bounds),

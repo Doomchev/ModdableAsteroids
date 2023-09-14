@@ -6,6 +6,7 @@ export default class BonusForLevel extends Mod {
         super()
         this.bonus = bonus
     }
+
     get name() {
         switch (project.locale) {
             case "ru":

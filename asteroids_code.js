@@ -29,10 +29,7 @@ export function initUpdate() {
     }
 
     project.update = () => {
-        let createAsteroid = val.createAsteroid
-        let createExplosion = val.createExplosion
-
-        if(currentState === state.alive) {
+       if(currentState === state.alive) {
             if(key.left.isDown) {
                 LinearChange.execute(shipSprite, "angle", -rad(ship.dAngle))
             }
@@ -55,7 +52,7 @@ export function initUpdate() {
             }
 
             shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
-                createExplosion(shipSprite, 2)
+                val.createExplosion(shipSprite, 2)
                 shipSprite.hide()
                 flameSprite.hide()
                 if (lives.value === 0) {

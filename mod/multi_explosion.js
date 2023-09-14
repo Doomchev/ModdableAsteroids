@@ -1,7 +1,7 @@
 import Mod from "../src/mod.js"
 import {pobj, project, val} from "../src/project.js"
 import Sprite from "../src/sprite.js"
-import {rad, rndi, rnd} from "../src/system.js"
+import {rad, rnd, rndi} from "../src/system.js"
 import DelayedRemove from "../src/actions/sprite/delayed_remove.js"
 
 export default class MultiExplosion extends Mod {
