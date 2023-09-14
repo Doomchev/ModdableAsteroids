@@ -9,6 +9,7 @@ let text = "", indent = "", currentIndex = -1
 export function exportProject() {
     for(let [name, object] of Object.entries(project)) {
         if(name.startsWith("_")) continue
+        if(object instanceof Function) continue
 
         text += `\r\n${name}: `
         if(!(object instanceof Object) || object instanceof Array) {
@@ -44,6 +45,7 @@ function exportObject(object, attachId = false) {
     let isShape = object instanceof Shape
     for(const[key, value] of Object.entries(object)) {
         if(key.startsWith("_") || value === undefined) continue
+        if(value instanceof Function) continue
 
         let defValue = dv[key]
         if(defValue instanceof Array && value.length === 0) continue

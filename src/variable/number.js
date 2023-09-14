@@ -19,6 +19,7 @@ export default class NumericVariable extends Value {
             let string = this.value.toString()
             return "0".repeat(parseInt(this.format.substring(1)) - string.length) + string
         } else if (this.format.startsWith("R")) {
+            if(this.value > 5) return this.format.substring(1) + " x " + this.value
             return this.format.substring(1).repeat(this.value)
         }
         return this.value

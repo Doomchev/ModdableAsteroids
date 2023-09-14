@@ -6,7 +6,14 @@
         <title>Moddable Asteroids</title>
         <script type="module" src="asteroids_make.js"></script>
     </head>
-    <body width="100%" height="100%" align="center" bgcolor="black">
-        <canvas id="canvas" width="360px" height="640px"></canvas>
+    <body width="100%" height="100%" align="center" bgcolor="black" style="display: flex; align-items: center;
+     flex-direction: column; color: white">
+        <canvas id="canvas" width="360px" height="640px" hidden="true"></canvas>
+        <div id="mods" style="display: flex; flex-direction: column; align-items: flex-start;">
+            <button id="start" style="align-self: center">Запуск</button>
+            <br>
+            <div width="100%" style="align-self: center">Моды:</div>
+            <br>
+        </div>
     </body>
 </html>

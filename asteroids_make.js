@@ -85,8 +85,6 @@ project.key = {
 
 setRegistry({
     startingLives: 3,
-    levelBonus: 1000,
-    lifeBonus: 25000,
     ship: {
         acceleration: 25.0,
         deceleration: 15.0,
@@ -109,16 +107,6 @@ setRegistry({
         },
     }
 })
-
-project.modules = [
-    new DefaultAsteroidCreation(),
-    new DefaultAsteroidDestruction(),
-    new MultiExplosion(),
-    new AsteroidsPerimeter(),
-    new AsteroidPieces(),
-    new ExtraLifeBonus(25000),
-    new BonusForLevel(1000),
-]
 
 project.init = () => {
     let textures = project.texture

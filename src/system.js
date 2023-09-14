@@ -2,6 +2,15 @@ import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {Value} from "./value.js"
 import {project} from "./project.js"
 import {exportProject} from "./export.js"
+import DefaultAsteroidCreation from "../mod/default_asteroid_creation.js"
+import DefaultAsteroidDestruction from "../mod/default_asteroid_destruction.js"
+import MultiExplosion from "../mod/multi_explosion.js"
+import AsteroidsPerimeter from "../mod/asteroids_perimeter.js"
+import AsteroidPieces from "../mod/asteroid_pieces.js"
+import ExtraLifeBonus from "../mod/extra_life_bonus.js"
+import BonusForLevel from "../mod/bonus_for_level.js"
+import InfiniteLives from "../mod/infinite_lives.js"
+import DefaultExplosion from "../mod/default_explosion.js"
 
 // global variables
 
@@ -91,67 +100,112 @@ export function loc(stringName) {
 // listeners
 
 document.addEventListener("DOMContentLoaded", function() {
-    let canvas = document.getElementById("canvas")
-    let size = Math.min(document.body.clientWidth - 20, document.body.clientHeight - 20)
-    canvas.height = size
-    canvas.width = size
-    canvas.focus()
-    ctx = canvas.getContext("2d")
-    ctx.font = canvas.width / 24 + "px monospace"
-    ctx.textBaseline = "top"
-    project.canvas = Canvas.create(16.0, 16.0, canvas.width, canvas.height)
-    setCanvas(project.canvas)
+    let modules = [
+        new DefaultAsteroidCreation(),
+        new DefaultAsteroidDestruction(),
+        new DefaultExplosion(),
+        new MultiExplosion(),
+        new AsteroidsPerimeter(),
+        new AsteroidPieces(),
+        new ExtraLifeBonus(25000),
+        new BonusForLevel(1000),
+        new InfiniteLives(),
+    ]
 
-    project.loadTextures()
+    let mods = document.getElementById("mods")
+    let div
+    modules.forEach(module => {
+        div = document.createElement("div")
 
-    let imagesToLoad = textureSource.size
-    textureSource.forEach((src, image) => {
-        image.onload = () => {
-            imagesToLoad--
-            if(imagesToLoad <= 0) {
-                project.init()
-                project.modules.forEach(module => module.init())
-                exportProject()
+        let checkbox = document.createElement("input")
+        checkbox.type = "checkbox"
+        checkbox.name = module.constructor.name
+        //checkbox.checked = true
+        checkbox.module = module
 
-                let apsTime = 0, realAps = 0, apsCounter = 0
-                setInterval(function() {
-                    project.actions.forEach(action => action.execute())
-                    project.update()
-                    project.modules.forEach(module => module.update())
+        div.appendChild(checkbox)
 
-                    for(const key of Object.values(project.key)) {
-                        if(!(key instanceof Object)) continue
-                        key._isPressed = false
-                    }
+        let label = document.createElement("label")
+        label.for = module.constructor.name
+        label.textContent = module.name
+        div.appendChild(label)
 
-                    let time = new Date().getTime()
-                    if(time >= apsTime) {
-                        realAps = apsCounter
-                        apsTime = time + 1000
-                        apsCounter = 0
-                    } else {
-                        apsCounter++
-                    }
-                }, 1000 / aps)
-
-                let fpsTime = 0, realFps = 0, fpsCounter = 0
-                setInterval(function() {
-                    let time = new Date().getTime()
-                    if(time >= fpsTime) {
-                        realFps = fpsCounter
-                        fpsTime = time + 1000
-                        fpsCounter = 0
-                    } else {
-                        fpsCounter++
-                    }
-                    currentCanvas.draw()
-                    ctx.fillStyle = "white"
-                    ctx.fillText(`fps: ${realFps}, aps: ${realAps}` , 5, 5)
-                }, 1000.0 / 60)
-            }
-        }
-        image.src = src
+        mods.appendChild(div)
     })
+
+    document.getElementById("start").onclick = function ()  {
+        for(let div of mods.childNodes) {
+            let element = div.childNodes[0]
+            if (element?.module && element.checked) project.modules.push(element.module)
+        }
+        mods.style.display = "none"
+
+        let canvas = document.getElementById("canvas")
+        canvas.hidden = false
+        let size = Math.min(document.body.clientWidth - 20, document.body.clientHeight - 20)
+        canvas.height = size
+        canvas.width = size
+        canvas.focus()
+        ctx = canvas.getContext("2d")
+        ctx.font = canvas.width / 24 + "px monospace"
+        ctx.textBaseline = "top"
+        project.canvas = Canvas.create(16.0, 16.0, canvas.width, canvas.height)
+        setCanvas(project.canvas)
+
+        project.loadTextures()
+
+        let imagesToLoad = textureSource.size
+        textureSource.forEach((src, image) => {
+            image.onload = () => {
+                imagesToLoad--
+                if (imagesToLoad <= 0) {
+                    project.init()
+                    project.modules.forEach(module => module.init())
+                    exportProject()
+
+                    let apsTime = 0, realAps = 0, apsCounter = 0
+                    setInterval(function () {
+                        project.actions.forEach(action => action.execute())
+                        project.update()
+                        project.modules.forEach(module => {
+                            module.actions.forEach(action => action.execute())
+                            module.update()
+                        })
+
+                        for (const key of Object.values(project.key)) {
+                            if (!(key instanceof Object)) continue
+                            key._wasPressed = false
+                        }
+
+                        let time = new Date().getTime()
+                        if (time >= apsTime) {
+                            realAps = apsCounter
+                            apsTime = time + 1000
+                            apsCounter = 0
+                        } else {
+                            apsCounter++
+                        }
+                    }, 1000 / aps)
+
+                    let fpsTime = 0, realFps = 0, fpsCounter = 0
+                    setInterval(function () {
+                        let time = new Date().getTime()
+                        if (time >= fpsTime) {
+                            realFps = fpsCounter
+                            fpsTime = time + 1000
+                            fpsCounter = 0
+                        } else {
+                            fpsCounter++
+                        }
+                        currentCanvas.draw()
+                        ctx.fillStyle = "white"
+                        ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
+                    }, 1000.0 / 60)
+                }
+            }
+            image.src = src
+        })
+    }
 })
 
 document.addEventListener("keydown", event => {
@@ -167,6 +221,9 @@ document.addEventListener("keydown", event => {
     for(const key of Object.values(project.key)) {
         if(!(key instanceof Object)) continue
         if(event.code === key.code) {
+            if(!key._isDown) {
+                key._wasPressed = true
+            }
             key._isDown = true
         }
     }
@@ -177,15 +234,6 @@ document.addEventListener("keyup", event => {
         if(!(key instanceof Object)) continue
         if(event.code === key.code) {
             key._isDown = false
-        }
-    }
-}, false)
-
-document.addEventListener("keypress", event => {
-    for(const key of Object.values(project.key)) {
-        if(!(key instanceof Object)) continue
-        if(event.code === key.code) {
-            key._wasPressed = true
         }
     }
 }, false)

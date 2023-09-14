@@ -23,31 +23,43 @@ import Canvas from "./canvas.js"
 import {Loc} from "./system.js"
 
 export let classes = {
+
+    // objects
+
     Image: function(o) {return new Image(o.texture, o.x, o.y, o.width, o.height, o.xMul ?? dv.xMul
         , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
     Sprite: function(o) {return new Sprite(o.image, o.centerX, o.centerY, o.width, o.height
         , o.angle, o.speed, o.imageAngle, o.active ?? dv.active, o.visible ?? dv.visible)},
     Key: function(o) {return new Key(o._name, o.code)},
-    LinearChange: function(o) {return new LinearChange(o.object, o.parameterName, o.speed, o.min, o.max)},
-    Move: function(o) {return new Move(o.object)},
     ImageArray: function(o) {return new ImageArray(o._name, o.texture, o.columns, o.rows, o.xMul ?? dv.xMul
         , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
     Constraint: function(o) {return new Constraint(o.sprite, o.parent)},
-    Animate: function(o) {return new Animate(o.sprite, o.images, o.speed)},
     Layer: function(o) {return new Layer(o._name, o.items)},
     Canvas: function(o) {return new Canvas(o.centerX, o.centerY, o.width, o.height, o.active ?? dv.active, o.viewport)},
     Area: function(o) {return new Area(o.leftX, o.topY, o.width, o.height)},
+    Shape: function(o) {return new Shape(o.centerX, o.centerY, o.width, o.height)},
+    Label: function(o) {return new Label(o._name, classes.Sprite(o), o.items, o.horizontalAlign, o.verticalAlign)},
+
+    // variables
+
+    NumericVariable: function(o) {return new NumericVariable(o._name, o.value, o.format)},
+    EnumVariable: function(o) {return new EnumVariable(o._name, o.value)},
+    SpriteVariable: function(o) {return new SpriteVariable(o._name)},
+
+    // actions
+
+    LinearChange: function(o) {return new LinearChange(o.object, o.parameterName, o.speed, o.min, o.max)},
+    Move: function(o) {return new Move(o.object)},
+    Animate: function(o) {return new Animate(o.sprite, o.images, o.speed)},
     SetBounds: function(o) {return new SetBounds(o.layer, o.bounds)},
     LoopArea: function(o) {return new LoopArea(o.object, o.area)},
-    Shape: function(o) {return new Shape(o.centerX, o.centerY, o.width, o.height)},
     ExecuteActions: function(o) {return new ExecuteActions(o.object)},
     RotateImage: function(o) {return new RotateImage(o.object, o.speed)},
     DelayedRemove: function(o) {return new DelayedRemove(o.sprite, o.layer, o.time)},
     AddAction: function(o) {return new AddAction(o.sprite, o.action)},
-    Label: function(o) {return new Label(o._name, classes.Sprite(o), o.items, o.horizontalAlign, o.verticalAlign)},
-    NumericVariable: function(o) {return new NumericVariable(o._name, o.value, o.format)},
-    EnumVariable: function(o) {return new EnumVariable(o._name, o.value)},
-    SpriteVariable: function(o) {return new SpriteVariable(o._name)},
+
+    // other
+
     Object: function(o) {return o},
     Loc: function(o) {return new Loc(o.name)},
 }

@@ -1,5 +1,6 @@
 import Mod from "../src/mod.js"
 import {project, val} from "../src/project.js"
+import {classes} from "../src/classes.js"
 
 export default class DefaultAsteroidDestruction extends Mod {
     get name() {
@@ -15,3 +16,5 @@ export default class DefaultAsteroidDestruction extends Mod {
         val.createExplosion(asteroid, asteroid.width)
     }
 }
+
+classes.DefaultAsteroidDestruction = function () {return new DefaultAsteroidDestruction()}
