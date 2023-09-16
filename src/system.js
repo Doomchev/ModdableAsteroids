@@ -1,6 +1,6 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {Value} from "./value.js"
-import {project} from "./project.js"
+import {modules, project, setModules} from "./project.js"
 import {exportProject} from "./export.js"
 import DefaultAsteroidCreation from "../mod/default_asteroid_creation.js"
 import DefaultAsteroidDestruction from "../mod/default_asteroid_destruction.js"
@@ -81,6 +81,18 @@ export function addTexturesToObjects(objects) {
     }
 }
 
+// sound
+
+export function loopedSound(name, loopStart, loopEnd, play) {
+    let sound = new Audio(project.sound[name])
+    let loopLength = loopEnd - loopStart
+    setInterval(function() {
+        if(sound.currentTime > loopEnd) sound.currentTime += loopStart - loopLength
+    }, 50)
+    if(play) sound.play()
+    return sound
+}
+
 // localization
 
 export class Loc extends Value {
@@ -101,7 +113,7 @@ export function loc(stringName) {
 // listeners
 
 document.addEventListener("DOMContentLoaded", function() {
-    let modules = [
+    let allModules = [
         [new DefaultAsteroidCreation(), true],
         [new AsteroidsPerimeter(), true],
         [new DefaultAsteroidDestruction(), true],
@@ -114,9 +126,8 @@ document.addEventListener("DOMContentLoaded", function() {
         [new InfiniteLives(), false],
     ]
 
-    let mods = document.getElementById("mods")
-    let div
-    modules.forEach(module => {
+    let mods = document.getElementById("mods"), div
+    allModules.forEach(module => {
         div = document.createElement("div")
 
         let checkbox = document.createElement("input")
@@ -140,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("start").onclick = function ()  {
         for(let div of mods.childNodes) {
             let element = div.childNodes[0]
-            if (element?.module && element.checked) project.modules.push(element.module)
+            if (element?.module && element.checked) modules.push(element.module)
         }
         mods.style.display = "none"
 
@@ -164,14 +175,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 imagesToLoad--
                 if (imagesToLoad <= 0) {
                     project.init()
-                    project.modules.forEach(module => module.init())
+                    modules.forEach(module => module.init())
                     exportProject()
 
                     let apsTime = 0, realAps = 0, apsCounter = 0
                     setInterval(function () {
                         project.actions.forEach(action => action.execute())
                         project.update()
-                        project.modules.forEach(module => {
+                        modules.forEach(module => {
                             module.actions.forEach(action => action.execute())
                             module.update()
                         })
