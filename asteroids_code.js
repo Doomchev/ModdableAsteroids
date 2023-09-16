@@ -1,8 +1,7 @@
 import Sprite from "./src/sprite.js"
-import {loopedSound, loc, rad, rnd, randomSign} from "./src/system.js"
-import Delayed from "./src/actions/delayed.js"
+import {loc, loopedSound, rad, randomSign, rnd} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
-import {mod, playSound, obj, project, val, func} from "./src/project.js"
+import {func, mod, obj, playSound, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 
@@ -26,16 +25,10 @@ export function initUpdate() {
 
     let currentState = state.alive
 
-    function destroyAsteroid(asteroid, angle) {
-        func.destroyAsteroid(asteroid, angle)
-        func.createExplosion(asteroid, asteroid.type.size)
-        asteroids.remove(asteroid)
-    }
-
     loopedSound("music", 0, 1.81, true)
     let flameSound = loopedSound("flame", 1.1, 1.9, true)
 
-
+    // functions
 
     func.createAsteroids = function(num) {
         let bounds = obj.bounds
@@ -53,26 +46,40 @@ export function initUpdate() {
     }
 
     func.createAsteroid = function (centerX, centerY, type, piece, angle = 0) {
-        let asteroid = Sprite.create(undefined, obj.asteroids, obj.asteroidImages, centerX, centerY
+        let asteroid = Sprite.create(undefined, asteroids, obj.asteroidImages, centerX, centerY
             , type.size, type.size, angle + rad(rnd(-15.0, 15.0)), rnd(type.minSpeed, type.maxSpeed)
             , rnd(type.minAnimSpeed, type.maxAnimSpeed) * randomSign(), rad(rnd(360)))
         asteroid.add(new RotateImage(asteroid, rad(rnd(-180, 180))))
         asteroid.type = type
+        mod.forEach(module => module.initAsteroid(asteroid))
         return asteroid
+    }
+
+    func.removeAsteroid= function (asteroid) {
+        score.value += asteroid.type.score
+        asteroids.remove(asteroid)
+    }
+
+    func.asteroidHit = function(asteroid, bullet) {
+        func.destroyAsteroid(asteroid, bullet.angle)
+        func.createExplosion(asteroid, asteroid.width)
+        func.removeAsteroid(asteroid)
     }
 
     func.destroyAsteroid = function (asteroid, angle) {
         func.createExplosion(asteroid, asteroid.width)
-    }
-
-    func.createExplosion = function (sprite, size) {
-        let explosion = Sprite.create(undefined, explosions, explosionImages, sprite.centerX, sprite.centerY
-            , size, size, rad(rnd(360)), 0, 16)
-        explosion.add(new DelayedRemove(explosion, explosions, 1.0))
         playSound("explosion")
     }
 
+    func.createExplosion = function (sprite, size, playSnd = true) {
+        let explosion = Sprite.create(undefined, explosions, explosionImages, sprite.centerX, sprite.centerY
+            , size, size, rad(rnd(360)), 0, 16)
+        explosion.add(new DelayedRemove(explosion, explosions, 1.0))
+        if(playSnd) playSound("explosion")
+    }
+    func.createSingleExplosion = func.createExplosion
 
+    // main
 
     project.update = () => {
        if(currentState === state.alive) {
@@ -143,10 +150,8 @@ export function initUpdate() {
         }
 
         bullets.collisionWith(asteroids, (bullet, asteroid) => {
-            destroyAsteroid(asteroid, bullet.angle)
-
-            score.value += asteroid.type.score
-
+            func.asteroidHit(asteroid, bullet)
+            func.createSingleExplosion(bullet, 0.7, false)
             bullets.remove(bullet)
         })
     }

@@ -1,6 +1,6 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {Value} from "./value.js"
-import {mod, project, setModules} from "./project.js"
+import {mod, project} from "./project.js"
 import {exportProject} from "./export.js"
 import MultiExplosion from "../mod/multi_explosion.js"
 import AsteroidPieces from "../mod/asteroid_pieces.js"
@@ -8,6 +8,7 @@ import ExtraLifeBonus from "../mod/extra_life_bonus.js"
 import BonusForLevel from "../mod/bonus_for_level.js"
 import InfiniteLives from "../mod/infinite_lives.js"
 import CameraMovement from "../mod/camera_movement.js"
+import AsteroidsHealth from "../mod/asteroids_health.js"
 
 // global variables
 
@@ -111,8 +112,9 @@ export function loc(stringName) {
 document.addEventListener("DOMContentLoaded", function() {
     let allModules = [
         [new AsteroidPieces(), true],
+        [new AsteroidsHealth(), true],
         [new MultiExplosion(), true],
-        [new CameraMovement(), false],
+        [new CameraMovement(), true],
         [new ExtraLifeBonus(25000), true],
         [new BonusForLevel(1000), true],
         [new InfiniteLives(), false],

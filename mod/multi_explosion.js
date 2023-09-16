@@ -1,5 +1,5 @@
 import Mod from "../src/mod.js"
-import {func, obj, playSound, project, val} from "../src/project.js"
+import {func, obj, playSound, project} from "../src/project.js"
 import Sprite from "../src/sprite.js"
 import {rad, rnd, rndi} from "../src/system.js"
 import DelayedRemove from "../src/actions/sprite/delayed_remove.js"
@@ -12,7 +12,7 @@ export default class MultiExplosion extends Mod {
     get name() {
         switch (project.locale) {
             case "ru":
-                return "Многоспрайтовый взрыва"
+                return "Многоспрайтовый взрыв"
             default:
                 return "Multisprite explosion"
         }
@@ -22,10 +22,10 @@ export default class MultiExplosion extends Mod {
         let explosions = obj.explosions
         let explosionImages = obj.explosionImages
 
-        func.createExplosion = function (sprite, size) {
+        func.createExplosion = function (sprite, size, playSnd) {
             let times = rndi(3) + size
             createParticle(true)
-            playSound("explosion")
+            if(playSnd) playSound("explosion")
 
             function createParticle(first) {
                 let angle = rad(rnd(360))
