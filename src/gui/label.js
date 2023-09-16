@@ -3,19 +3,30 @@ import {align, ctx, setName} from "../system.js"
 import {xToScreen, yToScreen} from "../canvas.js"
 
 export default class Label extends Shape {
-    constructor(name, sprite, items, horizontalAlign, verticalAlign) {
+    constructor(name, sprite, items, horizontalAlign, verticalAlign, format) {
         super(sprite.centerX, sprite.centerY, sprite.width, sprite.height)
         setName(this, name)
         this.items = items
         this.horizontalAlign = horizontalAlign
         this.verticalAlign = verticalAlign
+        this.format = format
     }
 
     draw() {
         let text = ""
         this.items.forEach(item => text += typeof item === "string" ? item : item.toString())
 
-        ctx.fillStyle = "white"
+        let formatString = this.format?.substring(1)
+        if (this.format === undefined) {
+        } else if (this.format.startsWith("Z")) {
+            text = "0".repeat(parseInt(formatString) - text.length) + text
+        } else if (this.format.startsWith("R")) {
+            if(this.value > 5) {
+                text = formatString + " x " + text
+            } else {
+                text = formatString.repeat(text)
+            }
+        }
 
         let x, y
         const metrics = ctx.measureText(text)
@@ -43,6 +54,8 @@ export default class Label extends Shape {
                 y = yToScreen(this.bottomY) - height
                 break
         }
+
+        ctx.fillStyle = "white"
         ctx.fillText(text, x, y)
     }
 

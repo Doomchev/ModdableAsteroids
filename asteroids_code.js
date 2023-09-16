@@ -1,5 +1,5 @@
 import Sprite from "./src/sprite.js"
-import {loc, loopedSound, rad, randomSign, rnd} from "./src/system.js"
+import {loc, loopedSound, rad, randomSign, rnd, rndi} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
 import {func, mod, obj, playSound, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
@@ -34,7 +34,7 @@ export function initUpdate() {
         let bounds = obj.bounds
         for(let i = 0; i < num; i++) {
             let x, y
-            if (rnd() < 0.5) {
+            if (rndi() === 0) {
                 x = rnd(bounds.leftX, bounds.rightX)
                 y = bounds.topY
             } else {
@@ -62,7 +62,6 @@ export function initUpdate() {
 
     func.asteroidHit = function(asteroid, bullet) {
         func.destroyAsteroid(asteroid, bullet.angle)
-        func.createExplosion(asteroid, asteroid.width)
         func.removeAsteroid(asteroid)
     }
 

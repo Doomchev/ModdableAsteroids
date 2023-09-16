@@ -113,15 +113,15 @@ project.sound.music = "sounds/music.mp3"
 project.init = () => {
     let textures = project.texture
 
-    let score = new NumericVariable("score", 0, "Z8")
-    let lives = new NumericVariable("lives", val.startingLives, "R ∆")
+    let score = new NumericVariable("score", 0)
+    let lives = new NumericVariable("lives", val.startingLives)
     let level = new NumericVariable("level", 0)
 
     let bounds = Shape.create("bounds", 0, 0, currentCanvas.width + 3
         , currentCanvas.height + 3)
 
     let shipSprite = Sprite.create("shipSprite", undefined, new Image(textures.ship, 0, 0
-        , undefined, undefined, 0.35, 0.5, 1.35, 1.9))
+        , undefined, undefined, 0.5, 0.5, 1.75, 1.75))
 
     let flameImages = new ImageArray("flameImages", textures.flame, 3, 3)
     let flameSprite = Sprite.create("flameSprite", undefined, flameImages._images[0], -0.9, 0
@@ -141,14 +141,14 @@ project.init = () => {
     let explosionImages = new ImageArray("explosionImages", textures.explosion
         , 4, 4, 0.5, 0.5, 2, 2)
 
-    let hudArea = Shape.create("hudArea", 0.0, 0.0, currentCanvas.width - 2.0
-        , currentCanvas.height - 2.0)
+    let hudArea = Shape.create("hudArea", 0.0, 0.0, currentCanvas.width - 1.0
+        , currentCanvas.height - 1.0)
 
     val.objects = [bulletImages, asteroidImages, explosionImages]
 
-    let scoreLabel = new Label("scoreLabel", hudArea, [score], align.left, align.top)
+    let scoreLabel = new Label("scoreLabel", hudArea, [score], align.left, align.top, "Z8")
     let levelLabel = new Label("levelLabel", hudArea, [loc("level"), level], align.center, align.top)
-    let livesLabel = new Label("livesLabel", hudArea, [lives], align.right, align.top)
+    let livesLabel = new Label("livesLabel", hudArea, [lives], align.right, align.top, "R ∆")
     let messageLabel = new Label("messageLabel", hudArea, [""], align.center, align.center)
     let hud = new Layer("hud", scoreLabel, levelLabel, livesLabel, messageLabel)
 

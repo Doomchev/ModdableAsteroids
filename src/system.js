@@ -152,14 +152,15 @@ document.addEventListener("DOMContentLoaded", function() {
         let canvas = document.getElementById("canvas")
         canvas.hidden = false
         let size = Math.min(document.body.clientWidth - 20, document.body.clientHeight - 20)
-        canvas.height = size
-        canvas.width = size
+        //canvas.width = canvas.height = size
+        canvas.width = 360
+        canvas.height = 640
         canvas.focus()
         ctx = canvas.getContext("2d")
         ctx.fillStyle = "white"
         ctx.font = canvas.width / 24 + "px monospace"
         ctx.textBaseline = "top"
-        project.canvas = Canvas.create(16.0, 16.0, canvas.width, canvas.height)
+        project.canvas = Canvas.create(9.0, 16.0, canvas.width, canvas.height)
         setCanvas(project.canvas)
 
         project.loadTextures()

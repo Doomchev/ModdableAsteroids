@@ -24,21 +24,11 @@ import {Loc} from "./system.js"
 
 export let classes = {
 
-    // objects
+    // basic
 
-    Image: function(o) {return new Image(o.texture, o.x, o.y, o.width, o.height, o.xMul ?? dv.xMul
-        , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
-    Sprite: function(o) {return new Sprite(o.image, o.centerX, o.centerY, o.width, o.height
-        , o.angle, o.speed, o.imageAngle, o.active ?? dv.active, o.visible ?? dv.visible)},
+    Object: function(o) {return o},
+    Loc: function(o) {return new Loc(o.name)},
     Key: function(o) {return new Key(o._name, o.code)},
-    ImageArray: function(o) {return new ImageArray(o._name, o.texture, o.columns, o.rows, o.xMul ?? dv.xMul
-        , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
-    Constraint: function(o) {return new Constraint(o.sprite, o.parent)},
-    Layer: function(o) {return new Layer(o._name, o.items)},
-    Canvas: function(o) {return new Canvas(o.centerX, o.centerY, o.width, o.height, o.active ?? dv.active, o.viewport)},
-    Area: function(o) {return new Area(o.leftX, o.topY, o.width, o.height)},
-    Shape: function(o) {return new Shape(o.centerX, o.centerY, o.width, o.height)},
-    Label: function(o) {return new Label(o._name, classes.Sprite(o), o.items, o.horizontalAlign, o.verticalAlign)},
 
     // variables
 
@@ -46,8 +36,23 @@ export let classes = {
     EnumVariable: function(o) {return new EnumVariable(o._name, o.value)},
     SpriteVariable: function(o) {return new SpriteVariable(o._name)},
 
+    // graphics
+
+    Image: function(o) {return new Image(o.texture, o.x, o.y, o.width, o.height, o.xMul ?? dv.xMul
+        , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
+    Sprite: function(o) {return new Sprite(o.image, o.centerX, o.centerY, o.width, o.height
+        , o.angle, o.speed, o.imageAngle, o.active ?? dv.active, o.visible ?? dv.visible)},
+    ImageArray: function(o) {return new ImageArray(o._name, o.texture, o.columns, o.rows, o.xMul ?? dv.xMul
+        , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
+    Layer: function(o) {return new Layer(o._name, o.items)},
+    Canvas: function(o) {return new Canvas(o.centerX, o.centerY, o.width, o.height, o.active ?? dv.active, o.viewport)},
+    Area: function(o) {return new Area(o.leftX, o.topY, o.width, o.height)},
+    Shape: function(o) {return new Shape(o.centerX, o.centerY, o.width, o.height)},
+    Label: function(o) {return new Label(o._name, classes.Sprite(o), o.items, o.horizontalAlign, o.verticalAlign)},
+
     // actions
 
+    Constraint: function(o) {return new Constraint(o.sprite, o.parent)},
     LinearChange: function(o) {return new LinearChange(o.object, o.parameterName, o.speed, o.min, o.max)},
     Move: function(o) {return new Move(o.object)},
     Animate: function(o) {return new Animate(o.sprite, o.images, o.speed)},
@@ -57,11 +62,6 @@ export let classes = {
     RotateImage: function(o) {return new RotateImage(o.object, o.speed)},
     DelayedRemove: function(o) {return new DelayedRemove(o.sprite, o.layer, o.time)},
     AddAction: function(o) {return new AddAction(o.sprite, o.action)},
-
-    // other
-
-    Object: function(o) {return o},
-    Loc: function(o) {return new Loc(o.name)},
 }
 
 export let dv = {
