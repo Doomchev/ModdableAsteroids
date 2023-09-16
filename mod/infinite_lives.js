@@ -1,5 +1,5 @@
 import Mod from "../src/mod.js"
-import {pobj, project, val} from "../src/project.js"
+import {obj, project, val} from "../src/project.js"
 
 export default class InfiniteLives extends Mod {
     get name() {
@@ -12,7 +12,7 @@ export default class InfiniteLives extends Mod {
     }
 
     update() {
-        let lives = pobj.lives
+        let lives = obj.lives
         let startingLives = val.startingLives
         if(lives.value < startingLives) lives.value = startingLives
     }

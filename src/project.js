@@ -3,19 +3,22 @@ export let project = {
     sound: {},
     locale: "ru",
     locales: {},
-    _object: {},
     key: {},
     scene: [],
     actions: [],
     registry: {},
     modules: [],
+
+    _object: {},
+    _function: {},
     _data: "",
+
     loadTextures: () => {},
     init: () => {},
     update: () => {},
 }
 
-export let val = project.registry, pobj = project._object, modules = project.modules
+export let val = project.registry, obj = project._object, mod = project.modules, func = project._function
 
 export function setRegistry(newRegistry) {
     project.registry = newRegistry
@@ -24,7 +27,6 @@ export function setRegistry(newRegistry) {
 
 export function setModules(newModules) {
     project.modules = newModules
-    modules = newModules
 }
 
 export function playSound(name) {

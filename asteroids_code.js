@@ -1,36 +1,78 @@
 import Sprite from "./src/sprite.js"
-import {loopedSound, loc, rad} from "./src/system.js"
+import {loopedSound, loc, rad, rnd, randomSign} from "./src/system.js"
 import Delayed from "./src/actions/delayed.js"
 import LinearChange from "./src/actions/linear_change.js"
-import {modules, playSound, pobj, project, val} from "./src/project.js"
+import {mod, playSound, obj, project, val, func} from "./src/project.js"
+import RotateImage from "./src/actions/sprite/rotate_image.js"
+import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 
 export function initUpdate() {
-    let asteroids = pobj.asteroids
-    let shipSprite = pobj.shipSprite
-    let flameSprite = pobj.flameSprite
-    let bullets = pobj.bullets
-    let bulletImages = pobj.bulletImages
-    let gun = pobj.gun
-    let lives = pobj.lives
-    let messageLabel = pobj.messageLabel
-    let level = pobj.level
-    let score = pobj.score
+    let asteroids = obj.asteroids
+    let shipSprite = obj.shipSprite
+    let flameSprite = obj.flameSprite
+    let bullets = obj.bullets
+    let bulletImages = obj.bulletImages
+    let explosions = obj.explosions
+    let explosionImages = obj.explosionImages
+    let gun = obj.gun
+    let lives = obj.lives
+    let messageLabel = obj.messageLabel
+    let level = obj.level
+    let score = obj.score
 
     let ship = val.ship
     let state = val.state
     let key = project.key
 
     let currentState = state.alive
-    let delayed = new Delayed(key.fire, 0.15)
 
     function destroyAsteroid(asteroid, angle) {
-        modules.forEach(module => module.destroyAsteroid(asteroid, angle))
+        func.destroyAsteroid(asteroid, angle)
+        func.createExplosion(asteroid, asteroid.type.size)
         asteroids.remove(asteroid)
-        playSound("explosion")
     }
 
     loopedSound("music", 0, 1.81, true)
-    let flameSound = loopedSound("flame", 0, 1, true)
+    let flameSound = loopedSound("flame", 1.1, 1.9, true)
+
+
+
+    func.createAsteroids = function(num) {
+        let bounds = obj.bounds
+        for(let i = 0; i < num; i++) {
+            let x, y
+            if (rnd() < 0.5) {
+                x = rnd(bounds.leftX, bounds.rightX)
+                y = bounds.topY
+            } else {
+                x = bounds.leftX
+                y = rnd(bounds.topY, bounds.bottomY)
+            }
+            func.createAsteroid(x, y, val.asteroidType.default, undefined, rnd(rad(360)))
+        }
+    }
+
+    func.createAsteroid = function (centerX, centerY, type, piece, angle = 0) {
+        let asteroid = Sprite.create(undefined, obj.asteroids, obj.asteroidImages, centerX, centerY
+            , type.size, type.size, angle + rad(rnd(-15.0, 15.0)), rnd(type.minSpeed, type.maxSpeed)
+            , rnd(type.minAnimSpeed, type.maxAnimSpeed) * randomSign(), rad(rnd(360)))
+        asteroid.add(new RotateImage(asteroid, rad(rnd(-180, 180))))
+        asteroid.type = type
+        return asteroid
+    }
+
+    func.destroyAsteroid = function (asteroid, angle) {
+        func.createExplosion(asteroid, asteroid.width)
+    }
+
+    func.createExplosion = function (sprite, size) {
+        let explosion = Sprite.create(undefined, explosions, explosionImages, sprite.centerX, sprite.centerY
+            , size, size, rad(rnd(360)), 0, 16)
+        explosion.add(new DelayedRemove(explosion, explosions, 1.0))
+        playSound("explosion")
+    }
+
+
 
     project.update = () => {
        if(currentState === state.alive) {
@@ -44,15 +86,16 @@ export function initUpdate() {
 
             if(key.forward.isDown) {
                 LinearChange.execute(shipSprite,"speed", ship.acceleration, 0, ship.limit)
-                if(flameSound.paused) flameSound.play()
+                if(flameSound) flameSound.play()
             } else {
                 LinearChange.execute(shipSprite, "speed", -ship.deceleration, 0)
                 if(!flameSound.paused) flameSound.pause()
+                flameSound.currentTime = 0
             }
 
             flameSprite.visible = key.forward.isDown
 
-            if(delayed.active()) {
+            if(val.gunDelay.active()) {
                 Sprite.create(undefined, bullets, bulletImages, gun, undefined, 0.15, 0.15
                     , shipSprite.angle, 15.0, 16.0)
                 playSound("shooting")
@@ -60,7 +103,7 @@ export function initUpdate() {
 
             shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
                 playSound("death")
-                val.createExplosion(shipSprite, 2)
+                func.createExplosion(shipSprite, 2)
                 shipSprite.hide()
                 flameSprite.hide()
                 if (lives.value === 0) {
@@ -71,7 +114,7 @@ export function initUpdate() {
                     messageLabel.show(loc("pressEnter"))
                     currentState = state.dead
                 }
-                destroyAsteroid(asteroid, 0)
+                func.destroyAsteroid(asteroid, 0)
             })
         } else if(key.continue.wasPressed) {
             shipSprite.show()
@@ -87,15 +130,15 @@ export function initUpdate() {
                 score.value = 0
                 asteroids.clear()
                 level.value = 0
-                modules.forEach(module => module.reset())
+                mod.forEach(module => module.reset())
             }
             currentState = state.alive
         }
 
         if(asteroids.isEmpty()) {
             level.value++
-
-            modules.forEach(module => module.initLevel(level.value))
+            func.createAsteroids(level.value)
+            mod.forEach(module => module.initLevel(level.value))
             new Audio(project.sound.newLevel).play()
         }
 

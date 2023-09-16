@@ -3,8 +3,11 @@ export default class Mod {
     actions = []
     init() {}
     reset() {}
-    initLevel() {}
-    destroyAsteroid() {}
     draw() {}
     update() {}
+
+    initLevel(num) {}
+    initAsteroid(asteroid) {}
+    asteroidHit(asteroid) {}
+    destroyAsteroid(asteroid) {}
 }

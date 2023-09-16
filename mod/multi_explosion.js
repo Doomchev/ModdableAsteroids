@@ -1,5 +1,5 @@
 import Mod from "../src/mod.js"
-import {pobj, project, val} from "../src/project.js"
+import {func, obj, playSound, project, val} from "../src/project.js"
 import Sprite from "../src/sprite.js"
 import {rad, rnd, rndi} from "../src/system.js"
 import DelayedRemove from "../src/actions/sprite/delayed_remove.js"
@@ -19,12 +19,13 @@ export default class MultiExplosion extends Mod {
     }
 
     init() {
-        let explosions = pobj.explosions
-        let explosionImages = pobj.explosionImages
+        let explosions = obj.explosions
+        let explosionImages = obj.explosionImages
 
-        val.createExplosion = function (sprite, size) {
+        func.createExplosion = function (sprite, size) {
             let times = rndi(3) + size
             createParticle(true)
+            playSound("explosion")
 
             function createParticle(first) {
                 let angle = rad(rnd(360))

@@ -1,5 +1,5 @@
 import Mod from "../src/mod.js"
-import {project, val} from "../src/project.js"
+import {func, project, val} from "../src/project.js"
 import {rad} from "../src/system.js"
 
 export default class AsteroidPieces extends Mod {
@@ -67,11 +67,11 @@ export default class AsteroidPieces extends Mod {
         type.small.pieces = []
 
         type.default = type.big
-    }
 
-    destroyAsteroid(asteroid, angle) {
-        asteroid.type.pieces.forEach(piece =>  {
-            val.createAsteroid(asteroid, undefined, piece.type, piece, angle + rad(piece.angle))
-        })
+        func.destroyAsteroid = function (asteroid, angle) {
+            asteroid.type.pieces.forEach(piece =>  {
+                func.createAsteroid(asteroid, undefined, piece.type, piece, angle + rad(piece.angle))
+            })
+        }
     }
 }

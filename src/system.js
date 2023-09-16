@@ -1,16 +1,12 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {Value} from "./value.js"
-import {modules, project, setModules} from "./project.js"
+import {mod, project, setModules} from "./project.js"
 import {exportProject} from "./export.js"
-import DefaultAsteroidCreation from "../mod/default_asteroid_creation.js"
-import DefaultAsteroidDestruction from "../mod/default_asteroid_destruction.js"
 import MultiExplosion from "../mod/multi_explosion.js"
-import AsteroidsPerimeter from "../mod/asteroids_perimeter.js"
 import AsteroidPieces from "../mod/asteroid_pieces.js"
 import ExtraLifeBonus from "../mod/extra_life_bonus.js"
 import BonusForLevel from "../mod/bonus_for_level.js"
 import InfiniteLives from "../mod/infinite_lives.js"
-import DefaultExplosion from "../mod/default_explosion.js"
 import CameraMovement from "../mod/camera_movement.js"
 
 // global variables
@@ -87,8 +83,8 @@ export function loopedSound(name, loopStart, loopEnd, play) {
     let sound = new Audio(project.sound[name])
     let loopLength = loopEnd - loopStart
     setInterval(function() {
-        if(sound.currentTime > loopEnd) sound.currentTime += loopStart - loopLength
-    }, 50)
+        if(sound.currentTime > loopEnd) sound.currentTime -= loopLength
+    }, 5)
     if(play) sound.play()
     return sound
 }
@@ -114,11 +110,7 @@ export function loc(stringName) {
 
 document.addEventListener("DOMContentLoaded", function() {
     let allModules = [
-        [new DefaultAsteroidCreation(), true],
-        [new AsteroidsPerimeter(), true],
-        [new DefaultAsteroidDestruction(), true],
         [new AsteroidPieces(), true],
-        [new DefaultExplosion(), false],
         [new MultiExplosion(), true],
         [new CameraMovement(), false],
         [new ExtraLifeBonus(25000), true],
@@ -151,7 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("start").onclick = function ()  {
         for(let div of mods.childNodes) {
             let element = div.childNodes[0]
-            if (element?.module && element.checked) modules.push(element.module)
+            if (element?.module && element.checked) mod.push(element.module)
         }
         mods.style.display = "none"
 
@@ -162,6 +154,7 @@ document.addEventListener("DOMContentLoaded", function() {
         canvas.width = size
         canvas.focus()
         ctx = canvas.getContext("2d")
+        ctx.fillStyle = "white"
         ctx.font = canvas.width / 24 + "px monospace"
         ctx.textBaseline = "top"
         project.canvas = Canvas.create(16.0, 16.0, canvas.width, canvas.height)
@@ -175,14 +168,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 imagesToLoad--
                 if (imagesToLoad <= 0) {
                     project.init()
-                    modules.forEach(module => module.init())
+                    mod.forEach(module => module.init())
                     exportProject()
 
                     let apsTime = 0, realAps = 0, apsCounter = 0
                     setInterval(function () {
                         project.actions.forEach(action => action.execute())
                         project.update()
-                        modules.forEach(module => {
+                        mod.forEach(module => {
                             module.actions.forEach(action => action.execute())
                             module.update()
                         })
@@ -214,7 +207,6 @@ document.addEventListener("DOMContentLoaded", function() {
                         }
                         currentCanvas.draw()
 
-                        ctx.fillStyle = "white"
                         //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
                     }, 1000.0 / 60)
                 }

@@ -1,5 +1,5 @@
 import Mod from "../src/mod.js"
-import {pobj, project} from "../src/project.js"
+import {obj, project} from "../src/project.js"
 
 export default class ExtraLifeBonus extends Mod {
     constructor(lifeBonus) {
@@ -18,8 +18,8 @@ export default class ExtraLifeBonus extends Mod {
     }
 
     update() {
-        if(pobj.score.value >= this.nextLifeBonus) {
-            pobj.lives.value++
+        if(obj.score.value >= this.nextLifeBonus) {
+            obj.lives.value++
             new Audio(project.sound.extraLife).play()
             this.nextLifeBonus += this.lifeBonus
         }

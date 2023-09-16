@@ -16,6 +16,7 @@ import SetBounds from "./src/actions/sprite/set_bounds.js"
 import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import {project, setRegistry, val} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
+import Delayed from "./src/actions/delayed.js"
 
 project.loadTextures = () => {
     addTextures({
@@ -150,6 +151,8 @@ project.init = () => {
     let livesLabel = new Label("livesLabel", hudArea, [lives], align.right, align.top)
     let messageLabel = new Label("messageLabel", hudArea, [""], align.center, align.center)
     let hud = new Layer("hud", scoreLabel, levelLabel, livesLabel, messageLabel)
+
+    val.gunDelay = new Delayed(project.key.fire, 0.15)
 
     project.background = "rgb(9, 44, 84)"
     project.scene = [bullets, asteroids, flameSprite, shipSprite, explosions, hud]
