@@ -1,6 +1,6 @@
 import Shape from "./shape.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {apsk, setName} from "./system.js"
+import {apsk, num, setName} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 
 export default class Sprite extends Shape {
@@ -31,6 +31,40 @@ export default class Sprite extends Shape {
             sprite.image = image._images[0]
         }
         return sprite
+    }
+
+    static createFromTemplate(template) {
+        let sprite = new Sprite()
+        sprite.setFromTemplate(template)
+        if(template.layer !== undefined) template.layer.add(sprite)
+        if(template.animationSpeed !== undefined) {
+            sprite.actions = [new Animate(sprite, template.images, num(template.animationSpeed))]
+            sprite.image = template.images._images[0]
+        }
+        return sprite
+    }
+
+    setFromTemplate(template) {
+        if(template.image !== undefined) this.image = template.image
+        if(template.pos !== undefined) {
+            let pos = template.pos.toSprite()
+            this.centerX = pos.centerX
+            this.centerY = pos.centerY
+        } else {
+            if(template.centerX !== undefined) this.centerX = num(template.centerX)
+            if(template.centerY !== undefined) this.centerY = num(template.centerY)
+        }
+        if(template.size !== undefined) {
+            this.width = this.height = num(template.size)
+        } else {
+            if(template.width !== undefined) this.width = num(template.width)
+            if(template.height !== undefined) this.height = num(template.height)
+        }
+        if(template.speed !== undefined) this.speed = num(template.speed)
+        if(template.angle !== undefined) this.angle = num(template.angle)
+        if(template.imageAngle !== undefined) this.imageAngle = num(template.imageAngle)
+        if(template.active !== undefined) this.active = template.active
+        if(template.visible !== undefined) this.visible = template.visible
     }
 
     draw() {

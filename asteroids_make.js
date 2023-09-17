@@ -2,7 +2,7 @@ import NumericVariable from "./src/variable/number.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {addTextures, align, loc, rad} from "./src/system.js"
+import {addTextures, align, loc, rad, rnd, setName} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Image from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -17,6 +17,9 @@ import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import {project, setRegistry, val} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
 import Delayed from "./src/actions/delayed.js"
+import Rnd from "./src/function/rnd.js";
+import {RandomSign} from "./src/function/random_sign.js";
+import Mul from "./src/function/mul.js";
 
 project.loadTextures = () => {
     addTextures({
@@ -76,6 +79,7 @@ project.key = {
     continue: new Key("continue", "Enter"),
 }
 
+let shipSprite = Sprite.create("shipSprite", undefined)
 setRegistry({
     startingLives: 3,
     ship: {
@@ -92,10 +96,9 @@ setRegistry({
     asteroidType: {
         default: {
             size: 3,
-            minSpeed: 2,
-            maxSpeed: 3,
-            minAnimSpeed: 12,
-            maxAnimSpeed: 20,
+            angle: new Rnd(-15, 15),
+            speed: new Rnd(2, 3),
+            animationSpeed: new Mul(new Rnd(12, 20), RandomSign),
             score: 100,
         },
     }
@@ -117,34 +120,56 @@ project.init = () => {
     let lives = new NumericVariable("lives", val.startingLives)
     let level = new NumericVariable("level", 0)
 
+    let bullets = new Layer("bullets")
+
+    let asteroids = new Layer("asteroids")
+    let asteroidImages = new ImageArray("asteroidImages", textures.asteroid
+        , 8, 4, 0.5, 0.5, 1.5, 1.5)
+    val.asteroidType.default.images = asteroidImages
+
+    let explosions = new Layer("explosions")
+    let explosionImages = new ImageArray("explosionImages", textures.explosion
+        , 4, 4, 0.5, 0.5, 2, 2)
+
+    project.registry.template = {
+        ship: {
+            image: new Image(textures.ship, 0, 0, undefined, undefined
+                , 0.5, 0.5, 1.75, 1.75),
+            angle: 0,
+            speed: 0,
+        },
+        bullet: {
+            layer: bullets,
+            images: new ImageArray("bulletImages", textures.bullet
+                , 1, 16, 43.0 / 48.0, 5.5 / 12.0, 10.5, 3.0),
+            size: 0.15,
+            speed: 15,
+            animationSpeed: 16.0
+        },
+        explosion: {
+            layer: explosions,
+            images: explosionImages,
+            angle: new Rnd(rad(360)),
+            animationSpeed: 16
+        }
+    }
+    let template = project.registry.template
+
     let bounds = Shape.create("bounds", 0, 0, currentCanvas.width + 3
         , currentCanvas.height + 3)
 
-    let shipSprite = Sprite.create("shipSprite", undefined, new Image(textures.ship, 0, 0
-        , undefined, undefined, 0.5, 0.5, 1.75, 1.75))
+    let shipSprite = Sprite.createFromTemplate(template.ship)
+    setName(shipSprite, "shipSprite")
 
     let flameImages = new ImageArray("flameImages", textures.flame, 3, 3)
     let flameSprite = Sprite.create("flameSprite", undefined, flameImages._images[0], -0.9, 0
         , 1, 1, rad(-90))
 
     let gun = Sprite.create("gun", undefined, undefined, 1.0, 0.0)
-
-    let bullets = new Layer("bullets")
-    let bulletImages = new ImageArray("bulletImages", textures.bullet
-        , 1, 16, 43.0 / 48.0, 5.5 / 12.0, 10.5, 3.0)
-
-    let asteroids = new Layer("asteroids")
-    let asteroidImages = new ImageArray("asteroidImages", textures.asteroid
-        , 8, 4, 0.5, 0.5, 1.5, 1.5)
-
-    let explosions = new Layer("explosions")
-    let explosionImages = new ImageArray("explosionImages", textures.explosion
-        , 4, 4, 0.5, 0.5, 2, 2)
+    template.bullet.pos = gun
 
     let hudArea = Shape.create("hudArea", 0.0, 0.0, currentCanvas.width - 1.0
         , currentCanvas.height - 1.0)
-
-    val.objects = [bulletImages, asteroidImages, explosionImages]
 
     let scoreLabel = new Label("scoreLabel", hudArea, [score], align.left, align.top, "Z8")
     let levelLabel = new Label("levelLabel", hudArea, [loc("level"), level], align.center, align.top)

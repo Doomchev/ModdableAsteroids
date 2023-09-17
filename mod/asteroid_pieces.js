@@ -1,6 +1,9 @@
 import Mod from "../src/mod.js"
-import {func, project, val} from "../src/project.js"
+import {func, obj, project, val} from "../src/project.js"
 import {rad} from "../src/system.js"
+import Rnd from "../src/function/rnd.js";
+import Mul from "../src/function/mul.js";
+import {RandomSign} from "../src/function/random_sign.js";
 
 export default class AsteroidPieces extends Mod {
     get name() {
@@ -16,28 +19,31 @@ export default class AsteroidPieces extends Mod {
         let type = val.asteroidType
 
         type.big = {
+            layer: obj.asteroids,
+            images: obj.asteroidImages,
             size: 3,
-                minSpeed: 2,
-                maxSpeed: 3,
-                minAnimSpeed: 12,
-                maxAnimSpeed: 20,
-                score: 100,
+            angle: new Rnd(-15, 15),
+            speed: new Rnd(2, 3),
+            animationSpeed: new Mul(new Rnd(12, 20), RandomSign),
+            score: 100,
         }
         type.medium = {
+            layer: obj.asteroids,
+            images: obj.asteroidImages,
             size: 2,
-                minSpeed: 2,
-                maxSpeed: 2.5,
-                minAnimSpeed: 16,
-                maxAnimSpeed: 25,
-                score: 200,
+            angle: new Rnd(-15, 15),
+            speed: new Rnd(2.5, 4),
+            animationSpeed: new Mul(new Rnd(16, 25), RandomSign),
+            score: 200,
         }
         type.small = {
+            layer: obj.asteroids,
+            images: obj.asteroidImages,
             size: 1,
-                minSpeed: 3,
-                maxSpeed: 5,
-                minAnimSpeed: 16,
-                maxAnimSpeed: 25,
-                score: 300,
+            angle: new Rnd(-15, 15),
+            speed: new Rnd(3, 5),
+            animationSpeed: new Mul(new Rnd(20, 30), RandomSign),
+            score: 300,
         }
 
         type.big.pieces = [
@@ -69,10 +75,10 @@ export default class AsteroidPieces extends Mod {
         type.default = type.big
 
         func.destroyAsteroid = function (asteroid, angle) {
-            func.createExplosion(asteroid, asteroid.type.size, true)
             asteroid.type.pieces.forEach(piece =>  {
                 func.createAsteroid(asteroid, undefined, piece.type, piece, angle + rad(piece.angle))
             })
+            func.createExplosion(asteroid, asteroid.size, true)
             func.removeAsteroid(asteroid, angle)
         }
     }

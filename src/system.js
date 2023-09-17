@@ -50,6 +50,7 @@ export function removeFromArray(item, array) {
 }
 
 export function num(value) {
+    if(value === undefined) return undefined
     return typeof value === "number" ? value : value.toNumber()
 }
 

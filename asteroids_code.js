@@ -1,5 +1,5 @@
 import Sprite from "./src/sprite.js"
-import {loc, loopedSound, rad, randomSign, rnd, rndi} from "./src/system.js"
+import {loc, loopedSound, num, rad, randomSign, rnd, rndi} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
 import {func, mod, obj, playSound, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
@@ -22,6 +22,7 @@ export function initUpdate() {
     let ship = val.ship
     let state = val.state
     let key = project.key
+    let template = val.template
 
     let currentState = state.alive
 
@@ -46,11 +47,16 @@ export function initUpdate() {
     }
 
     func.createAsteroid = function (centerX, centerY, type, piece, angle = 0) {
-        let asteroid = Sprite.create(undefined, asteroids, obj.asteroidImages, centerX, centerY
-            , type.size, type.size, angle + rad(rnd(-15.0, 15.0)), rnd(type.minSpeed, type.maxSpeed)
-            , rnd(type.minAnimSpeed, type.maxAnimSpeed) * randomSign(), rad(rnd(360)))
-        asteroid.add(new RotateImage(asteroid, rad(rnd(-180, 180))))
+        let asteroid = Sprite.createFromTemplate(type)
+        if(typeof centerX == "object") {
+            let pos = centerX.toSprite()
+            asteroid.moveTo(pos.centerX,pos.centerY)
+        } else {
+            asteroid.moveTo(centerX, centerY)
+        }
+        asteroid.angle += angle
         asteroid.type = type
+        asteroid.add(new RotateImage(asteroid, rad(rnd(-180, 180))))
         mod.forEach(module => module.initAsteroid(asteroid))
         return asteroid
     }
@@ -71,8 +77,9 @@ export function initUpdate() {
     }
 
     func.createExplosion = function (sprite, size, playSnd = true) {
-        let explosion = Sprite.create(undefined, explosions, explosionImages, sprite.centerX, sprite.centerY
-            , size, size, rad(rnd(360)), 0, 16)
+        let explosion = Sprite.createFromTemplate(template.explosion)
+        explosion.width = explosion.height = size
+        explosion.moveTo(sprite.centerX, sprite.centerY)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
         if(playSnd) playSound("explosion")
     }
@@ -81,7 +88,7 @@ export function initUpdate() {
     // main
 
     project.update = () => {
-       if(currentState === state.alive) {
+        if(currentState === state.alive) {
             if(key.left.isDown) {
                 LinearChange.execute(shipSprite, "angle", -rad(ship.dAngle))
             }
@@ -102,14 +109,15 @@ export function initUpdate() {
             flameSprite.visible = key.forward.isDown
 
             if(val.gunDelay.active()) {
-                Sprite.create(undefined, bullets, bulletImages, gun, undefined, 0.15, 0.15
-                    , shipSprite.angle, 15.0, 16.0)
+                let bullet = Sprite.createFromTemplate(template.bullet)
+                bullet.turn(shipSprite.angle)
                 playSound("shooting")
             }
 
             shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
                 playSound("death")
                 func.createExplosion(shipSprite, 2)
+                shipSprite.setFromTemplate(template.ship)
                 shipSprite.hide()
                 flameSprite.hide()
                 if (lives.value === 0) {
@@ -126,9 +134,6 @@ export function initUpdate() {
             shipSprite.show()
             flameSprite.show()
             messageLabel.show()
-            shipSprite.moveTo(0, 0)
-            shipSprite.angle = 0
-            shipSprite.speed = 0
             if(currentState === state.dead) {
                 lives.value--
             } else {
