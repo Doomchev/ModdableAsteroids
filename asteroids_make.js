@@ -2,7 +2,7 @@ import NumericVariable from "./src/variable/number.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {addTextures, align, loc, rad, rnd, setName} from "./src/system.js"
+import {addTextures, align, loc, rad, setName} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Image from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -17,9 +17,9 @@ import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import {project, setRegistry, val} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
 import Delayed from "./src/actions/delayed.js"
-import Rnd from "./src/function/rnd.js";
-import {RandomSign} from "./src/function/random_sign.js";
-import Mul from "./src/function/mul.js";
+import Rnd from "./src/function/rnd.js"
+import {RandomSign} from "./src/function/random_sign.js"
+import Mul from "./src/function/mul.js"
 
 project.loadTextures = () => {
     addTextures({
@@ -151,7 +151,7 @@ project.init = () => {
             images: explosionImages,
             angle: new Rnd(rad(360)),
             animationSpeed: 16
-        }
+        },
     }
     let template = project.registry.template
 

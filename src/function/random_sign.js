@@ -1,4 +1,4 @@
-import {randomSign, rnd} from "../system.js";
+import {randomSign} from "../system.js"
 
 export let RandomSign = {
     toNumber() {

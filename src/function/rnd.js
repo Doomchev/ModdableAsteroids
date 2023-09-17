@@ -1,4 +1,4 @@
-import {num, rnd} from "../system.js";
+import {num, rnd} from "../system.js"
 
 export default class Rnd {
     constructor(from, to) {

@@ -1,5 +1,5 @@
 import Sprite from "./src/sprite.js"
-import {loc, loopedSound, num, rad, randomSign, rnd, rndi} from "./src/system.js"
+import {loc, loopedSound, num, rad, rnd, rndi} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
 import {func, mod, obj, playSound, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
@@ -49,14 +49,14 @@ export function initUpdate() {
     func.createAsteroid = function (centerX, centerY, type, piece, angle = 0) {
         let asteroid = Sprite.createFromTemplate(type)
         if(typeof centerX == "object") {
-            let pos = centerX.toSprite()
-            asteroid.moveTo(pos.centerX,pos.centerY)
+            asteroid.setPositionAs(centerX.toSprite())
         } else {
             asteroid.moveTo(centerX, centerY)
         }
-        asteroid.angle += angle
+        asteroid.turn(angle)
         asteroid.type = type
-        asteroid.add(new RotateImage(asteroid, rad(rnd(-180, 180))))
+        asteroid.imageAngle = 0
+        asteroid.add(new RotateImage(asteroid, num(type.rotationSpeed)))
         mod.forEach(module => module.initAsteroid(asteroid))
         return asteroid
     }

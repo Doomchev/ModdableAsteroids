@@ -1,4 +1,4 @@
-import {num} from "../system";
+import {num} from "../system.js"
 
 export default class Sum {
     constructor(value1, value2) {

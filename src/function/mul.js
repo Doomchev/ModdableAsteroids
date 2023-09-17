@@ -1,4 +1,4 @@
-import {num} from "../system.js";
+import {num} from "../system.js"
 
 export default class Mul {
     constructor(value1, value2) {
