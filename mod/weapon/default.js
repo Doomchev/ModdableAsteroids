@@ -40,7 +40,7 @@ export default class DefaultWeapon extends Weapon {
             bullet.setPositionAs(this.registry.gun)
             bullet.turn(obj.shipSprite.angle)
             bullet.damage = 100
-            playSound("shooting")
+            playSound("fireball")
         }
     }
 }

@@ -1,11 +1,10 @@
 import Weapon from "./weapon.js"
 import Sprite from "../../src/sprite.js"
 import Img from "../../src/image.js"
-import {func, obj, project, val} from "../../src/project.js"
+import {obj, project, val} from "../../src/project.js"
 import Constraint from "../../src/constraint.js"
 import Delayed from "../../src/actions/delayed.js"
-import {playSound, rad} from "../../src/system.js"
-import ImageArray from "../../src/image_array.js"
+import {playSound} from "../../src/system.js"
 import DelayedRemove from "../../src/actions/sprite/delayed_remove.js"
 
 export default class DoubleBarreled extends Weapon {
@@ -32,7 +31,7 @@ export default class DoubleBarreled extends Weapon {
                 //angle: new Rnd(rad(-10), rad(10)),
             },
             gunfire: {
-                layer: obj.particles,
+                layer: obj.ship,
                 image: new Img(project.texture.gunfire, undefined, undefined, undefined, undefined
                     , 0, 0.5),
                 size: 1,
@@ -49,6 +48,8 @@ export default class DoubleBarreled extends Weapon {
 
         this.gunfire = new Array(2)
         val.weapon = this
+
+        obj.ship.add(reg.turret)
     }
 
     fire() {
@@ -63,7 +64,7 @@ export default class DoubleBarreled extends Weapon {
                 let gunfire = Sprite.createFromTemplate(reg.gunfire)
                 gunfire.setPositionAs(reg.barrelEnd[i])
                 gunfire.turn(obj.shipSprite.angle)
-                gunfire.add(new DelayedRemove(gunfire, obj.particles, 0.05))
+                gunfire.add(new DelayedRemove(gunfire, obj.ship, 0.05))
                 this.gunfire[i] = gunfire
             }
             playSound("bullet")
@@ -83,6 +84,6 @@ export default class DoubleBarreled extends Weapon {
     }
 
     draw() {
-        this.registry.turret.draw()
+
     }
 }

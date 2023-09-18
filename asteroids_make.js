@@ -16,7 +16,6 @@ import SetBounds from "./src/actions/sprite/set_bounds.js"
 import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import {project, setRegistry, val} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
-import Delayed from "./src/actions/delayed.js"
 import Rnd from "./src/function/rnd.js"
 import {RandomSign} from "./src/function/random_sign.js"
 import Mul from "./src/function/mul.js"
@@ -31,7 +30,6 @@ project.loadTextures = () => {
         turret: "textures/turret.png",
         bullet: "textures/bullet.png",
         gunfire: "textures/gunfire.png",
-        bulletHit: "textures/bullet_hit.png",
     })
 }
 
@@ -113,7 +111,7 @@ setRegistry({
 })
 
 project.sound = {
-    shooting: new Audio("sounds/shooting.mp3"),
+    fireball: new Audio("sounds/fireball.mp3"),
     bullet: new Audio("sounds/bullet.mp3"),
     bulletHit: new Audio("sounds/bullet_hit.mp3"),
     explosion: new Audio("sounds/explosion.mp3"),
@@ -133,7 +131,7 @@ project.init = () => {
     let level = new NumericVariable("level", 0)
 
     let bullets = new Layer("bullets")
-    let particles = new Layer("particles")
+    let ship = new Layer("ship")
 
     let asteroids = new Layer("asteroids")
     let asteroidImages = new ImageArray("asteroidImages", textures.asteroid
@@ -165,10 +163,12 @@ project.init = () => {
 
     let shipSprite = Sprite.createFromTemplate(template.ship)
     setName(shipSprite, "shipSprite")
+    ship.add(shipSprite)
 
     let flameImages = new ImageArray("flameImages", textures.flame, 3, 3)
     let flameSprite = Sprite.create("flameSprite", undefined, flameImages._images[0], -0.9, 0
         , 1, 1, rad(-90))
+    ship.add(flameSprite)
 
     let hudArea = Shape.create("hudArea", 0, 0, currentCanvas.width - 1
         , currentCanvas.height - 1)
@@ -180,7 +180,7 @@ project.init = () => {
     let hud = new Layer("hud", scoreLabel, levelLabel, livesLabel, messageLabel)
 
     project.background = "rgb(9, 44, 84)"
-    project.scene = [bullets, asteroids, particles, flameSprite, shipSprite, explosions, hud]
+    project.scene = [bullets, asteroids, ship, explosions, hud]
 
     project.actions = [
         new LoopArea(shipSprite, bounds),
@@ -198,7 +198,7 @@ project.init = () => {
         new LoopArea(asteroids, bounds),
 
         new ExecuteActions(explosions),
-        new ExecuteActions(particles),
+        new ExecuteActions(ship),
     ]
 
     initUpdate()

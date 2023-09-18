@@ -88,7 +88,8 @@ export function addTexturesToObjects(objects) {
 // sound
 
 export function playSound(name) {
-    new Audio(project.sound[name].src).play()
+    let sound = new Audio(project.sound[name].src)
+    sound.addEventListener("canplaythrough", (event) => sound.play())
 }
 
 export function loopedSound(name, loopStart, loopEnd, play) {
@@ -163,6 +164,7 @@ document.addEventListener("DOMContentLoaded", function() {
         mods.style.display = "none"
 
         let square = true
+
         let canvas = document.getElementById("canvas")
         canvas.hidden = false
         if(square) {
@@ -171,6 +173,7 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             canvas.width = 360
             canvas.height = 640
+            document.body.style.flexDirection = ""
         }
         canvas.focus()
         ctx = canvas.getContext("2d")

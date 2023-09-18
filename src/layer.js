@@ -6,10 +6,11 @@ export default class Layer extends Renderable {
         super()
         setName(this, name)
         this.items = items
+        this.visible = true
     }
 
     draw() {
-        this.items.forEach(item => item.draw())
+        if(this.visible) this.items.forEach(item => item.draw())
     }
 
     // items management
@@ -50,6 +51,14 @@ export default class Layer extends Renderable {
 
     turnImage(angle) {
         this.items.forEach(item => item.turnImage(angle))
+    }
+
+    hide() {
+        this.visible = false
+    }
+
+    show() {
+        this.visible = true
     }
 
     // collisions

@@ -10,10 +10,9 @@ export function initUpdate() {
     let shipSprite = obj.shipSprite
     let flameSprite = obj.flameSprite
     let bullets = obj.bullets
-    let bulletImages = obj.bulletImages
     let explosions = obj.explosions
-    let explosionImages = obj.explosionImages
-    let gun = obj.gun
+    let shipLayer = obj.ship
+
     let lives = obj.lives
     let messageLabel = obj.messageLabel
     let level = obj.level
@@ -126,8 +125,7 @@ export function initUpdate() {
             shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
                 func.createExplosion(shipSprite, 2)
                 shipSprite.setFromTemplate(template.ship)
-                shipSprite.hide()
-                flameSprite.hide()
+                shipLayer.hide()
                 if (lives.value === 0) {
                     messageLabel.show(loc("gameOver"))
                     currentState = state.gameOver
@@ -140,8 +138,7 @@ export function initUpdate() {
                 func.destroyAsteroid(asteroid, 0)
             })
         } else if(key.continue.wasPressed) {
-            shipSprite.show()
-            flameSprite.show()
+            shipLayer.show()
             messageLabel.show()
             if(currentState === state.dead) {
                 lives.value--
