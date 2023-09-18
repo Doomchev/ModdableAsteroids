@@ -1,5 +1,6 @@
 import Mod from "../src/mod.js"
 import {func, project, val} from "../src/project.js"
+import {playSound} from "../src/system.js"
 
 export default class AsteroidsHealth extends Mod {
     get name() {
@@ -19,6 +20,8 @@ export default class AsteroidsHealth extends Mod {
         func.asteroidHit = function(asteroid, bullet) {
             asteroid.hp -= bullet.damage
             if(asteroid.hp <= 0) func.destroyAsteroid(asteroid, bullet.angle)
+            func.createSingleExplosion(bullet, bullet.width * 2, false)
+            playSound("bulletHit")
         }
     }
 

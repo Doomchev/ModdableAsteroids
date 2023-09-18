@@ -22,7 +22,7 @@ export default class MultiExplosion extends Mod {
         let explosions = obj.explosions
         let explosionImages = obj.explosionImages
 
-        func.createExplosion = function (sprite, size, playSnd) {
+        func.createExplosion = function (sprite, size, playSnd = true) {
             let times = rndi(3) + size
             createParticle(true)
             if(playSnd) playSound("explosion")

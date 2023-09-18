@@ -81,7 +81,7 @@ export default class AsteroidPieces extends Mod {
             asteroid.type.pieces.forEach(piece => {
                 func.createAsteroid(asteroid, undefined, piece.type, angle + rad(piece.angle))
             })
-            func.createExplosion(asteroid, asteroid.size, true)
+            func.createExplosion(asteroid, asteroid.width)
             func.removeAsteroid(asteroid, angle)
         }
     }

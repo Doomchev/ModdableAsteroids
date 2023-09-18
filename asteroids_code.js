@@ -68,6 +68,7 @@ export function initUpdate() {
 
     func.asteroidHit = function(asteroid, bullet) {
         func.destroyAsteroid(asteroid, bullet.angle)
+        func.createSingleExplosion(bullet, 0.7, false)
         func.removeAsteroid(asteroid)
     }
 
@@ -123,7 +124,6 @@ export function initUpdate() {
             }
 
             shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
-                playSound("death")
                 func.createExplosion(shipSprite, 2)
                 shipSprite.setFromTemplate(template.ship)
                 shipSprite.hide()
@@ -135,6 +135,7 @@ export function initUpdate() {
                 } else {
                     messageLabel.show(loc("pressEnter"))
                     currentState = state.dead
+                    playSound("death")
                 }
                 func.destroyAsteroid(asteroid, 0)
             })
@@ -160,12 +161,11 @@ export function initUpdate() {
             level.value++
             func.createAsteroids(level.value)
             mod.forEach(module => module.initLevel(level.value))
-            new Audio(project.sound.newLevel).play()
+            playSound("newLevel")
         }
 
         bullets.collisionWith(asteroids, (bullet, asteroid) => {
             func.asteroidHit(asteroid, bullet)
-            func.createSingleExplosion(bullet, 0.7, false)
             bullets.remove(bullet)
         })
     }

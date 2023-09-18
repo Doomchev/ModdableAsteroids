@@ -21,8 +21,8 @@ export default class DefaultWeapon extends Weapon {
             bullet: {
                 layer: obj.bullets,
                 images: new ImageArray("bulletImages", project.texture.fireball
-                , 1, 16, 43 / 48, 5.5 / 12, 10.5, 3),
-                size: 0.15,
+                , 1, 16, 43 / 48, 5.5 / 12, 5.25, 1.5),
+                size: 0.3,
                 speed: 15,
                 //angle: new Rnd(rad(-10), rad(10)),
                 animationSpeed: 16.0,

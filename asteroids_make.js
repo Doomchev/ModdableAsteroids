@@ -30,6 +30,8 @@ project.loadTextures = () => {
         fireball: "textures/fireball.png",
         turret: "textures/turret.png",
         bullet: "textures/bullet.png",
+        gunfire: "textures/gunfire.png",
+        bulletHit: "textures/bullet_hit.png",
     })
 }
 
@@ -112,6 +114,8 @@ setRegistry({
 
 project.sound = {
     shooting: new Audio("sounds/shooting.mp3"),
+    bullet: new Audio("sounds/bullet.mp3"),
+    bulletHit: new Audio("sounds/bullet_hit.mp3"),
     explosion: new Audio("sounds/explosion.mp3"),
     death: new Audio("sounds/death.mp3"),
     extraLife: new Audio("sounds/extra_life.mp3"),
@@ -129,6 +133,7 @@ project.init = () => {
     let level = new NumericVariable("level", 0)
 
     let bullets = new Layer("bullets")
+    let particles = new Layer("particles")
 
     let asteroids = new Layer("asteroids")
     let asteroidImages = new ImageArray("asteroidImages", textures.asteroid
@@ -175,7 +180,7 @@ project.init = () => {
     let hud = new Layer("hud", scoreLabel, levelLabel, livesLabel, messageLabel)
 
     project.background = "rgb(9, 44, 84)"
-    project.scene = [bullets, asteroids, flameSprite, shipSprite, explosions, hud]
+    project.scene = [bullets, asteroids, particles, flameSprite, shipSprite, explosions, hud]
 
     project.actions = [
         new LoopArea(shipSprite, bounds),
@@ -193,6 +198,7 @@ project.init = () => {
         new LoopArea(asteroids, bounds),
 
         new ExecuteActions(explosions),
+        new ExecuteActions(particles),
     ]
 
     initUpdate()
