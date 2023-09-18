@@ -109,14 +109,14 @@ setRegistry({
     }
 })
 
-project.sound.shooting = "sounds/shooting.mp3"
-project.sound.explosion = "sounds/explosion.mp3"
-project.sound.death = "sounds/death.mp3"
-project.sound.extraLife = "sounds/extra_life.mp3"
-project.sound.flame = "sounds/flame.mp3"
-project.sound.newLevel = "sounds/new_level.mp3"
-project.sound.gameOver = "sounds/game_over.mp3"
-project.sound.music = "sounds/music.mp3"
+project.sound.shooting = new Audio("sounds/shooting.mp3")
+project.sound.explosion = new Audio("sounds/explosion.mp3")
+project.sound.death = new Audio("sounds/death.mp3")
+project.sound.extraLife = new Audio("sounds/extra_life.mp3")
+project.sound.flame = new Audio("sounds/flame.mp3")
+project.sound.newLevel = new Audio("sounds/new_level.mp3")
+project.sound.gameOver = new Audio("sounds/game_over.mp3")
+project.sound.music = new Audio("sounds/music.mp3")
 
 project.init = () => {
     let textures = project.texture

@@ -85,8 +85,12 @@ export function addTexturesToObjects(objects) {
 
 // sound
 
+export function playSound(name) {
+    new Audio(project.sound[name].src).play()
+}
+
 export function loopedSound(name, loopStart, loopEnd, play) {
-    let sound = new Audio(project.sound[name])
+    let sound = new Audio(project.sound[name].src)
     let loopLength = loopEnd - loopStart
     setInterval(function() {
         if(sound.currentTime > loopEnd) sound.currentTime -= loopLength

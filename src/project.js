@@ -29,6 +29,3 @@ export function setModules(newModules) {
     project.modules = newModules
 }
 
-export function playSound(name) {
-    new Audio(project.sound[name]).play()
-}

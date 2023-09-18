@@ -1,7 +1,7 @@
 import Sprite from "./src/sprite.js"
-import {loc, loopedSound, num, paused, rad, rnd, rndi, togglePause} from "./src/system.js"
+import {loc, loopedSound, num, paused, playSound, rad, rnd, rndi, togglePause} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
-import {func, mod, obj, playSound, project, val} from "./src/project.js"
+import {func, mod, obj, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 
