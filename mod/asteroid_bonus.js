@@ -4,6 +4,7 @@ import {obj, project, val} from "../src/project.js"
 import Img from "../src/image.js"
 import {playSound, rnd} from "../src/system.js"
 import Sprite from "../src/sprite.js"
+import Pulsation from "../src/actions/sprite/pulsation.js"
 
 export default class AsteroidBonus extends Mod {
     get name() {
@@ -20,7 +21,7 @@ export default class AsteroidBonus extends Mod {
             template: {
                 image: new Img(project.texture.bonus),
             },
-            probability: 0.1,
+            probability: 0.5,
         }
     }
 
@@ -28,6 +29,7 @@ export default class AsteroidBonus extends Mod {
         if(rnd() <= this.registry.probability) {
             let bonus = Sprite.createFromTemplate(this.registry.template)
             bonus.setPositionAs(asteroid)
+            bonus.add(new Pulsation(bonus, 0.1, 0.5))
             obj.bonuses.add(bonus)
         }
     }
