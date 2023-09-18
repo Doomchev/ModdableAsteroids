@@ -2,9 +2,10 @@ import Mod from "../src/mod.js"
 import ImageArray from "../src/image_array.js"
 import {obj, project, val} from "../src/project.js"
 import Img from "../src/image.js"
-import {playSound, rnd} from "../src/system.js"
+import {playSound, rad, rnd} from "../src/system.js"
 import Sprite from "../src/sprite.js"
 import Pulsation from "../src/actions/sprite/pulsation.js"
+import Swing from "../src/actions/sprite/swing.js"
 
 export default class AsteroidBonus extends Mod {
     get name() {
@@ -29,7 +30,8 @@ export default class AsteroidBonus extends Mod {
         if(rnd() <= this.registry.probability) {
             let bonus = Sprite.createFromTemplate(this.registry.template)
             bonus.setPositionAs(asteroid)
-            bonus.add(new Pulsation(bonus, 0.1, 0.5))
+            bonus.add(new Pulsation(bonus, 0.1, 0.45))
+            bonus.add(new Swing(bonus, rad(15), 0.9))
             obj.bonuses.add(bonus)
         }
     }
