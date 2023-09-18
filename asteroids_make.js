@@ -19,6 +19,16 @@ import {initUpdate} from "./asteroids_code.js"
 import Rnd from "./src/function/rnd.js"
 import {RandomSign} from "./src/function/random_sign.js"
 import Mul from "./src/function/mul.js"
+import AsteroidPieces from "./mod/asteroid_pieces.js"
+import AsteroidsHealth from "./mod/asteroids_health.js"
+import MultiExplosion from "./mod/multi_explosion.js"
+import CameraMovement from "./mod/camera_movement.js"
+import ExtraLifeBonus from "./mod/extra_life_bonus.js"
+import BonusForLevel from "./mod/bonus_for_level.js"
+import InfiniteLives from "./mod/infinite_lives.js"
+import DefaultWeapon from "./mod/weapon/default.js"
+import DoubleBarreled from "./mod/weapon/double_barreled.js"
+import AsteroidBonus from "./mod/asteroid_bonus.js"
 
 project.loadTextures = () => {
     addTextures({
@@ -30,6 +40,7 @@ project.loadTextures = () => {
         turret: "textures/turret.png",
         bullet: "textures/bullet.png",
         gunfire: "textures/gunfire.png",
+        bonus: "textures/bonus.png",
     })
 }
 
@@ -94,6 +105,7 @@ setRegistry({
         limit: 7.5,
         dAngle: 180,
     },
+    weapon: {},
     state: {
         alive: 0,
         dead: 1,
@@ -121,7 +133,21 @@ project.sound = {
     newLevel: new Audio("sounds/new_level.mp3"),
     gameOver: new Audio("sounds/game_over.mp3"),
     music: new Audio("sounds/music.mp3"),
+    bonus: new Audio("sounds/bonus.mp3"),
 }
+
+project.allModules = [
+    [new AsteroidPieces(), true],
+    [new AsteroidsHealth(), true],
+    [new MultiExplosion(), true],
+    [new CameraMovement(), true],
+    [new ExtraLifeBonus(25000), true],
+    [new BonusForLevel(1000), true],
+    [new InfiniteLives(), false],
+    [new DefaultWeapon(), true],
+    [new DoubleBarreled(), true],
+    [new AsteroidBonus(), true],
+]
 
 project.init = () => {
     let textures = project.texture
@@ -132,15 +158,12 @@ project.init = () => {
 
     let bullets = new Layer("bullets")
     let ship = new Layer("ship")
-
     let asteroids = new Layer("asteroids")
-    let asteroidImages = new ImageArray("asteroidImages", textures.asteroid
-        , 8, 4, 0.5, 0.5, 1.5, 1.5)
-    val.asteroidType.default.images = asteroidImages
-
+    let bonuses = new Layer("bonuses")
     let explosions = new Layer("explosions")
-    let explosionImages = new ImageArray("explosionImages", textures.explosion
-        , 4, 4, 0.5, 0.5, 2, 2)
+
+    val.asteroidType.default.images = new ImageArray("asteroidImages", textures.asteroid
+        , 8, 4, 0.5, 0.5, 1.5, 1.5)
 
     project.registry.template = {
         ship: {
@@ -151,7 +174,8 @@ project.init = () => {
         },
         explosion: {
             layer: explosions,
-            images: explosionImages,
+            images: new ImageArray("explosionImages", textures.explosion
+                , 4, 4, 0.5, 0.5, 2, 2),
             angle: new Rnd(rad(360)),
             animationSpeed: 16
         },
@@ -180,7 +204,7 @@ project.init = () => {
     let hud = new Layer("hud", scoreLabel, levelLabel, livesLabel, messageLabel)
 
     project.background = "rgb(9, 44, 84)"
-    project.scene = [bullets, asteroids, ship, explosions, hud]
+    project.scene = [bullets, asteroids, bonuses, ship, explosions, hud]
 
     project.actions = [
         new LoopArea(shipSprite, bounds),
@@ -198,6 +222,7 @@ project.init = () => {
         new LoopArea(asteroids, bounds),
 
         new ExecuteActions(explosions),
+        new ExecuteActions(bonuses),
         new ExecuteActions(ship),
     ]
 

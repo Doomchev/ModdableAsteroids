@@ -1,5 +1,5 @@
 import Mod from "../src/mod.js"
-import {func, obj, project, val} from "../src/project.js"
+import {func, mod, obj, project, val} from "../src/project.js"
 import {rad} from "../src/system.js"
 import Rnd from "../src/function/rnd.js"
 import Mul from "../src/function/mul.js"
@@ -78,6 +78,7 @@ export default class AsteroidPieces extends Mod {
         type.default = type.big
 
         func.destroyAsteroid = function (asteroid, angle) {
+            mod.forEach(module => module.destroyAsteroid(asteroid, angle))
             asteroid.type.pieces.forEach(piece => {
                 func.createAsteroid(asteroid, undefined, piece.type, angle + rad(piece.angle))
             })

@@ -1,5 +1,5 @@
 import Sprite from "./src/sprite.js"
-import {loc, loopedSound, num, paused, playSound, rad, rnd, rndi, togglePause} from "./src/system.js"
+import {loc, loopedSound, masterVolume, num, paused, playSound, rad, rnd, rndi, togglePause} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
 import {func, mod, obj, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
@@ -27,6 +27,7 @@ export function initUpdate() {
 
     loopedSound("music", 0, 1.81, true)
     let flameSound = loopedSound("flame", 1.1, 1.9, true)
+    flameSound.volume = masterVolume
 
     // functions
 
@@ -34,7 +35,7 @@ export function initUpdate() {
         let bounds = obj.bounds
         for(let i = 0; i < num; i++) {
             let x, y
-            if (rndi() === 0) {
+            if (rndi(2)) {
                 x = rnd(bounds.leftX, bounds.rightX)
                 y = bounds.topY
             } else {
@@ -74,6 +75,7 @@ export function initUpdate() {
     func.destroyAsteroid = function (asteroid, angle) {
         func.createExplosion(asteroid, asteroid.width)
         playSound("explosion")
+        mod.forEach(module => module.destroyAsteroid(asteroid, angle))
     }
 
     func.createExplosion = function (sprite, size, playSnd = true) {
@@ -119,7 +121,7 @@ export function initUpdate() {
             flameSprite.visible = key.forward.isDown
 
             if(key.fire.isDown) {
-                val.weapon.fire()
+                val.currentWeapon.fire()
             }
 
             shipSprite.collisionWith(asteroids, (sprite, asteroid) => {

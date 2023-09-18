@@ -2,20 +2,11 @@ import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {Value} from "./value.js"
 import {mod, project} from "./project.js"
 import {exportProject} from "./export.js"
-import MultiExplosion from "../mod/multi_explosion.js"
-import AsteroidPieces from "../mod/asteroid_pieces.js"
-import ExtraLifeBonus from "../mod/extra_life_bonus.js"
-import BonusForLevel from "../mod/bonus_for_level.js"
-import InfiniteLives from "../mod/infinite_lives.js"
-import CameraMovement from "../mod/camera_movement.js"
-import AsteroidsHealth from "../mod/asteroids_health.js"
-import DoubleBarreled from "../mod/weapon/double_barreled.js"
-import DefaultWeapon from "../mod/weapon/default.js"
 
 // global variables
 
-export let zk = 1.2, fps = 60.0, aps = 200.0, showCollisionShapes = false, paused = false
-export let ctx, mousesx, mousesy, apsk = 1.0 / aps
+export let zk = 1.2, fps = 60, aps = 150, showCollisionShapes = false, paused = false
+export let ctx, mousesx, mousesy, apsk = 1 / aps
 
 // enums
 
@@ -30,7 +21,7 @@ export let align = {
 // global functions
 
 export function rad(angle) {
-    return Math.PI * angle / 180.0
+    return Math.PI * angle / 180
 }
 
 export function rndi(from, to) {
@@ -89,9 +80,11 @@ export function addTexturesToObjects(objects) {
 
 export function playSound(name) {
     let sound = new Audio(project.sound[name].src)
+    sound.volume = masterVolume
     sound.addEventListener("canplaythrough", (event) => sound.play())
 }
 
+export let masterVolume = 0.25
 export function loopedSound(name, loopStart, loopEnd, play) {
     let sound = new Audio(project.sound[name].src)
     let loopLength = loopEnd - loopStart
@@ -99,6 +92,7 @@ export function loopedSound(name, loopStart, loopEnd, play) {
         if(sound.currentTime > loopEnd) sound.currentTime -= loopLength
     }, 5)
     if(play) sound.play()
+    sound.volume = masterVolume
     return sound
 }
 
@@ -122,20 +116,8 @@ export function loc(stringName) {
 // listeners
 
 document.addEventListener("DOMContentLoaded", function() {
-    let allModules = [
-        [new AsteroidPieces(), true],
-        [new AsteroidsHealth(), true],
-        [new MultiExplosion(), true],
-        [new CameraMovement(), true],
-        [new ExtraLifeBonus(25000), true],
-        [new BonusForLevel(1000), true],
-        [new InfiniteLives(), false],
-        [new DefaultWeapon(), false],
-        [new DoubleBarreled(), true],
-    ]
-
     let mods = document.getElementById("mods"), div
-    allModules.forEach(module => {
+    project.allModules.forEach(module => {
         div = document.createElement("div")
 
         let checkbox = document.createElement("input")
@@ -165,15 +147,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
         let square = true
 
+        let body = document.body
         let canvas = document.getElementById("canvas")
         canvas.hidden = false
         if(square) {
-            let size = Math.min(document.body.clientWidth - 20, document.body.clientHeight - 20)
+            let size = Math.min(body.clientWidth - 20, body.clientHeight - 20)
             canvas.width = canvas.height = size
         } else {
             canvas.width = 360
             canvas.height = 640
-            document.body.style.flexDirection = ""
+            body.style.flexDirection = ""
         }
         canvas.focus()
         ctx = canvas.getContext("2d")
@@ -196,15 +179,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
                     let apsTime = 0, realAps = 0, apsCounter = 0
                     setInterval(function () {
-                        if(!paused) {
+                        if(paused) {
+                            project.update()
+                        } else {
                             project.actions.forEach(action => action.execute())
                             project.update()
                             mod.forEach(module => {
                                 module.actions.forEach(action => action.execute())
                                 module.update()
                             })
-                        } else {
-                            project.update()
                         }
 
                         for (const key of Object.values(project.key)) {
@@ -232,11 +215,12 @@ document.addEventListener("DOMContentLoaded", function() {
                         } else {
                             fpsCounter++
                         }
+
                         currentCanvas.draw()
                         mod.forEach(module => module.draw())
 
                         //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
-                    }, 1000.0 / 60)
+                    }, 1000.0 / 150)
                 }
             }
             image.src = src

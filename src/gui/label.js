@@ -21,10 +21,11 @@ export default class Label extends Shape {
         } else if (this.format.startsWith("Z")) {
             text = "0".repeat(parseInt(formatString) - text.length) + text
         } else if (this.format.startsWith("R")) {
-            if(this.value > 5) {
-                text = formatString + " x " + text
+            let value = parseInt(text)
+            if(value > 5) {
+                text = formatString + " x " + value
             } else {
-                text = formatString.repeat(text)
+                text = formatString.repeat(value)
             }
         }
 

@@ -47,7 +47,7 @@ export default class DoubleBarreled extends Weapon {
         }
 
         this.gunfire = new Array(2)
-        val.weapon = this
+        val.weapon.doubleBarreled = this
 
         obj.ship.add(reg.turret)
     }
@@ -81,9 +81,5 @@ export default class DoubleBarreled extends Weapon {
             this.gunfire[0].setPositionAs(reg.barrelEnd[0])
             this.gunfire[1].setPositionAs(reg.barrelEnd[1])
         }
-    }
-
-    draw() {
-
     }
 }

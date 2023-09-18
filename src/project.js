@@ -8,6 +8,7 @@ export let project = {
     actions: [],
     registry: {},
     modules: [],
+    allModules: [],
 
     _object: {},
     _function: {},
@@ -28,4 +29,3 @@ export function setRegistry(newRegistry) {
 export function setModules(newModules) {
     project.modules = newModules
 }
-
