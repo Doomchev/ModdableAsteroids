@@ -1,4 +1,4 @@
-import Image from "./image.js"
+import Img from "./image.js"
 import {setName} from "./system.js"
 
 export default class ImageArray {
@@ -17,7 +17,7 @@ export default class ImageArray {
         let height = texture.height / rows
         let images = Array(quantity)
         for(let i = 0; i < quantity; i++) {
-            images[i] = new Image(texture, (i % columns) * width, Math.floor(i / columns) * height, width, height
+            images[i] = new Img(texture, (i % columns) * width, Math.floor(i / columns) * height, width, height
                 , xMul, yMul, widthMul, heightMul)
         }
         this._images = images

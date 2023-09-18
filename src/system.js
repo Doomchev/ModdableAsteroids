@@ -9,6 +9,8 @@ import BonusForLevel from "../mod/bonus_for_level.js"
 import InfiniteLives from "../mod/infinite_lives.js"
 import CameraMovement from "../mod/camera_movement.js"
 import AsteroidsHealth from "../mod/asteroids_health.js"
+import DoubleBarreled from "../mod/weapon/double_barreled.js"
+import DefaultWeapon from "../mod/weapon/default.js"
 
 // global variables
 
@@ -127,6 +129,8 @@ document.addEventListener("DOMContentLoaded", function() {
         [new ExtraLifeBonus(25000), true],
         [new BonusForLevel(1000), true],
         [new InfiniteLives(), false],
+        [new DefaultWeapon(), false],
+        [new DoubleBarreled(), true],
     ]
 
     let mods = document.getElementById("mods"), div
@@ -226,6 +230,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             fpsCounter++
                         }
                         currentCanvas.draw()
+                        mod.forEach(module => module.draw())
 
                         //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
                     }, 1000.0 / 60)

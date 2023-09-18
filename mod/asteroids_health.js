@@ -15,10 +15,9 @@ export default class AsteroidsHealth extends Mod {
         val.asteroidType.small.hp = 100
         val.asteroidType.medium.hp = 200
         val.asteroidType.big.hp = 300
-        val.gunDelay.cooldown = 0.1
 
         func.asteroidHit = function(asteroid, bullet) {
-            asteroid.hp -= 100
+            asteroid.hp -= bullet.damage
             if(asteroid.hp <= 0) func.destroyAsteroid(asteroid, bullet.angle)
         }
     }

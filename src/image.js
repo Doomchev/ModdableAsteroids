@@ -1,7 +1,7 @@
 import {ctx, showCollisionShapes} from "./system.js"
 import {Renderable} from "./renderable.js"
 
-export default class Image extends Renderable {
+export default class Img extends Renderable {
     constructor(texture, x = 0, y = 0, width = texture.width, height = texture.height
                 , xMul = 0.5, yMul = 0.5, widthMul = 1.0, heightMul = 1.0) {
         super()

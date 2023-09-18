@@ -4,7 +4,7 @@ import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
 import {addTextures, align, loc, rad, setName} from "./src/system.js"
 import Sprite from "./src/sprite.js"
-import Image from "./src/image.js"
+import Img from "./src/image.js"
 import ImageArray from "./src/image_array.js"
 import Layer from "./src/layer.js"
 import Key from "./src/key.js"
@@ -25,9 +25,11 @@ project.loadTextures = () => {
     addTextures({
         ship: "textures/ship.png",
         flame: "textures/flame.png",
-        bullet: "textures/bullet.png",
         asteroid: "textures/asteroid.png",
         explosion: "textures/explosion.png",
+        fireball: "textures/fireball.png",
+        turret: "textures/turret.png",
+        bullet: "textures/bullet.png",
     })
 }
 
@@ -84,7 +86,6 @@ project.key = {
     pause: new Key("pause", "KeyP"),
 }
 
-let shipSprite = Sprite.create("shipSprite", undefined)
 setRegistry({
     startingLives: 3,
     ship: {
@@ -109,14 +110,16 @@ setRegistry({
     }
 })
 
-project.sound.shooting = new Audio("sounds/shooting.mp3")
-project.sound.explosion = new Audio("sounds/explosion.mp3")
-project.sound.death = new Audio("sounds/death.mp3")
-project.sound.extraLife = new Audio("sounds/extra_life.mp3")
-project.sound.flame = new Audio("sounds/flame.mp3")
-project.sound.newLevel = new Audio("sounds/new_level.mp3")
-project.sound.gameOver = new Audio("sounds/game_over.mp3")
-project.sound.music = new Audio("sounds/music.mp3")
+project.sound = {
+    shooting: new Audio("sounds/shooting.mp3"),
+    explosion: new Audio("sounds/explosion.mp3"),
+    death: new Audio("sounds/death.mp3"),
+    extraLife: new Audio("sounds/extra_life.mp3"),
+    flame: new Audio("sounds/flame.mp3"),
+    newLevel: new Audio("sounds/new_level.mp3"),
+    gameOver: new Audio("sounds/game_over.mp3"),
+    music: new Audio("sounds/music.mp3"),
+}
 
 project.init = () => {
     let textures = project.texture
@@ -138,19 +141,10 @@ project.init = () => {
 
     project.registry.template = {
         ship: {
-            image: new Image(textures.ship, 0, 0, undefined, undefined
+            image: new Img(textures.ship, 0, 0, undefined, undefined
                 , 0.5, 0.5, 1.75, 1.75),
             angle: 0,
             speed: 0,
-        },
-        bullet: {
-            layer: bullets,
-            images: new ImageArray("bulletImages", textures.bullet
-                , 1, 16, 43 / 48, 5.5 / 12, 10.5, 3),
-            size: 0.15,
-            speed: 15,
-            //angle: new Rnd(rad(-10), rad(10)),
-            animationSpeed: 16.0
         },
         explosion: {
             layer: explosions,
@@ -167,14 +161,9 @@ project.init = () => {
     let shipSprite = Sprite.createFromTemplate(template.ship)
     setName(shipSprite, "shipSprite")
 
-    let weapon = Sprite.create()
-
     let flameImages = new ImageArray("flameImages", textures.flame, 3, 3)
     let flameSprite = Sprite.create("flameSprite", undefined, flameImages._images[0], -0.9, 0
         , 1, 1, rad(-90))
-
-    let gun = Sprite.create("gun", undefined, undefined, 1, 0)
-    template.bullet.pos = gun
 
     let hudArea = Shape.create("hudArea", 0, 0, currentCanvas.width - 1
         , currentCanvas.height - 1)
@@ -185,8 +174,6 @@ project.init = () => {
     let messageLabel = new Label("messageLabel", hudArea, [""], align.center, align.center)
     let hud = new Layer("hud", scoreLabel, levelLabel, livesLabel, messageLabel)
 
-    val.gunDelay = new Delayed(project.key.fire, 0.15)
-
     project.background = "rgb(9, 44, 84)"
     project.scene = [bullets, asteroids, flameSprite, shipSprite, explosions, hud]
 
@@ -196,8 +183,6 @@ project.init = () => {
 
         new Animate(flameSprite, flameImages, 16),
         new Constraint(flameSprite, shipSprite),
-
-        new Constraint(gun, shipSprite),
 
         new SetBounds(bullets, bounds),
         new ExecuteActions(bullets),

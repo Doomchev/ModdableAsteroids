@@ -1,4 +1,4 @@
-import Image from "./image.js"
+import Img from "./image.js"
 import Sprite from "./sprite.js"
 import Key from "./key.js"
 import LinearChange from "./actions/linear_change.js"
@@ -38,7 +38,7 @@ export let classes = {
 
     // graphics
 
-    Image: function(o) {return new Image(o.texture, o.x, o.y, o.width, o.height, o.xMul ?? dv.xMul
+    Image: function(o) {return new Img(o.texture, o.x, o.y, o.width, o.height, o.xMul ?? dv.xMul
         , o.yMul ?? dv.yMul, o.widthMul ?? dv.widthMul, o.heightMul ?? dv.heightMul)},
     Sprite: function(o) {return new Sprite(o.image, o.centerX, o.centerY, o.width, o.height
         , o.angle, o.speed, o.imageAngle, o.active ?? dv.active, o.visible ?? dv.visible)},

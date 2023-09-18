@@ -118,10 +118,8 @@ export function initUpdate() {
 
             flameSprite.visible = key.forward.isDown
 
-            if(val.gunDelay.active()) {
-                let bullet = Sprite.createFromTemplate(template.bullet)
-                bullet.turn(shipSprite.angle)
-                playSound("shooting")
+            if(key.fire.isDown) {
+                val.weapon.fire()
             }
 
             shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
