@@ -6,11 +6,11 @@ export default class Delayed extends Action {
         super()
         this.key = key
         this.cooldown = cooldown
-        this.time = 0.0
+        this.time = 0
     }
 
     active() {
-        if(this.time > 0.0) {
+        if(this.time > 0) {
             this.time -= apsk
             return false
         } else {

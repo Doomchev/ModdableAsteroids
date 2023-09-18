@@ -37,6 +37,7 @@ project.locales.en = {
     level: "LEVEL ",
     pressEnter: "PRESS ENTER",
     gameOver: "GAME OVER",
+    paused: "PAUSED",
 
     // keys
 
@@ -44,6 +45,7 @@ project.locales.en = {
     right: "Turn right",
     forward: "Thrust",
     fire: "Fire",
+    pause: "Pause",
 
     // variables
 
@@ -58,11 +60,13 @@ project.locales.ru = {
     level: "УРОВЕНЬ ",
     pressEnter: "НАЖМИТЕ ENTER",
     gameOver: "ИГРА ОКОНЧЕНА",
+    paused: "ПАУЗА",
 
     left: "Повернуть влево",
     right: "Повернуть вправо",
     forward: "Ускоряться",
     fire: "Стрелять",
+    pause: "Пауза",
 
     startingLives: "Стартовые жизни",
     acceleration: "Ускорение корабля",
@@ -77,16 +81,17 @@ project.key = {
     forward: new Key("forward", "ArrowUp"),
     fire: new Key("fire", "Space"),
     continue: new Key("continue", "Enter"),
+    pause: new Key("pause", "KeyP"),
 }
 
 let shipSprite = Sprite.create("shipSprite", undefined)
 setRegistry({
     startingLives: 3,
     ship: {
-        acceleration: 25.0,
-        deceleration: 15.0,
+        acceleration: 25,
+        deceleration: 15,
         limit: 7.5,
-        dAngle: 180.0,
+        dAngle: 180,
     },
     state: {
         alive: 0,
@@ -141,9 +146,10 @@ project.init = () => {
         bullet: {
             layer: bullets,
             images: new ImageArray("bulletImages", textures.bullet
-                , 1, 16, 43.0 / 48.0, 5.5 / 12.0, 10.5, 3.0),
+                , 1, 16, 43 / 48, 5.5 / 12, 10.5, 3),
             size: 0.15,
             speed: 15,
+            //angle: new Rnd(rad(-10), rad(10)),
             animationSpeed: 16.0
         },
         explosion: {
@@ -161,15 +167,17 @@ project.init = () => {
     let shipSprite = Sprite.createFromTemplate(template.ship)
     setName(shipSprite, "shipSprite")
 
+    let weapon = Sprite.create()
+
     let flameImages = new ImageArray("flameImages", textures.flame, 3, 3)
     let flameSprite = Sprite.create("flameSprite", undefined, flameImages._images[0], -0.9, 0
         , 1, 1, rad(-90))
 
-    let gun = Sprite.create("gun", undefined, undefined, 1.0, 0.0)
+    let gun = Sprite.create("gun", undefined, undefined, 1, 0)
     template.bullet.pos = gun
 
-    let hudArea = Shape.create("hudArea", 0.0, 0.0, currentCanvas.width - 1.0
-        , currentCanvas.height - 1.0)
+    let hudArea = Shape.create("hudArea", 0, 0, currentCanvas.width - 1
+        , currentCanvas.height - 1)
 
     let scoreLabel = new Label("scoreLabel", hudArea, [score], align.left, align.top, "Z8")
     let levelLabel = new Label("levelLabel", hudArea, [loc("level"), level], align.center, align.top)
@@ -186,7 +194,7 @@ project.init = () => {
         new LoopArea(shipSprite, bounds),
         new Move(shipSprite),
 
-        new Animate(flameSprite, flameImages, 16.0),
+        new Animate(flameSprite, flameImages, 16),
         new Constraint(flameSprite, shipSprite),
 
         new Constraint(gun, shipSprite),

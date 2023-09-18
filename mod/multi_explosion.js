@@ -35,7 +35,7 @@ export default class MultiExplosion extends Mod {
                 let explosion = Sprite.create(undefined, explosions, explosionImages
                     , sprite.centerX + length * Math.cos(angle), sprite.centerY + length * Math.sin(angle)
                     , particleSize, particleSize, rad(rnd(360)), 0, 16)
-                explosion.add(new DelayedRemove(explosion, explosions, 1.0))
+                explosion.add(new DelayedRemove(explosion, explosions, 1))
                 times--
                 if(times > 0) setTimeout(createParticle, 100)
             }

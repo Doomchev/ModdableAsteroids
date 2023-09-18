@@ -1,5 +1,5 @@
 import Sprite from "./src/sprite.js"
-import {loc, loopedSound, num, rad, rnd, rndi} from "./src/system.js"
+import {loc, loopedSound, num, paused, rad, rnd, rndi, togglePause} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
 import {func, mod, obj, playSound, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
@@ -42,13 +42,13 @@ export function initUpdate() {
                 x = bounds.leftX
                 y = rnd(bounds.topY, bounds.bottomY)
             }
-            func.createAsteroid(x, y, val.asteroidType.default, undefined, rnd(rad(360)))
+            func.createAsteroid(x, y, val.asteroidType.default, rnd(rad(360)))
         }
     }
 
-    func.createAsteroid = function (centerX, centerY, type, piece, angle = 0) {
+    func.createAsteroid = function (centerX, centerY, type, angle = 0) {
         let asteroid = Sprite.createFromTemplate(type)
-        if(typeof centerX == "object") {
+        if(centerY === undefined) {
             asteroid.setPositionAs(centerX.toSprite())
         } else {
             asteroid.moveTo(centerX, centerY)
@@ -88,6 +88,16 @@ export function initUpdate() {
     // main
 
     project.update = () => {
+        if(key.pause.wasPressed) {
+            togglePause()
+            if(paused) {
+                messageLabel.show(loc("paused"))
+            } else {
+                messageLabel.show()
+            }
+        }
+        if(paused) return
+
         if(currentState === state.alive) {
             if(key.left.isDown) {
                 LinearChange.execute(shipSprite, "angle", -rad(ship.dAngle))
@@ -144,6 +154,8 @@ export function initUpdate() {
                 mod.forEach(module => module.reset())
             }
             currentState = state.alive
+        } else {
+            if(!flameSound.paused) flameSound.pause()
         }
 
         if(asteroids.isEmpty()) {

@@ -40,6 +40,7 @@ export default class Canvas extends Sprite {
         for(let i = 0; i < project.scene.length; i++) {
             project.scene[i].draw()
         }
+
         currentCanvas = oldCanvas
 
         ctx.fillStyle = "white"

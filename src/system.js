@@ -12,7 +12,7 @@ import AsteroidsHealth from "../mod/asteroids_health.js"
 
 // global variables
 
-export let zk = 1.2, fps = 60.0, aps = 200.0, showCollisionShapes = false
+export let zk = 1.2, fps = 60.0, aps = 200.0, showCollisionShapes = false, paused = false
 export let ctx, mousesx, mousesy, apsk = 1.0 / aps
 
 // enums
@@ -59,6 +59,10 @@ export function setName(object, name) {
         project._object[name] = object
         object._name = name
     }
+}
+
+export function togglePause() {
+    paused = !paused
 }
 
 // textures
@@ -150,18 +154,22 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         mods.style.display = "none"
 
+        let square = true
         let canvas = document.getElementById("canvas")
         canvas.hidden = false
-        let size = Math.min(document.body.clientWidth - 20, document.body.clientHeight - 20)
-        //canvas.width = canvas.height = size
-        canvas.width = 360
-        canvas.height = 640
+        if(square) {
+            let size = Math.min(document.body.clientWidth - 20, document.body.clientHeight - 20)
+            canvas.width = canvas.height = size
+        } else {
+            canvas.width = 360
+            canvas.height = 640
+        }
         canvas.focus()
         ctx = canvas.getContext("2d")
         ctx.fillStyle = "white"
         ctx.font = canvas.width / 24 + "px monospace"
         ctx.textBaseline = "top"
-        project.canvas = Canvas.create(9.0, 16.0, canvas.width, canvas.height)
+        project.canvas = Canvas.create(square ? 16 : 9, 16, canvas.width, canvas.height)
         setCanvas(project.canvas)
 
         project.loadTextures()
@@ -177,12 +185,16 @@ document.addEventListener("DOMContentLoaded", function() {
 
                     let apsTime = 0, realAps = 0, apsCounter = 0
                     setInterval(function () {
-                        project.actions.forEach(action => action.execute())
-                        project.update()
-                        mod.forEach(module => {
-                            module.actions.forEach(action => action.execute())
-                            module.update()
-                        })
+                        if(!paused) {
+                            project.actions.forEach(action => action.execute())
+                            project.update()
+                            mod.forEach(module => {
+                                module.actions.forEach(action => action.execute())
+                                module.update()
+                            })
+                        } else {
+                            project.update()
+                        }
 
                         for (const key of Object.values(project.key)) {
                             if (!(key instanceof Object)) continue
