@@ -51,6 +51,7 @@ project.locales.en = {
     pressEnter: "PRESS ENTER",
     gameOver: "GAME OVER",
     paused: "PAUSED",
+    ammo: "AMMO: ",
 
     // keys
 
@@ -74,6 +75,7 @@ project.locales.ru = {
     pressEnter: "НАЖМИТЕ ENTER",
     gameOver: "ИГРА ОКОНЧЕНА",
     paused: "ПАУЗА",
+    ammo: "ПАТРОНЫ: ",
 
     left: "Повернуть влево",
     right: "Повернуть вправо",
@@ -155,6 +157,7 @@ project.init = () => {
     let score = new NumericVariable("score", 0)
     let lives = new NumericVariable("lives", val.startingLives)
     let level = new NumericVariable("level", 0)
+    let ammo = new NumericVariable("ammo", 0)
 
     let bullets = new Layer("bullets")
     let ship = new Layer("ship")
@@ -200,8 +203,10 @@ project.init = () => {
     let scoreLabel = new Label("scoreLabel", hudArea, [score], align.left, align.top, "Z8")
     let levelLabel = new Label("levelLabel", hudArea, [loc("level"), level], align.center, align.top)
     let livesLabel = new Label("livesLabel", hudArea, [lives], align.right, align.top, "R ∆")
+    let ammoLabel = new Label("ammoLabel", hudArea, [loc("ammo"), ammo], align.right, align.bottom)
+
     let messageLabel = new Label("messageLabel", hudArea, [""], align.center, align.center)
-    let hud = new Layer("hud", scoreLabel, levelLabel, livesLabel, messageLabel)
+    let hud = new Layer("hud", scoreLabel, levelLabel, livesLabel, messageLabel, ammoLabel)
 
     project.background = "rgb(9, 44, 84)"
     project.scene = [bullets, asteroids, bonuses, ship, explosions, hud]

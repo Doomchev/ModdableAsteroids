@@ -69,8 +69,8 @@ export default class DoubleBarreled extends Weapon {
                 this.gunfire[i] = gunfire
             }
             playSound("bullet")
-            this.ammo -= 1
-            if(this.ammo === 0) {
+            obj.ammo.value -= 1
+            if(obj.ammo.value === 0) {
                 reg.turret.visible = false
                 val.currentWeapon = val.weapon.default
             }

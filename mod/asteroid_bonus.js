@@ -45,7 +45,7 @@ export default class AsteroidBonus extends Mod {
         let ammo = this.registry.ammo
         obj.bonuses.collisionWith(obj.shipSprite, function(bonus) {
             val.currentWeapon = reg.weapon.doubleBarreled
-            val.currentWeapon.ammo = ammo
+            obj.ammo.value = ammo
             val.currentWeapon.registry.turret.visible = true
             playSound("bonus")
             obj.bonuses.remove(bonus)
