@@ -8,6 +8,15 @@ import Pulsation from "../src/actions/sprite/pulsation.js"
 import Swing from "../src/actions/sprite/swing.js"
 
 export default class AsteroidBonus extends Mod {
+    constructor(probability, ammo) {
+        super()
+        this.registry = {
+            probability: probability,
+            ammo: ammo,
+            template: {},
+        }
+    }
+
     get name() {
         switch (project.locale) {
             case "ru":
@@ -18,12 +27,7 @@ export default class AsteroidBonus extends Mod {
     }
 
     init() {
-        this.registry = {
-            template: {
-                image: new Img(project.texture.bonus),
-            },
-            probability: 0.5,
-        }
+        this.registry.template.image = new Img(project.texture.bonus)
     }
 
     destroyAsteroid(asteroid) {
@@ -37,8 +41,12 @@ export default class AsteroidBonus extends Mod {
     }
 
     update() {
-        obj.bonuses.collisionWith(obj.shipSprite, function (bonus) {
-            val.currentWeapon = project.registry.weapon.doubleBarreled
+        let reg = project.registry
+        let ammo = this.registry.ammo
+        obj.bonuses.collisionWith(obj.shipSprite, function(bonus) {
+            val.currentWeapon = reg.weapon.doubleBarreled
+            val.currentWeapon.ammo = ammo
+            val.currentWeapon.registry.turret.visible = true
             playSound("bonus")
             obj.bonuses.remove(bonus)
         })

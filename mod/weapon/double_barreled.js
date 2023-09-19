@@ -49,6 +49,7 @@ export default class DoubleBarreled extends Weapon {
         this.gunfire = new Array(2)
         val.weapon.doubleBarreled = this
 
+        reg.turret.visible = false
         obj.ship.add(reg.turret)
     }
 
@@ -68,6 +69,11 @@ export default class DoubleBarreled extends Weapon {
                 this.gunfire[i] = gunfire
             }
             playSound("bullet")
+            this.ammo -= 1
+            if(this.ammo === 0) {
+                reg.turret.visible = false
+                val.currentWeapon = val.weapon.default
+            }
         }
     }
 

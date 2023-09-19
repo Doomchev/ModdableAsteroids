@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         mods.style.display = "none"
 
-        let square = true
+        let square = false
 
         let body = document.body
         let canvas = document.getElementById("canvas")
