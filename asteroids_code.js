@@ -1,27 +1,27 @@
 import Sprite from "./src/sprite.js"
 import {loc, loopedSound, masterVolume, num, paused, playSound, rad, rnd, rndi, togglePause} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
-import {func, mod, obj, project, val} from "./src/project.js"
+import {func, mod, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 
 export function initUpdate() {
-    let asteroids = obj.asteroids
-    let shipSprite = obj.shipSprite
-    let flameSprite = obj.flameSprite
-    let bullets = obj.bullets
-    let explosions = obj.explosions
-    let shipLayer = obj.ship
+    let asteroids = val.asteroids
+    let shipSprite = val.shipSprite
+    let flameSprite = val.flameSprite
+    let bullets = val.bullets
+    let explosions = val.explosions
+    let shipLayer = val.shipLayer
 
-    let lives = obj.lives
-    let messageLabel = obj.messageLabel
-    let level = obj.level
-    let score = obj.score
+    let lives = val.lives
+    let messageLabel = val.messageLabel
+    let level = val.level
+    let score = val.score
 
-    let ship = val.ship
     let state = val.state
     let key = project.key
     let template = val.template
+    let ship = val.ship
 
     let currentState = state.alive
 
@@ -32,7 +32,7 @@ export function initUpdate() {
     // functions
 
     func.createAsteroids = function(num) {
-        let bounds = obj.bounds
+        let bounds = val.bounds
         for(let i = 0; i < num; i++) {
             let x, y
             if (rndi(2)) {
@@ -141,6 +141,7 @@ export function initUpdate() {
             })
         } else if(key.continue.wasPressed) {
             shipLayer.show()
+
             messageLabel.show()
             if(currentState === state.dead) {
                 lives.value--

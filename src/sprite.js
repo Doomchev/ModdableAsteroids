@@ -1,6 +1,6 @@
 import Shape from "./shape.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {apsk, num, setName} from "./system.js"
+import {apsk, num} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 
 export default class Sprite extends Shape {
@@ -17,14 +17,13 @@ export default class Sprite extends Shape {
         this.actions = []
     }
 
-    static create(name, layer, image, centerX, centerY, width, height, angle, speed, animationSpeed, imageAngle, active, visible) {
+    static create(layer, image, centerX, centerY, width, height, angle, speed, animationSpeed, imageAngle, active, visible) {
         if(typeof centerX === "object") {
             let pos = centerX
             centerX = pos.centerX
             centerY = pos.centerY
         }
         let sprite = new Sprite(image, centerX, centerY, width, height, angle, speed, imageAngle, active, visible)
-        setName(sprite, name)
         if(layer) layer.add(sprite)
         if(animationSpeed !== undefined) {
             sprite.actions = [new Animate(sprite, image, animationSpeed)]

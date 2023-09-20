@@ -1,6 +1,6 @@
 import Mod from "../src/mod.js"
 import {currentCanvas} from "../src/canvas.js"
-import {obj, project} from "../src/project.js"
+import {project, val} from "../src/project.js"
 
 export default class CameraMovement extends Mod {
     get name() {
@@ -13,8 +13,8 @@ export default class CameraMovement extends Mod {
     }
 
     update() {
-        currentCanvas.setPositionAs(obj.shipSprite)
-        obj.bounds.setPositionAs(obj.shipSprite)
-        obj.hud.setPositionAs(obj.shipSprite)
+        currentCanvas.setPositionAs(val.shipSprite)
+        val.bounds.setPositionAs(val.shipSprite)
+        val.hud.setPositionAs(val.shipSprite)
     }
 }

@@ -1,7 +1,7 @@
 import Weapon from "./weapon.js"
 import Sprite from "../../src/sprite.js"
 import Img from "../../src/image.js"
-import {obj, project, val} from "../../src/project.js"
+import {project, val} from "../../src/project.js"
 import Constraint from "../../src/constraint.js"
 import Delayed from "../../src/actions/delayed.js"
 import {playSound} from "../../src/system.js"
@@ -23,7 +23,7 @@ export default class DoubleBarreled extends Weapon {
             barrelEnd: [],
             gunDelay: new Delayed(project.key.fire, 0.10),
             bullet: {
-                layer: obj.bullets,
+                layer: val.bullets,
                 image: new Img(project.texture.bullet),
                 size: 0.12,
                 speed: 30,
@@ -31,7 +31,7 @@ export default class DoubleBarreled extends Weapon {
                 //angle: new Rnd(rad(-10), rad(10)),
             },
             gunfire: {
-                layer: obj.ship,
+                layer: val.shipLayer,
                 image: new Img(project.texture.gunfire, undefined, undefined, undefined, undefined
                     , 0, 0.5),
                 size: 1,
@@ -50,7 +50,7 @@ export default class DoubleBarreled extends Weapon {
         val.weapon.doubleBarreled = this
 
         reg.turret.visible = false
-        obj.ship.add(reg.turret)
+        val.shipLayer.add(reg.turret)
     }
 
     fire() {
@@ -59,18 +59,18 @@ export default class DoubleBarreled extends Weapon {
             for (let i = 0; i < 2; i++) {
                 let bullet = Sprite.createFromTemplate(reg.bullet)
                 bullet.setPositionAs(reg.barrelEnd[i])
-                bullet.turn(obj.shipSprite.angle)
+                bullet.turn(val.shipSprite.angle)
                 bullet.damage = 50
 
                 let gunfire = Sprite.createFromTemplate(reg.gunfire)
                 gunfire.setPositionAs(reg.barrelEnd[i])
-                gunfire.turn(obj.shipSprite.angle)
-                gunfire.add(new DelayedRemove(gunfire, obj.ship, 0.05))
+                gunfire.turn(val.shipSprite.angle)
+                gunfire.add(new DelayedRemove(gunfire, val.shipLayer, 0.05))
                 this.gunfire[i] = gunfire
             }
             playSound("bullet")
-            obj.ammo.value -= 1
-            if(obj.ammo.value === 0) {
+            val.ammo.value -= 1
+            if(val.ammo.value === 0) {
                 reg.turret.visible = false
                 val.currentWeapon = val.weapon.default
             }
@@ -78,7 +78,7 @@ export default class DoubleBarreled extends Weapon {
     }
 
     update() {
-        let ship = obj.shipSprite
+        let ship = val.shipSprite
         let reg = this.registry
         let turret = reg.turret
         turret.setPositionAs(ship)

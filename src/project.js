@@ -10,7 +10,6 @@ export let project = {
     modules: [],
     allModules: [],
 
-    _object: {},
     _function: {},
     _data: "",
 
@@ -19,7 +18,7 @@ export let project = {
     update: () => {},
 }
 
-export let val = project.registry, obj = project._object, mod = project.modules, func = project._function
+export let val = project.registry, mod = project.modules, func = project._function
 
 export function setRegistry(newRegistry) {
     project.registry = newRegistry

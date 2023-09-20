@@ -1,5 +1,5 @@
 import Mod from "../src/mod.js"
-import {func, mod, obj, project, val} from "../src/project.js"
+import {func, mod, project, val} from "../src/project.js"
 import {rad} from "../src/system.js"
 import Rnd from "../src/function/rnd.js"
 import Mul from "../src/function/mul.js"
@@ -19,8 +19,8 @@ export default class AsteroidPieces extends Mod {
         let type = val.asteroidType
 
         type.big = {
-            layer: obj.asteroids,
-            images: obj.asteroidImages,
+            layer: val.asteroids,
+            images: val.asteroidImages,
             size: 3,
             angle: new Rnd(rad(-15), rad(15)),
             speed: new Rnd(2, 3),
@@ -29,8 +29,8 @@ export default class AsteroidPieces extends Mod {
             score: 100,
         }
         type.medium = {
-            layer: obj.asteroids,
-            images: obj.asteroidImages,
+            layer: val.asteroids,
+            images: val.asteroidImages,
             size: 2,
             angle: new Rnd(rad(-15), rad(15)),
             speed: new Rnd(2.5, 4),
@@ -39,8 +39,8 @@ export default class AsteroidPieces extends Mod {
             score: 200,
         }
         type.small = {
-            layer: obj.asteroids,
-            images: obj.asteroidImages,
+            layer: val.asteroids,
+            images: val.asteroidImages,
             size: 1,
             angle: new Rnd(rad(-15), rad(15)),
             speed: new Rnd(3, 5),

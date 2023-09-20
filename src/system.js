@@ -47,13 +47,6 @@ export function num(value) {
     return typeof value === "number" ? value : value.toNumber()
 }
 
-export function setName(object, name) {
-    if (name) {
-        project._object[name] = object
-        object._name = name
-    }
-}
-
 export function togglePause() {
     paused = !paused
 }
@@ -78,13 +71,14 @@ export function addTexturesToObjects(objects) {
 
 // sound
 
+export let masterVolume = 0.25
+
 export function playSound(name) {
     let sound = new Audio(project.sound[name].src)
     sound.volume = masterVolume
     sound.addEventListener("canplaythrough", (event) => sound.play())
 }
 
-export let masterVolume = 0.25
 export function loopedSound(name, loopStart, loopEnd, play) {
     let sound = new Audio(project.sound[name].src)
     let loopLength = loopEnd - loopStart

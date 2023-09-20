@@ -1,10 +1,8 @@
 import {Value} from "../value.js"
-import {setName} from "../system.js"
 
 export default class SpriteVariable extends Value {
-    constructor(name) {
+    constructor() {
         super()
-        setName(this, name)
         this._id = name
         this.sprite = null
     }

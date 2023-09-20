@@ -1,5 +1,4 @@
 import {Renderable} from "./renderable.js"
-import {setName} from "./system.js"
 
 export default class Shape extends Renderable {
     constructor(centerX = 0.0, centerY = 0.0,  width = 1.0, height = 1.0) {
@@ -8,12 +7,6 @@ export default class Shape extends Renderable {
         this.centerY = centerY
         this.halfWidth = 0.5 * width
         this.halfHeight = 0.5 * height
-    }
-
-    static create(name, centerX, centerY, width, height) {
-        let shape = new Shape(centerX, centerY, width, height)
-        setName(shape, name)
-        return shape
     }
 
     get width() {

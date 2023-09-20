@@ -1,4 +1,4 @@
-import {apsk, rad} from "../../system.js"
+import {apsk} from "../../system.js"
 import {Action} from "../action.js"
 
 export default class Pulsation extends Action {

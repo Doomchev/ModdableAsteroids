@@ -1,5 +1,5 @@
 import Mod from "../src/mod.js"
-import {obj, project} from "../src/project.js"
+import {project, val} from "../src/project.js"
 import {playSound} from "../src/system.js"
 
 export default class ExtraLifeBonus extends Mod {
@@ -19,8 +19,8 @@ export default class ExtraLifeBonus extends Mod {
     }
 
     update() {
-        if(obj.score.value >= this.nextLifeBonus) {
-            obj.lives.value++
+        if(val.score.value >= this.nextLifeBonus) {
+            val.lives.value++
             playSound("extraLife")
             this.nextLifeBonus += this.lifeBonus
         }

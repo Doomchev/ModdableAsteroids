@@ -2,7 +2,7 @@ import NumericVariable from "./src/variable/number.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {addTextures, align, loc, rad, setName} from "./src/system.js"
+import {addTextures, align, loc, rad} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Img from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -154,20 +154,23 @@ project.allModules = [
 project.init = () => {
     let textures = project.texture
 
-    let score = new NumericVariable("score", 0)
-    let lives = new NumericVariable("lives", val.startingLives)
-    let level = new NumericVariable("level", 0)
-    let ammo = new NumericVariable("ammo", 0)
+    val.score = new NumericVariable(0)
+    val.lives = new NumericVariable(val.startingLives)
+    val.level = new NumericVariable(0)
+    val.ammo = new NumericVariable(0)
 
-    let bullets = new Layer("bullets")
-    let ship = new Layer("ship")
-    let asteroids = new Layer("asteroids")
-    let bonuses = new Layer("bonuses")
-    let explosions = new Layer("explosions")
+    val.bullets = new Layer()
+    val.shipLayer = new Layer()
+    val.asteroids = new Layer()
+    val.bonuses = new Layer()
+    val.explosions = new Layer()
 
-    val.asteroidType.default.images = new ImageArray("asteroidImages", textures.asteroid
-        , 8, 4, 0.5, 0.5, 1.5, 1.5)
+    val.asteroidImages = new ImageArray(textures.asteroid, 8, 4
+        , 0.5, 0.5, 1.5, 1.5)
+    val.asteroidType.default.images = val.asteroidImages
 
+    val.explosionImages = new ImageArray(textures.explosion
+        , 4, 4, 0.5, 0.5, 2, 2)
     project.registry.template = {
         ship: {
             image: new Img(textures.ship, 0, 0, undefined, undefined
@@ -176,59 +179,54 @@ project.init = () => {
             speed: 0,
         },
         explosion: {
-            layer: explosions,
-            images: new ImageArray("explosionImages", textures.explosion
-                , 4, 4, 0.5, 0.5, 2, 2),
+            layer: val.explosions,
+            images: val.explosionImages,
             angle: new Rnd(rad(360)),
             animationSpeed: 16
         },
     }
     let template = project.registry.template
 
-    let bounds = Shape.create("bounds", 0, 0, currentCanvas.width + 3
-        , currentCanvas.height + 3)
+    val.bounds = new Shape(0, 0, currentCanvas.width + 3, currentCanvas.height + 3)
 
-    let shipSprite = Sprite.createFromTemplate(template.ship)
-    setName(shipSprite, "shipSprite")
-    ship.add(shipSprite)
+    val.shipSprite = Sprite.createFromTemplate(template.ship)
+    val.shipLayer.add(val.shipSprite)
 
-    let flameImages = new ImageArray("flameImages", textures.flame, 3, 3)
-    let flameSprite = Sprite.create("flameSprite", undefined, flameImages._images[0], -0.9, 0
+    val.flameImages = new ImageArray(textures.flame, 3, 3)
+    val.flameSprite = Sprite.create(val.shipLayer, val.flameImages._images[0], -0.9, 0
         , 1, 1, rad(-90))
-    ship.add(flameSprite)
 
-    let hudArea = Shape.create("hudArea", 0, 0, currentCanvas.width - 1
-        , currentCanvas.height - 1)
+    let hudArea = new Shape(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
 
-    let scoreLabel = new Label("scoreLabel", hudArea, [score], align.left, align.top, "Z8")
-    let levelLabel = new Label("levelLabel", hudArea, [loc("level"), level], align.center, align.top)
-    let livesLabel = new Label("livesLabel", hudArea, [lives], align.right, align.top, "R ∆")
-    let ammoLabel = new Label("ammoLabel", hudArea, [loc("ammo"), ammo], align.right, align.bottom)
+    val.scoreLabel = new Label(hudArea, [val.score], align.left, align.top, "Z8")
+    val.levelLabel = new Label(hudArea, [loc("level"), val.level], align.center, align.top)
+    val.livesLabel = new Label(hudArea, [val.lives], align.right, align.top, "R ∆")
+    val.ammoLabel = new Label(hudArea, [loc("ammo"), val.ammo], align.right, align.bottom)
 
-    let messageLabel = new Label("messageLabel", hudArea, [""], align.center, align.center)
-    let hud = new Layer("hud", scoreLabel, levelLabel, livesLabel, messageLabel, ammoLabel)
+    val.messageLabel = new Label(hudArea, [""], align.center, align.center)
+    val.hud = new Layer(val.scoreLabel, val.levelLabel, val.livesLabel, val.messageLabel, val.ammoLabel)
 
     project.background = "rgb(9, 44, 84)"
-    project.scene = [bullets, asteroids, bonuses, ship, explosions, hud]
+    project.scene = [val.bullets, val.asteroids, val.bonuses, val.shipLayer, val.explosions, val.hud]
 
     project.actions = [
-        new LoopArea(shipSprite, bounds),
-        new Move(shipSprite),
+        new LoopArea(val.shipSprite, val.bounds),
+        new Move(val.shipSprite),
 
-        new Animate(flameSprite, flameImages, 16),
-        new Constraint(flameSprite, shipSprite),
+        new Animate(val.flameSprite, val.flameImages, 16),
+        new Constraint(val.flameSprite, val.shipSprite),
 
-        new SetBounds(bullets, bounds),
-        new ExecuteActions(bullets),
-        new Move(bullets),
+        new SetBounds(val.bullets, val.bounds),
+        new ExecuteActions(val.bullets),
+        new Move(val.bullets),
 
-        new ExecuteActions(asteroids),
-        new Move(asteroids),
-        new LoopArea(asteroids, bounds),
+        new ExecuteActions(val.asteroids),
+        new Move(val.asteroids),
+        new LoopArea(val.asteroids, val.bounds),
 
-        new ExecuteActions(explosions),
-        new ExecuteActions(bonuses),
-        new ExecuteActions(ship),
+        new ExecuteActions(val.explosions),
+        new ExecuteActions(val.bonuses),
+        new ExecuteActions(val.shipLayer),
     ]
 
     initUpdate()

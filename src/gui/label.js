@@ -1,11 +1,10 @@
 import Shape from "../shape.js"
-import {align, ctx, setName} from "../system.js"
+import {align, ctx} from "../system.js"
 import {xToScreen, yToScreen} from "../canvas.js"
 
 export default class Label extends Shape {
-    constructor(name, sprite, items, horizontalAlign, verticalAlign, format) {
+    constructor(sprite, items, horizontalAlign, verticalAlign, format) {
         super(sprite.centerX, sprite.centerY, sprite.width, sprite.height)
-        setName(this, name)
         this.items = items
         this.horizontalAlign = horizontalAlign
         this.verticalAlign = verticalAlign

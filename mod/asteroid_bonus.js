@@ -1,6 +1,5 @@
 import Mod from "../src/mod.js"
-import ImageArray from "../src/image_array.js"
-import {obj, project, val} from "../src/project.js"
+import {project, val} from "../src/project.js"
 import Img from "../src/image.js"
 import {playSound, rad, rnd} from "../src/system.js"
 import Sprite from "../src/sprite.js"
@@ -36,19 +35,19 @@ export default class AsteroidBonus extends Mod {
             bonus.setPositionAs(asteroid)
             bonus.add(new Pulsation(bonus, 0.1, 0.45))
             bonus.add(new Swing(bonus, rad(15), 0.9))
-            obj.bonuses.add(bonus)
+            val.bonuses.add(bonus)
         }
     }
 
     update() {
         let reg = project.registry
         let ammo = this.registry.ammo
-        obj.bonuses.collisionWith(obj.shipSprite, function(bonus) {
+        val.bonuses.collisionWith(val.shipSprite, function(bonus) {
             val.currentWeapon = reg.weapon.doubleBarreled
-            obj.ammo.value = ammo
+            val.ammo.value = ammo
             val.currentWeapon.registry.turret.visible = true
             playSound("bonus")
-            obj.bonuses.remove(bonus)
+            val.bonuses.remove(bonus)
         })
     }
 }

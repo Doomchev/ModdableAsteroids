@@ -1,10 +1,8 @@
 import Img from "./image.js"
-import {setName} from "./system.js"
 
 export default class ImageArray {
-    constructor(name, texture, columns, rows
-                , xMul = 0.5, yMul = 0.5, widthMul = 1.0, heightMul = 1.0) {
-        setName(this, name)
+    constructor(texture, columns, rows, xMul = 0.5, yMul = 0.5
+                , widthMul = 1.0, heightMul = 1.0) {
         this.texture = texture
         this.columns = columns
         this.rows =  rows
