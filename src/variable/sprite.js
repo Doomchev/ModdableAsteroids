@@ -1,6 +1,6 @@
-import {Value} from "../value.js"
+import {Function} from "../function.js"
 
-export default class SpriteVariable extends Value {
+export default class SpriteVariable extends Function {
     constructor() {
         super()
         this._id = name

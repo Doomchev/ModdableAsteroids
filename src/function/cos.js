@@ -1,7 +1,8 @@
-import {apsk} from "../system.js"
+import {Function} from "../function.js"
 
-export default class Cos {
-    constructor(length, amplitude, xshift, yshift) {
+export default class Cos extends Function {
+    constructor(length, amplitude = 1, xshift = 0, yshift = 0) {
+        super()
         this.length = length
         this.amplitude = amplitude
         this.xshift = xshift
@@ -9,8 +10,7 @@ export default class Cos {
         this.time = 0
     }
 
-    toNumber() {
-        this.time += apsk
-        return this.yshift + this.amplitude * Math.sin((this.xshift + this.time) * 2 * Math.PI / this.length)
+    calculate(x) {
+        return this.yshift + this.amplitude * Math.cos((this.xshift + x) * 2 * Math.PI / this.length)
     }
 }

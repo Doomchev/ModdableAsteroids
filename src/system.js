@@ -1,5 +1,5 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
-import {Value} from "./value.js"
+import {Function} from "./function.js"
 import {mod, project} from "./project.js"
 import {exportProject} from "./export.js"
 
@@ -92,7 +92,7 @@ export function loopedSound(name, loopStart, loopEnd, play) {
 
 // localization
 
-export class Loc extends Value {
+export class Loc extends Function {
     constructor(name) {
         super()
         this.name = name

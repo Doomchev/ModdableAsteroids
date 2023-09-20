@@ -1,7 +1,7 @@
-import {Value} from "../value.js"
+import {Function} from "../function.js"
 import {num} from "../system.js"
 
-export default class NumericVariable extends Value {
+export default class NumericVariable extends Function {
     constructor(value) {
         super()
         this.value = num(value)

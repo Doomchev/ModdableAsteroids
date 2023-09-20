@@ -17,7 +17,7 @@ import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import {project, setRegistry, val} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
 import Rnd from "./src/function/rnd.js"
-import {RandomSign} from "./src/function/random_sign.js"
+import RandomSign from "./src/function/random_sign.js"
 import Mul from "./src/function/mul.js"
 import AsteroidPieces from "./mod/asteroid_pieces.js"
 import AsteroidsHealth from "./mod/asteroids_health.js"
@@ -118,7 +118,7 @@ setRegistry({
             size: 3,
             angle: new Rnd(-15, 15),
             speed: new Rnd(2, 3),
-            animationSpeed: new Mul(new Rnd(12, 20), RandomSign),
+            animationSpeed: new Mul(new Rnd(12, 20), RandomSign.instance),
             score: 100,
         },
     }

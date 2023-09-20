@@ -3,8 +3,9 @@ import {project, val} from "../src/project.js"
 import Img from "../src/image.js"
 import {playSound, rad, rnd} from "../src/system.js"
 import Sprite from "../src/sprite.js"
-import Pulsation from "../src/actions/sprite/pulsation.js"
-import Swing from "../src/actions/sprite/swing.js"
+import Cos from "../src/function/cos.js"
+import SetSize from "../src/actions/sprite/set_size.js"
+import SetAngle from "../src/actions/sprite/set_angle.js"
 
 export default class AsteroidBonus extends Mod {
     constructor(probability, ammo) {
@@ -33,8 +34,8 @@ export default class AsteroidBonus extends Mod {
         if(rnd() <= this.registry.probability) {
             let bonus = Sprite.createFromTemplate(this.registry.template)
             bonus.setPositionAs(asteroid)
-            bonus.add(new Pulsation(bonus, 0.1, 0.45))
-            bonus.add(new Swing(bonus, rad(15), 0.9))
+            bonus.add(new SetSize(bonus, new Cos(0.45, 0.1, 0, 1)))
+            bonus.add(new SetAngle(bonus, new Cos(0.9, rad(15))))
             val.bonuses.add(bonus)
         }
     }

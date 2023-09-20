@@ -1,6 +1,6 @@
-import {Value} from "../value.js"
+import {Function} from "../function.js"
 
-export default class EnumVariable extends Value {
+export default class EnumVariable extends Function {
     constructor(value) {
         super()
         this.value = value
