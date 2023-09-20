@@ -1,9 +1,9 @@
-import Mod from "../src/mod.js"
+import Mod from "./mod.js"
 import {func, mod, project, val} from "../src/project.js"
 import {rad} from "../src/system.js"
 import Rnd from "../src/function/rnd.js"
 import Mul from "../src/function/mul.js"
-import RandomSign from "../src/function/random_sign.js"
+import RandomSign, {rnds} from "../src/function/random_sign.js"
 
 export default class AsteroidPieces extends Mod {
     get name() {
@@ -24,7 +24,7 @@ export default class AsteroidPieces extends Mod {
             size: 3,
             angle: new Rnd(rad(-15), rad(15)),
             speed: new Rnd(2, 3),
-            animationSpeed: new Mul(new Rnd(12, 20), RandomSign.instance),
+            animationSpeed: new Mul(new Rnd(12, 20), rnds),
             rotationSpeed: new Rnd(rad(-180), rad(180)),
             score: 100,
         }
@@ -34,7 +34,7 @@ export default class AsteroidPieces extends Mod {
             size: 2,
             angle: new Rnd(rad(-15), rad(15)),
             speed: new Rnd(2.5, 4),
-            animationSpeed: new Mul(new Rnd(16, 25), RandomSign.instance),
+            animationSpeed: new Mul(new Rnd(16, 25), rnds),
             rotationSpeed: new Rnd(rad(-180), rad(180)),
             score: 200,
         }
@@ -44,7 +44,7 @@ export default class AsteroidPieces extends Mod {
             size: 1,
             angle: new Rnd(rad(-15), rad(15)),
             speed: new Rnd(3, 5),
-            animationSpeed: new Mul(new Rnd(20, 30), RandomSign.instance),
+            animationSpeed: new Mul(new Rnd(20, 30), rnds),
             rotationSpeed: new Rnd(rad(-180), rad(180)),
             score: 300,
         }

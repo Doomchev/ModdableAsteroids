@@ -4,6 +4,7 @@ import LinearChange from "./src/actions/linear_change.js"
 import {func, mod, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
+import {makeInvulnerable} from "./mod/invulnerability.js"
 
 export function initUpdate() {
     let asteroids = val.asteroids
@@ -66,16 +67,16 @@ export function initUpdate() {
         asteroids.remove(asteroid)
     }
 
-    func.asteroidHit = function(asteroid, bullet) {
+    func.onAsteroidHit = function(asteroid, bullet) {
         func.destroyAsteroid(asteroid, bullet.angle)
         func.createSingleExplosion(bullet, 0.7, false)
-        func.removeAsteroid(asteroid)
     }
 
     func.destroyAsteroid = function (asteroid, angle) {
         func.createExplosion(asteroid, asteroid.width)
         playSound("explosion")
         mod.forEach(module => module.destroyAsteroid(asteroid, angle))
+        func.removeAsteroid(asteroid)
     }
 
     func.createExplosion = function (sprite, size, playSnd = true) {
@@ -124,27 +125,30 @@ export function initUpdate() {
                 val.currentWeapon.fire()
             }
 
-            shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
-                func.createExplosion(shipSprite, 2)
-                shipSprite.setFromTemplate(template.ship)
-                shipLayer.hide()
-                if (lives.value === 0) {
-                    messageLabel.show(loc("gameOver"))
-                    currentState = state.gameOver
-                    playSound("gameOver")
-                } else {
-                    messageLabel.show(loc("pressEnter"))
-                    currentState = state.dead
-                    playSound("death")
-                }
-                func.destroyAsteroid(asteroid, 0)
-            })
+            if(!val.invulnerable) {
+                shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
+                    func.createExplosion(shipSprite, 2)
+                    shipSprite.setFromTemplate(template.ship)
+                    shipLayer.hide()
+                    if(lives.value === 0) {
+                        messageLabel.show(loc("gameOver"))
+                        currentState = state.gameOver
+                        playSound("gameOver")
+                    } else {
+                        messageLabel.show(loc("pressEnter"))
+                        currentState = state.dead
+                        playSound("death")
+                    }
+                    func.destroyAsteroid(asteroid, 0)
+                })
+            }
         } else if(key.continue.wasPressed) {
             shipLayer.show()
 
             messageLabel.show()
             if(currentState === state.dead) {
                 lives.value--
+                makeInvulnerable(2, 0.05)
             } else {
                 lives.value = val.startingLives
                 score.value = 0
@@ -165,7 +169,7 @@ export function initUpdate() {
         }
 
         bullets.collisionWith(asteroids, (bullet, asteroid) => {
-            func.asteroidHit(asteroid, bullet)
+            func.onAsteroidHit(asteroid, bullet)
             bullets.remove(bullet)
         })
     }

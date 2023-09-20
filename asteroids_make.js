@@ -17,7 +17,7 @@ import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import {project, setRegistry, val} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
 import Rnd from "./src/function/rnd.js"
-import RandomSign from "./src/function/random_sign.js"
+import RandomSign, {rnds} from "./src/function/random_sign.js"
 import Mul from "./src/function/mul.js"
 import AsteroidPieces from "./mod/asteroid_pieces.js"
 import AsteroidsHealth from "./mod/asteroids_health.js"
@@ -29,6 +29,7 @@ import InfiniteLives from "./mod/infinite_lives.js"
 import DefaultWeapon from "./mod/weapon/default.js"
 import DoubleBarreled from "./mod/weapon/double_barreled.js"
 import AsteroidBonus from "./mod/asteroid_bonus.js"
+import Invulnerability from "./mod/invulnerability.js"
 
 project.loadTextures = () => {
     addTextures({
@@ -113,12 +114,13 @@ setRegistry({
         dead: 1,
         gameOver: 2,
     },
+    invulnerable: false,
     asteroidType: {
         default: {
             size: 3,
             angle: new Rnd(-15, 15),
             speed: new Rnd(2, 3),
-            animationSpeed: new Mul(new Rnd(12, 20), RandomSign.instance),
+            animationSpeed: new Mul(new Rnd(12, 20), rnds),
             score: 100,
         },
     }
@@ -149,6 +151,7 @@ project.allModules = [
     [new DefaultWeapon(), true],
     [new DoubleBarreled(), true],
     [new AsteroidBonus(0.1, 50), true],
+    [new Invulnerability(0.05), true],
 ]
 
 project.init = () => {

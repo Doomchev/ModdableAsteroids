@@ -1,4 +1,4 @@
-import Mod from "../src/mod.js"
+import Mod from "./mod.js"
 import {currentCanvas} from "../src/canvas.js"
 import {project, val} from "../src/project.js"
 

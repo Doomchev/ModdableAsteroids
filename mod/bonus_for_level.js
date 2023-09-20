@@ -1,4 +1,4 @@
-import Mod from "../src/mod.js"
+import Mod from "./mod.js"
 import {project, val} from "../src/project.js"
 
 export default class BonusForLevel extends Mod {

@@ -1,4 +1,4 @@
-import Mod from "../src/mod.js"
+import Mod from "./mod.js"
 import {func, project, val} from "../src/project.js"
 import Sprite from "../src/sprite.js"
 import {playSound, rad, rnd, rndi} from "../src/system.js"

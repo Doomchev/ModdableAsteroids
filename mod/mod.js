@@ -8,6 +8,6 @@ export default class Mod {
 
     initLevel(num) {}
     initAsteroid(asteroid) {}
-    asteroidHit(asteroid) {}
+    onAsteroidHit(asteroid) {}
     destroyAsteroid(asteroid) {}
 }
