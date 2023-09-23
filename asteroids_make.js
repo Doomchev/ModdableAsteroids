@@ -150,7 +150,7 @@ project.allModules = [
     [new InfiniteLives(), false],
     [new DefaultWeapon(), true],
     [new DoubleBarreled(), true],
-    [new AsteroidBonus(0.1, 50), true],
+    [new AsteroidBonus(0.1, 50, 100), true],
     [new Invulnerability(0.05), true],
 ]
 

@@ -1,5 +1,5 @@
 export default class Mod {
-    get name() {return ""}
+    get name() {return "Module"}
     actions = []
     init() {}
     reset() {}

@@ -8,11 +8,12 @@ import SetSize from "../src/actions/sprite/set_size.js"
 import SetAngle from "../src/actions/sprite/set_angle.js"
 
 export default class AsteroidBonus extends Mod {
-    constructor(probability, ammo) {
+    constructor(probability, ammo, maxAmmo) {
         super()
         this.registry = {
             probability: probability,
             ammo: ammo,
+            maxAmmo: maxAmmo,
             template: {},
         }
     }
@@ -42,7 +43,7 @@ export default class AsteroidBonus extends Mod {
 
     update() {
         let reg = project.registry
-        let ammo = this.registry.ammo
+        let ammo = Math.min(val.ammo.value + this.registry.ammo, this.registry.maxAmmo)
         val.bonuses.collisionWith(val.shipSprite, function(bonus) {
             val.currentWeapon = reg.weapon.doubleBarreled
             val.ammo.value = ammo
