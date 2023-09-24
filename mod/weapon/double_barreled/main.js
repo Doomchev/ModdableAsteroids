@@ -1,11 +1,11 @@
-import Weapon from "./weapon.js"
-import Sprite from "../../src/sprite.js"
-import Img from "../../src/image.js"
-import {project, val} from "../../src/project.js"
-import Constraint from "../../src/constraint.js"
-import Delayed from "../../src/actions/delayed.js"
-import {playSound} from "../../src/system.js"
-import DelayedRemove from "../../src/actions/sprite/delayed_remove.js"
+import Weapon from "../weapon.js"
+import Sprite from "../../../src/sprite.js"
+import Img from "../../../src/image.js"
+import {project, val} from "../../../src/project.js"
+import Constraint from "../../../src/constraint.js"
+import Delayed from "../../../src/actions/delayed.js"
+import {loadSound, loadTexture, playSound} from "../../../src/system.js"
+import DelayedRemove from "../../../src/actions/sprite/delayed_remove.js"
 
 export default class DoubleBarreled extends Weapon {
     get name() {
@@ -17,14 +17,27 @@ export default class DoubleBarreled extends Weapon {
         }
     }
 
+    loadAssets() {
+        this.texture = {
+            gunfire: loadTexture("gunfire.png"),
+            bullet: loadTexture("bullet.png"),
+            turret: loadTexture("turret.png"),
+        }
+
+        this.sound = {
+            bulletFire: loadSound("bullet.mp3"),
+            bulletHit: loadSound("bullet_hit.mp3"),
+        }
+    }
+
     init() {
         this.registry = {
-            turret: new Sprite(new Img(project.texture.turret), 0, 0, 2, 2),
+            turret: new Sprite(new Img(this.texture.turret), 0, 0, 2, 2),
             barrelEnd: [],
             gunDelay: new Delayed(project.key.fire, 0.10),
             bullet: {
                 layer: val.bullets,
-                image: new Img(project.texture.bullet),
+                image: new Img(this.texture.bullet),
                 size: 0.12,
                 speed: 30,
                 damage: 50,
@@ -32,10 +45,11 @@ export default class DoubleBarreled extends Weapon {
             },
             gunfire: {
                 layer: val.shipLayer,
-                image: new Img(project.texture.gunfire, undefined, undefined, undefined, undefined
+                image: new Img(this.texture.gunfire, undefined, undefined, undefined, undefined
                     , 0, 0.5),
                 size: 1,
             },
+            bonus: Sprite
         }
 
         let reg = this.registry
@@ -61,6 +75,10 @@ export default class DoubleBarreled extends Weapon {
                 bullet.setPositionAs(reg.barrelEnd[i])
                 bullet.turn(val.shipSprite.angle)
                 bullet.damage = 50
+                bullet.onHit = () => {
+                    playSound(this.sound.bulletHit)
+                }
+
 
                 let gunfire = Sprite.createFromTemplate(reg.gunfire)
                 gunfire.setPositionAs(reg.barrelEnd[i])
@@ -68,7 +86,7 @@ export default class DoubleBarreled extends Weapon {
                 gunfire.add(new DelayedRemove(gunfire, val.shipLayer, 0.05))
                 this.gunfire[i] = gunfire
             }
-            playSound("bullet")
+            playSound(this.sound.bulletFire)
             val.ammo.value -= 1
             if(val.ammo.value === 0) {
                 reg.turret.visible = false

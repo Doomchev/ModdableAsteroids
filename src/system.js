@@ -51,43 +51,44 @@ export function togglePause() {
     paused = !paused
 }
 
+// assets
+
+let assetSource = new Map()
+let assetPath = ""
+
 // textures
 
-let textureSource = new Map()
-export function addTextures(textureMap) {
-    for(let [name, src] of Object.entries(textureMap)) {
-        let texture = new Image();
-        texture._name = name
-        textureSource.set(texture, src)
-        project.texture[name] = texture
-    }
-}
-
-export function addTexturesToObjects(objects) {
-    for(let [name, texture] of Object.entries(project.texture)) {
-        objects.set(name + "Texture", texture)
-    }
+export function loadTexture(src) {
+    let texture = new Image();
+    assetSource.set(texture, assetPath + src)
+    return texture
 }
 
 // sound
 
 export let masterVolume = 0.25
 
-export function playSound(name) {
-    let sound = new Audio(project.sound[name].src)
-    sound.volume = masterVolume
-    sound.addEventListener("canplaythrough", (event) => sound.play())
+export function loadSound(src) {
+    let sound = new Audio()
+    assetSource.set(sound, assetPath + src)
+    return sound
 }
 
-export function loopedSound(name, loopStart, loopEnd, play) {
-    let sound = new Audio(project.sound[name].src)
+export function playSound(sound) {
+    let newSound = new Audio(sound.src)
+    newSound.volume = masterVolume
+    newSound.play()
+}
+
+export function loopedSound(sound, loopStart, loopEnd, play) {
+    let newSound = new Audio(sound.src)
     let loopLength = loopEnd - loopStart
     setInterval(function() {
-        if(sound.currentTime > loopEnd) sound.currentTime -= loopLength
+        if(newSound.currentTime > loopEnd) newSound.currentTime -= loopLength
     }, 5)
-    if(play) sound.play()
-    sound.volume = masterVolume
-    return sound
+    if(play) newSound.play()
+    newSound.volume = masterVolume
+    return newSound
 }
 
 // localization
@@ -121,6 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
         checkbox.name = moduleObject.constructor.name
         checkbox.checked = module[1]
         checkbox.module = moduleObject
+        moduleObject.path = module.length < 3 ? "" : module[2]
 
         div.appendChild(checkbox)
 
@@ -132,6 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
         mods.appendChild(div)
     })
 
+    let assetsToLoad = 0
     document.getElementById("start").onclick = function ()  {
         for(let div of mods.childNodes) {
             let element = div.childNodes[0]
@@ -139,7 +142,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         mods.style.display = "none"
 
-        let square = false
+        let square = true
 
         let body = document.body
         let canvas = document.getElementById("canvas")
@@ -160,67 +163,87 @@ document.addEventListener("DOMContentLoaded", function() {
         project.canvas = Canvas.create(square ? 16 : 9, 16, canvas.width, canvas.height)
         setCanvas(project.canvas)
 
-        project.loadTextures()
+        project.loadAssets()
+        mod.forEach(module => {
+            assetPath = module.path
+            if(module.loadAssets) module.loadAssets()
+        })
+        assetPath = "=error="
 
-        let imagesToLoad = textureSource.size
-        textureSource.forEach((src, image) => {
-            image.onload = () => {
-                imagesToLoad--
-                if (imagesToLoad <= 0) {
-                    project.init()
-                    mod.forEach(module => module.init())
-                    exportProject()
-
-                    let apsTime = 0, realAps = 0, apsCounter = 0
-                    setInterval(function () {
-                        if(paused) {
-                            project.update()
-                        } else {
-                            project.actions.forEach(action => action.execute())
-                            project.update()
-                            mod.forEach(module => {
-                                module.actions.forEach(action => action.execute())
-                                module.update()
-                            })
-                        }
-
-                        for (const key of Object.values(project.key)) {
-                            if (!(key instanceof Object)) continue
-                            key._wasPressed = false
-                        }
-
-                        let time = new Date().getTime()
-                        if (time >= apsTime) {
-                            realAps = apsCounter
-                            apsTime = time + 1000
-                            apsCounter = 0
-                        } else {
-                            apsCounter++
-                        }
-                    }, 1000 / aps)
-
-                    let fpsTime = 0, realFps = 0, fpsCounter = 0
-                    setInterval(function () {
-                        let time = new Date().getTime()
-                        if (time >= fpsTime) {
-                            realFps = fpsCounter
-                            fpsTime = time + 1000
-                            fpsCounter = 0
-                        } else {
-                            fpsCounter++
-                        }
-
-                        currentCanvas.draw()
-                        mod.forEach(module => module.draw())
-
-                        //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
-                    }, 1000.0 / 150)
+        assetsToLoad = assetSource.size
+        assetSource.forEach((src, asset) => {
+            if(asset instanceof Audio) {
+                addAudioListener(asset)
+            } else {
+                asset.onload = () => {
+                    assetsToLoad--
+                    if (assetsToLoad <= 0) start()
                 }
             }
-            image.src = src
+            asset.src = src
         })
     }
+
+    function addAudioListener(audio) {
+        let listener = () => {
+            assetsToLoad--
+            audio.removeEventListener("canplaythrough", listener, false)
+            if (assetsToLoad <= 0) start()
+        }
+        audio.addEventListener("canplaythrough", listener, false);
+    }
 })
+
+function start() {
+    project.init()
+    mod.forEach(module => module.init())
+    exportProject()
+
+    let apsTime = 0, realAps = 0, apsCounter = 0
+    setInterval(function () {
+        if(paused) {
+            project.update()
+        } else {
+            project.actions.forEach(action => action.execute())
+            project.update()
+            mod.forEach(module => {
+                module.actions.forEach(action => action.execute())
+                module.update()
+            })
+        }
+
+        for (const key of Object.values(project.key)) {
+            if (!(key instanceof Object)) continue
+            key._wasPressed = false
+        }
+
+        let time = new Date().getTime()
+        if (time >= apsTime) {
+            realAps = apsCounter
+            apsTime = time + 1000
+            apsCounter = 0
+        } else {
+            apsCounter++
+        }
+    }, 1000 / aps)
+
+    let fpsTime = 0, realFps = 0, fpsCounter = 0
+    setInterval(function () {
+        let time = new Date().getTime()
+        if (time >= fpsTime) {
+            realFps = fpsCounter
+            fpsTime = time + 1000
+            fpsCounter = 0
+        } else {
+            fpsCounter++
+        }
+
+        currentCanvas.draw()
+        mod.forEach(module => module.draw())
+
+        //ctx.fillText(`fps: ${realFps}, aps: ${realAps}`, 5, 5)
+    }, 1000.0 / 150)
+}
 
 document.addEventListener("keydown", event => {
     switch (event.code) {

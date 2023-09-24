@@ -2,7 +2,7 @@ import NumericVariable from "./src/variable/number.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {addTextures, align, loc, rad} from "./src/system.js"
+import {align, loadSound, loadTexture, loc, rad} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Img from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -26,24 +26,10 @@ import CameraMovement from "./mod/camera_movement.js"
 import ExtraLifeBonus from "./mod/extra_life_bonus.js"
 import BonusForLevel from "./mod/bonus_for_level.js"
 import InfiniteLives from "./mod/infinite_lives.js"
-import DefaultWeapon from "./mod/weapon/default.js"
-import DoubleBarreled from "./mod/weapon/double_barreled.js"
+import DefaultWeapon from "./mod/weapon/default/main.js"
+import DoubleBarreled from "./mod/weapon/double_barreled/main.js"
 import AsteroidBonus from "./mod/asteroid_bonus.js"
 import Invulnerability from "./mod/invulnerability.js"
-
-project.loadTextures = () => {
-    addTextures({
-        ship: "textures/ship.png",
-        flame: "textures/flame.png",
-        asteroid: "textures/asteroid.png",
-        explosion: "textures/explosion.png",
-        fireball: "textures/fireball.png",
-        turret: "textures/turret.png",
-        bullet: "textures/bullet.png",
-        gunfire: "textures/gunfire.png",
-        bonus: "textures/bonus.png",
-    })
-}
 
 project.locales.en = {
     // hud
@@ -126,20 +112,6 @@ setRegistry({
     }
 })
 
-project.sound = {
-    fireball: new Audio("sounds/fireball.mp3"),
-    bullet: new Audio("sounds/bullet.mp3"),
-    bulletHit: new Audio("sounds/bullet_hit.mp3"),
-    explosion: new Audio("sounds/explosion.mp3"),
-    death: new Audio("sounds/death.mp3"),
-    extraLife: new Audio("sounds/extra_life.mp3"),
-    flame: new Audio("sounds/flame.mp3"),
-    newLevel: new Audio("sounds/new_level.mp3"),
-    gameOver: new Audio("sounds/game_over.mp3"),
-    music: new Audio("sounds/music.mp3"),
-    bonus: new Audio("sounds/bonus.mp3"),
-}
-
 project.allModules = [
     [new AsteroidPieces(), true],
     [new AsteroidsHealth(), true],
@@ -148,15 +120,34 @@ project.allModules = [
     [new ExtraLifeBonus(25000), true],
     [new BonusForLevel(1000), true],
     [new InfiniteLives(), false],
-    [new DefaultWeapon(), true],
-    [new DoubleBarreled(), true],
+    [new DefaultWeapon(), true, "mod/weapon/default/"],
+    [new DoubleBarreled(), true, "mod/weapon/double_barreled/"],
     [new AsteroidBonus(0.1, 50, 100), true],
     [new Invulnerability(0.05), true],
 ]
 
-project.init = () => {
-    let textures = project.texture
+project.loadAssets = () => {
+    val.texture = {
+        ship: loadTexture("textures/ship.png"),
+        flame: loadTexture("textures/flame.png"),
+        asteroid: loadTexture("textures/asteroid.png"),
+        explosion: loadTexture("textures/explosion.png"),
+        bonus: loadTexture("textures/bonus.png"),
+    }
 
+    val.sound = {
+        explosion: loadSound("sounds/explosion.mp3"),
+        death: loadSound("sounds/death.mp3"),
+        extraLife: loadSound("sounds/extra_life.mp3"),
+        flame: loadSound("sounds/flame.mp3"),
+        newLevel: loadSound("sounds/new_level.mp3"),
+        gameOver: loadSound("sounds/game_over.mp3"),
+        music: loadSound("sounds/music.mp3"),
+        bonus: loadSound("sounds/bonus.mp3"),
+    }
+}
+
+project.init = () => {
     val.score = new NumericVariable(0)
     val.lives = new NumericVariable(val.startingLives)
     val.level = new NumericVariable(0)
@@ -168,15 +159,15 @@ project.init = () => {
     val.bonuses = new Layer()
     val.explosions = new Layer()
 
-    val.asteroidImages = new ImageArray(textures.asteroid, 8, 4
+    val.asteroidImages = new ImageArray(val.texture.asteroid, 8, 4
         , 0.5, 0.5, 1.5, 1.5)
     val.asteroidType.default.images = val.asteroidImages
 
-    val.explosionImages = new ImageArray(textures.explosion
-        , 4, 4, 0.5, 0.5, 2, 2)
+    val.explosionImages = new ImageArray(val.texture.explosion, 4, 4
+        , 0.5, 0.5, 2, 2)
     project.registry.template = {
         ship: {
-            image: new Img(textures.ship, 0, 0, undefined, undefined
+            image: new Img(val.texture.ship, 0, 0, undefined, undefined
                 , 0.5, 0.5, 1.75, 1.75),
             angle: 0,
             speed: 0,
@@ -195,7 +186,7 @@ project.init = () => {
     val.shipSprite = Sprite.createFromTemplate(template.ship)
     val.shipLayer.add(val.shipSprite)
 
-    val.flameImages = new ImageArray(textures.flame, 3, 3)
+    val.flameImages = new ImageArray(val.texture.flame, 3, 3)
     val.flameSprite = Sprite.create(val.shipLayer, val.flameImages._images[0], -0.9, 0
         , 1, 1, rad(-90))
 

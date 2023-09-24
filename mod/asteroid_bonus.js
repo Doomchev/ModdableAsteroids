@@ -28,7 +28,7 @@ export default class AsteroidBonus extends Mod {
     }
 
     init() {
-        this.registry.template.image = new Img(project.texture.bonus)
+        this.registry.template.image = new Img(val.texture.bonus)
     }
 
     destroyAsteroid(asteroid) {
@@ -48,7 +48,7 @@ export default class AsteroidBonus extends Mod {
             val.currentWeapon = reg.weapon.doubleBarreled
             val.ammo.value = ammo
             val.currentWeapon.registry.turret.visible = true
-            playSound("bonus")
+            playSound(val.sound.bonus)
             val.bonuses.remove(bonus)
         })
     }

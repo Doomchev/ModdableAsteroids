@@ -21,7 +21,7 @@ export default class AsteroidsHealth extends Mod {
             asteroid.hp -= bullet.damage
             if(asteroid.hp <= 0) func.destroyAsteroid(asteroid, bullet.angle)
             func.createSingleExplosion(bullet, bullet.width * 2, false)
-            playSound("bulletHit")
+            if(bullet.onHit) bullet.onHit()
         }
     }
 

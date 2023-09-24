@@ -1,7 +1,5 @@
 export let project = {
-    texture: {},
-    sound: {},
-    locale: "ru",
+    locale: "en",
     locales: {},
     key: {},
     scene: [],
@@ -13,7 +11,7 @@ export let project = {
     _function: {},
     _data: "",
 
-    loadTextures: () => {},
+    loadAssets: () => {},
     init: () => {},
     update: () => {},
 }

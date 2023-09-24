@@ -21,7 +21,7 @@ export default class ExtraLifeBonus extends Mod {
     update() {
         if(val.score.value >= this.nextLifeBonus) {
             val.lives.value++
-            playSound("extraLife")
+            playSound(val.sound.extraLife)
             this.nextLifeBonus += this.lifeBonus
         }
     }

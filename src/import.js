@@ -1,4 +1,4 @@
-import {addTextures, addTexturesToObjects, collisionSprite1, collisionSprite2, Loc} from "./system.js"
+import {addTextures, Loc} from "./system.js"
 import {setCurrentCanvas} from "./canvas.js"
 import {classes} from "./classes.js"
 import {current} from "./variable/sprite.js"
@@ -18,8 +18,6 @@ export function importTextures() {
 export function importProject() {
     objects.clear()
     objects.set("current", current)
-    objects.set("collisionSprite1", collisionSprite1)
-    objects.set("collisionSprite2", collisionSprite2)
 
     addTexturesToObjects(objects)
 
@@ -159,7 +157,7 @@ function readValue() {
     let firstSymbol = readSymbol()
     switch (firstSymbol) {
         case "[":
-            expect("[")
+            pos++
             let array = []
             while(readSymbol() !== "]") {
                 array.push(readValue())
@@ -193,4 +191,10 @@ function readValue() {
         return parseFloat(data.substring(start, pos))
     }
     return readObject()
+}
+
+function addTexturesToObjects(objects) {
+    for(let [name, texture] of Object.entries(project.texture)) {
+        objects.set(name + "Texture", texture)
+    }
 }

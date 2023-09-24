@@ -26,9 +26,8 @@ export function initUpdate() {
 
     let currentState = state.alive
 
-    loopedSound("music", 0, 1.81, true)
-    let flameSound = loopedSound("flame", 1.1, 1.9, true)
-    flameSound.volume = masterVolume
+    loopedSound(val.sound.music, 0, 1.81, true)
+    let flameSound = loopedSound(val.sound.flame, 1.1, 1.9, true)
 
     // functions
 
@@ -74,7 +73,6 @@ export function initUpdate() {
 
     func.destroyAsteroid = function (asteroid, angle) {
         func.createExplosion(asteroid, asteroid.width)
-        playSound("explosion")
         mod.forEach(module => module.destroyAsteroid(asteroid, angle))
         func.removeAsteroid(asteroid)
     }
@@ -84,7 +82,7 @@ export function initUpdate() {
         explosion.width = explosion.height = size
         explosion.moveTo(sprite.centerX, sprite.centerY)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
-        if(playSnd) playSound("explosion")
+        if(playSnd) playSound(val.sound.explosion)
     }
     func.createSingleExplosion = func.createExplosion
 
@@ -133,11 +131,11 @@ export function initUpdate() {
                     if(lives.value === 0) {
                         messageLabel.show(loc("gameOver"))
                         currentState = state.gameOver
-                        playSound("gameOver")
+                        playSound(val.sound.gameOver)
                     } else {
                         messageLabel.show(loc("pressEnter"))
                         currentState = state.dead
-                        playSound("death")
+                        playSound(val.sound.death)
                     }
                     func.destroyAsteroid(asteroid, 0)
                 })
@@ -165,7 +163,7 @@ export function initUpdate() {
             level.value++
             func.createAsteroids(level.value)
             mod.forEach(module => module.initLevel(level.value))
-            playSound("newLevel")
+            playSound(val.sound.newLevel)
         }
 
         bullets.collisionWith(asteroids, (bullet, asteroid) => {
