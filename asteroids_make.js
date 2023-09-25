@@ -94,7 +94,7 @@ setRegistry({
         limit: 7.5,
         dAngle: 180,
     },
-    weapons: [],
+    weapon: {},
     state: {
         alive: 0,
         dead: 1,

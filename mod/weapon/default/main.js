@@ -22,28 +22,26 @@ export default class DefaultWeapon extends Weapon {
     }
 
     init() {
-        this.registry = {
-            bullet: {
-                layer: val.bullets,
-                images: new ImageArray(this.fireballImage, 1, 16
-                    , 43 / 48, 5.5 / 12, 5.25, 1.5),
-                size: 0.3,
-                speed: 15,
-                //angle: new Rnd(rad(-10), rad(10)),
-                animationSpeed: 16.0,
-            },
-            gun: Sprite.create(undefined, undefined, 1, 0),
-            gunDelay: new Delayed(project.key.fire, 0.15),
+        this.bullet = {
+            layer: val.bullets,
+            images: new ImageArray(this.fireballImage, 1, 16
+                , 43 / 48, 5.5 / 12, 5.25, 1.5),
+            size: 0.3,
+            speed: 15,
+            //angle: new Rnd(rad(-10), rad(10)),
+            animationSpeed: 16.0,
         }
-        this.actions = [new Constraint(this.registry.gun, val.shipSprite),]
-        val.weapons.push(this)
+        this.gun = Sprite.create(undefined, undefined, 1, 0),
+        this.gunDelay = new Delayed(project.key.fire, 0.15),
+        this.actions = [new Constraint(this.gun, val.shipSprite),]
+        val.weapon.default = this
         val.currentWeapon = this
     }
 
     fire() {
-        if(this.registry.gunDelay.active()) {
-            let bullet = Sprite.createFromTemplate(this.registry.bullet)
-            bullet.setPositionAs(this.registry.gun)
+        if(this.gunDelay.active()) {
+            let bullet = Sprite.createFromTemplate(this.bullet)
+            bullet.setPositionAs(this.gun)
             bullet.turn(val.shipSprite.angle)
             bullet.damage = 100
             playSound(this.fireSound)
