@@ -20,7 +20,7 @@ import Rnd from "./src/function/rnd.js"
 import RandomSign, {rnds} from "./src/function/random_sign.js"
 import Mul from "./src/function/mul.js"
 import AsteroidPieces from "./mod/asteroid_pieces.js"
-import AsteroidsHealth from "./mod/asteroids_health.js"
+import AsteroidsHealth from "./mod/asteroid_health.js"
 import MultiExplosion from "./mod/multi_explosion.js"
 import CameraMovement from "./mod/camera_movement.js"
 import ExtraLifeBonus from "./mod/extra_life_bonus.js"
@@ -94,7 +94,7 @@ setRegistry({
         limit: 7.5,
         dAngle: 180,
     },
-    weapon: {},
+    weapons: [],
     state: {
         alive: 0,
         dead: 1,
@@ -132,7 +132,6 @@ project.loadAssets = () => {
         flame: loadTexture("textures/flame.png"),
         asteroid: loadTexture("textures/asteroid.png"),
         explosion: loadTexture("textures/explosion.png"),
-        bonus: loadTexture("textures/bonus.png"),
     }
 
     val.sound = {

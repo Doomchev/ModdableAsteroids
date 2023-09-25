@@ -36,7 +36,7 @@ export default class DefaultWeapon extends Weapon {
             gunDelay: new Delayed(project.key.fire, 0.15),
         }
         this.actions = [new Constraint(this.registry.gun, val.shipSprite),]
-        val.weapon.default = this
+        val.weapons.push(this)
         val.currentWeapon = this
     }
 

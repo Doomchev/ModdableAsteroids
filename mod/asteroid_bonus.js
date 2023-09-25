@@ -8,16 +8,6 @@ import SetSize from "../src/actions/sprite/set_size.js"
 import SetAngle from "../src/actions/sprite/set_angle.js"
 
 export default class AsteroidBonus extends Mod {
-    constructor(probability, ammo, maxAmmo) {
-        super()
-        this.registry = {
-            probability: probability,
-            ammo: ammo,
-            maxAmmo: maxAmmo,
-            template: {},
-        }
-    }
-
     get name() {
         switch (project.locale) {
             case "ru":
@@ -27,26 +17,24 @@ export default class AsteroidBonus extends Mod {
         }
     }
 
-    init() {
-        this.registry.template.image = new Img(val.texture.bonus)
-    }
-
     destroyAsteroid(asteroid) {
-        if(rnd() <= this.registry.probability) {
-            let bonus = Sprite.createFromTemplate(this.registry.template)
-            bonus.setPositionAs(asteroid)
-            bonus.add(new SetSize(bonus, new Cos(0.45, 0.1, 0, 1)))
-            bonus.add(new SetAngle(bonus, new Cos(0.9, rad(15))))
-            val.bonuses.add(bonus)
-        }
+        val.weapons.forEach(weapon => {
+            if(rnd() <= weapon.registry.probability) {
+                let bonus = Sprite.createFromTemplate(weapon.registry.bonus)
+                bonus.weapon = weapon
+                bonus.setPositionAs(asteroid)
+                bonus.add(new SetSize(bonus, new Cos(0.45, 0.1, 0, 1)))
+                bonus.add(new SetAngle(bonus, new Cos(0.9, rad(15))))
+                val.bonuses.add(bonus)
+            }
+        })
     }
 
     update() {
-        let reg = project.registry
-        let ammo = Math.min(val.ammo.value + this.registry.ammo, this.registry.maxAmmo)
         val.bonuses.collisionWith(val.shipSprite, function(bonus) {
-            val.currentWeapon = reg.weapon.doubleBarreled
-            val.ammo.value = ammo
+            let weapon = bonus.weapon
+            val.currentWeapon = weapon
+            val.ammo.value = Math.min(val.ammo.value + weapon.registry.ammo, weapon.registry.maxAmmo)
             val.currentWeapon.registry.turret.visible = true
             playSound(val.sound.bonus)
             val.bonuses.remove(bonus)

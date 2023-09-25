@@ -22,6 +22,7 @@ export default class DoubleBarreled extends Weapon {
             gunfire: loadTexture("gunfire.png"),
             bullet: loadTexture("bullet.png"),
             turret: loadTexture("turret.png"),
+            bonus: loadTexture("bonus.png"),
         }
 
         this.sound = {
@@ -49,11 +50,13 @@ export default class DoubleBarreled extends Weapon {
                     , 0, 0.5),
                 size: 1,
             },
-            bonus: Sprite
+            bonus: new Sprite(new Img(this.texture.bonus)),
+            probability: 0.1,
+            ammo: 50,
+            maxAmmo: 100,
         }
-
         let reg = this.registry
-        reg.weapon = this
+
         for(let i = 0; i < 2; i++) {
             let barrelEnd = new Sprite(undefined, 0.5, 0.4 * (i === 0 ? -1 : 1))
             reg.barrelEnd.push(barrelEnd)
@@ -61,7 +64,7 @@ export default class DoubleBarreled extends Weapon {
         }
 
         this.gunfire = new Array(2)
-        val.weapon.doubleBarreled = this
+        val.weapons.push(this)
 
         reg.turret.visible = false
         val.shipLayer.add(reg.turret)
