@@ -19,23 +19,22 @@ export default class AsteroidBonus extends Mod {
 
     destroyAsteroid(asteroid) {
         for(const[, weapon] of Object.entries(val.weapon)) {
-            if(rnd() <= weapon.probability) {
-                let bonus = Sprite.createFromTemplate(weapon.bonus)
-                bonus.weapon = weapon
-                bonus.setPositionAs(asteroid)
-                bonus.add(new SetSize(bonus, new Cos(0.45, 0.1, 0, 1)))
-                bonus.add(new SetAngle(bonus, new Cos(0.9, rad(15))))
-                val.bonuses.add(bonus)
-            }
+            if(rnd() > weapon.probability) continue
+            if(!weapon.bonus) continue
+
+            let bonus = Sprite.createFromTemplate(weapon.bonus)
+            bonus.weapon = weapon
+            bonus.setPositionAs(asteroid)
+            bonus.add(new SetSize(bonus, new Cos(0.45, 0.1, 0, 1)))
+            bonus.add(new SetAngle(bonus, new Cos(0.9, rad(15))))
+            val.bonuses.add(bonus)
+            return
         }
     }
 
     update() {
         val.bonuses.collisionWith(val.shipSprite, function(bonus) {
-            let weapon = bonus.weapon
-            val.currentWeapon = weapon
-            val.ammo.value = Math.min(val.ammo.value + weapon.ammo, weapon.maxAmmo)
-            weapon.turret.visible = true
+            bonus.weapon.collect()
             playSound(val.sound.bonus)
             val.bonuses.remove(bonus)
         })

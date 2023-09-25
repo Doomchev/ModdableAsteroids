@@ -93,6 +93,12 @@ export default class DoubleBarreled extends Weapon {
         }
     }
 
+    collect() {
+        val.currentWeapon = this
+        val.ammo.value = Math.min(val.ammo.value + this.ammo, this.maxAmmo)
+        this.turret.visible = true
+    }
+
     update() {
         let ship = val.shipSprite
         let turret = this.turret
