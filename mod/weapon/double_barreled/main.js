@@ -60,7 +60,6 @@ export default class DoubleBarreled extends Weapon {
         this.ammo = new NumericVariable(0)
         this.bonusAmmo = 50
         this.maxAmmo = 100
-        this.damage = 50
 
         for(let i = 0; i < 2; i++) {
             let barrelEnd = new Sprite(undefined, 0.5, 0.4 * (i === 0 ? -1 : 1))
@@ -91,7 +90,7 @@ export default class DoubleBarreled extends Weapon {
                 let bullet = Sprite.createFromTemplate(this.bullet)
                 bullet.setPositionAs(this.barrelEnd[i])
                 bullet.turn(val.shipSprite.angle)
-                bullet.damage = this.damage
+                bullet.damage = this.bullet.damage
                 bullet.onHit = () => {
                     playSound(this.sound.bulletHit)
                 }

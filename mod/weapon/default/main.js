@@ -30,10 +30,13 @@ export default class DefaultWeapon extends Weapon {
             speed: 15,
             //angle: new Rnd(rad(-10), rad(10)),
             animationSpeed: 16.0,
+            damage: 100
         }
+
         this.gun = Sprite.create(undefined, undefined, 1, 0)
         this.gunDelay = new Delayed(project.key.fire, 0.15)
         this.actions = [new Constraint(this.gun, val.shipSprite)]
+
         val.weapon.default = this
         val.currentWeapon = this
     }
@@ -45,7 +48,7 @@ export default class DefaultWeapon extends Weapon {
             let bullet = Sprite.createFromTemplate(this.bullet)
             bullet.setPositionAs(this.gun)
             bullet.turn(val.shipSprite.angle)
-            bullet.damage = 100
+            bullet.damage = this.bullet.damage
             playSound(this.fireSound)
         }
     }
