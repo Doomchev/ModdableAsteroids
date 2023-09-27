@@ -22,7 +22,8 @@ export default class MissileWeapon extends Weapon {
 
     loadAssets() {
         this.missileTexture = loadTexture("missile.png")
-        this.bonus = loadTexture("bonus.png")
+        this.iconTexture = loadTexture("icon.png")
+        this.bonusTexture = loadTexture("bonus.png")
         this.fire = loadSound("fire.ogg")
     }
 
@@ -35,7 +36,7 @@ export default class MissileWeapon extends Weapon {
             speed: 15,
         }
 
-        this.bonus = new Sprite(new Img(this.bonus))
+        this.bonus = new Sprite(new Img(this.bonusTexture))
         this.probability = 0.1
         this.ammo = new NumericVariable(3)
         this.maxAmmo = 8
@@ -48,7 +49,7 @@ export default class MissileWeapon extends Weapon {
         this.delay = new Delayed(key, 0.5)
         val.weapon.missile = this
 
-        val.hud.add(new Label(val.hudArea, [loc("missiles"), this.ammo], align.left, align.bottom))
+        val.hud.add(new Label(val.hudArea, [this.ammo], align.left, align.bottom, "I1", this.iconTexture))
     }
 
     update() {

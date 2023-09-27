@@ -3,12 +3,13 @@ import {align, ctx} from "../system.js"
 import {xToScreen, yToScreen} from "../canvas.js"
 
 export default class Label extends Shape {
-    constructor(sprite, items, horizontalAlign, verticalAlign, format) {
+    constructor(sprite, items, horizontalAlign, verticalAlign, format, image) {
         super(sprite.centerX, sprite.centerY, sprite.width, sprite.height)
         this.items = items
         this.horizontalAlign = horizontalAlign
         this.verticalAlign = verticalAlign
         this.format = format
+        this.image = image
     }
 
     draw() {
@@ -32,6 +33,12 @@ export default class Label extends Shape {
         const metrics = ctx.measureText(text)
         let width = metrics.width
         let height = metrics.actualBoundingBoxDescent
+        if (this.format?.startsWith("I")) {
+            height *= 2
+            let k = height / this.image.height
+            width = this.image.width * k * Math.round(1.0 * parseInt(text) / parseInt(formatString))
+        }
+
         switch(this.horizontalAlign) {
             case align.left:
                 x = xToScreen(this.leftX)
@@ -55,8 +62,16 @@ export default class Label extends Shape {
                 break
         }
 
-        ctx.fillStyle = "white"
-        ctx.fillText(text, x, y)
+        if (this.format?.startsWith("I")) {
+            let value = Math.round(1.0 * parseInt(text) / parseInt(formatString))
+            width /= value
+            for(let i = 0; i < value ; i++) {
+                ctx.drawImage(this.image, 0, 0, this.image.width, this.image.height, x + i * width, y, width, height)
+            }
+        } else {
+            ctx.fillStyle = "white"
+            ctx.fillText(text, x, y)
+        }
     }
 
     show(...objects) {

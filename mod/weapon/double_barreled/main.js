@@ -26,6 +26,7 @@ export default class DoubleBarreled extends Weapon {
             bullet: loadTexture("bullet.png"),
             turret: loadTexture("turret.png"),
             bonus: loadTexture("bonus.png"),
+            icon: loadTexture("icon.png")
         }
 
         this.sound = {
@@ -73,7 +74,7 @@ export default class DoubleBarreled extends Weapon {
         this.turret.visible = false
         val.shipLayer.add(this.turret)
 
-        val.hud.add(new Label(val.hudArea, [loc("ammo"), this.ammo], align.right, align.bottom))
+        val.hud.add(new Label(val.hudArea, [this.ammo], align.right, align.bottom, "I10", this.texture.icon))
     }
 
     collect() {

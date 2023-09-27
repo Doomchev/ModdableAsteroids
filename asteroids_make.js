@@ -196,7 +196,7 @@ project.init = () => {
 
     val.scoreLabel = new Label(val.hudArea, [val.score], align.left, align.top, "Z8")
     val.levelLabel = new Label(val.hudArea, [loc("level"), val.level], align.center, align.top)
-    val.livesLabel = new Label(val.hudArea, [val.lives], align.right, align.top, "R ∆")
+    val.livesLabel = new Label(val.hudArea, [val.lives], align.right, align.top, "I1", val.texture.ship)
 
     val.messageLabel = new Label(val.hudArea, [""], align.center, align.center)
     val.hud = new Layer(val.scoreLabel, val.levelLabel, val.livesLabel, val.messageLabel)
