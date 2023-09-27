@@ -154,7 +154,6 @@ project.init = () => {
     val.score = new NumericVariable(0)
     val.lives = new NumericVariable(val.startingLives)
     val.level = new NumericVariable(0)
-    val.ammo = new NumericVariable(0)
 
     val.bullets = new Layer()
     val.shipLayer = new Layer()
@@ -198,10 +197,9 @@ project.init = () => {
     val.scoreLabel = new Label(val.hudArea, [val.score], align.left, align.top, "Z8")
     val.levelLabel = new Label(val.hudArea, [loc("level"), val.level], align.center, align.top)
     val.livesLabel = new Label(val.hudArea, [val.lives], align.right, align.top, "R ∆")
-    val.ammoLabel = new Label(val.hudArea, [loc("ammo"), val.ammo], align.right, align.bottom)
 
     val.messageLabel = new Label(val.hudArea, [""], align.center, align.center)
-    val.hud = new Layer(val.scoreLabel, val.levelLabel, val.livesLabel, val.messageLabel, val.ammoLabel)
+    val.hud = new Layer(val.scoreLabel, val.levelLabel, val.livesLabel, val.messageLabel)
 
     project.background = "rgb(9, 44, 84)"
     project.scene = [val.bullets, val.asteroids, val.bonuses, val.shipLayer, val.explosions, val.hud]

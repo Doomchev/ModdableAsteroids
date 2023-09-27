@@ -4,9 +4,11 @@ import Img from "../../../src/image.js"
 import {project, val} from "../../../src/project.js"
 import Constraint from "../../../src/constraint.js"
 import Delayed from "../../../src/actions/delayed.js"
-import {loadSound, loadTexture, playSound} from "../../../src/system.js"
+import {align, loadSound, loadTexture, loc, playSound} from "../../../src/system.js"
 import DelayedRemove from "../../../src/actions/sprite/delayed_remove.js"
 import {current} from "../../../src/variable/sprite.js"
+import NumericVariable from "../../../src/variable/number.js"
+import Label from "../../../src/gui/label.js"
 
 export default class DoubleBarreled extends Weapon {
     get name() {
@@ -55,8 +57,10 @@ export default class DoubleBarreled extends Weapon {
 
         this.bonus = new Sprite(new Img(this.texture.bonus))
         this.probability = 0.1
-        this.ammo = 50
+        this.ammo = new NumericVariable(0)
+        this.bonusAmmo = 50
         this.maxAmmo = 100
+        this.damage = 50
 
         for(let i = 0; i < 2; i++) {
             let barrelEnd = new Sprite(undefined, 0.5, 0.4 * (i === 0 ? -1 : 1))
@@ -69,11 +73,13 @@ export default class DoubleBarreled extends Weapon {
 
         this.turret.visible = false
         val.shipLayer.add(this.turret)
+
+        val.hud.add(new Label(val.hudArea, [loc("ammo"), this.ammo], align.right, align.bottom))
     }
 
     collect() {
         val.currentWeapon = this
-        val.ammo.value = Math.min(val.ammo.value + this.ammo, this.maxAmmo)
+        this.ammo.increment(this.bonusAmmo, this.maxAmmo)
         this.turret.visible = true
     }
 
@@ -81,11 +87,11 @@ export default class DoubleBarreled extends Weapon {
         if(val.currentWeapon !== this) return
 
         if(this.gunDelay.active()) {
-            for (let i = 0; i < 2; i++) {
+            for (let i = 0; i <= 1; i++) {
                 let bullet = Sprite.createFromTemplate(this.bullet)
                 bullet.setPositionAs(this.barrelEnd[i])
                 bullet.turn(val.shipSprite.angle)
-                bullet.damage = 50
+                bullet.damage = this.damage
                 bullet.onHit = () => {
                     playSound(this.sound.bulletHit)
                 }
@@ -97,8 +103,8 @@ export default class DoubleBarreled extends Weapon {
                 this.gunfire[i] = gunfire
             }
             playSound(this.sound.bulletFire)
-            val.ammo.value -= 1
-            if(val.ammo.value === 0) {
+            this.ammo.decrement()
+            if(this.ammo.value === 0) {
                 this.turret.visible = false
                 val.currentWeapon = val.weapon.default
             }

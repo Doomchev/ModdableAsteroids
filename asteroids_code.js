@@ -62,7 +62,7 @@ export function initUpdate() {
     }
 
     func.removeAsteroid = function (asteroid) {
-        score.value += asteroid.type.score
+        score.increment(asteroid.type.score)
         asteroids.remove(asteroid)
     }
 
@@ -141,7 +141,7 @@ export function initUpdate() {
 
             messageLabel.show()
             if(currentState === state.dead) {
-                lives.value--
+                lives.decrement()
                 makeInvulnerable(2, 0.05)
             } else {
                 lives.value = val.startingLives
@@ -156,7 +156,7 @@ export function initUpdate() {
         }
 
         if(asteroids.isEmpty()) {
-            level.value++
+            level.increment()
             func.createAsteroids(level.value)
             mod.forEach(module => module.initLevel(level.value))
             playSound(val.sound.newLevel)

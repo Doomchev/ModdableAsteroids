@@ -17,6 +17,6 @@ export default class BonusForLevel extends Mod {
     }
 
     initLevel(level) {
-        if(level > 1) val.score.value += this.bonus
+        if(level > 1) val.score.increment(this.bonus)
     }
 }

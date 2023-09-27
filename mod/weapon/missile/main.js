@@ -48,8 +48,7 @@ export default class MissileWeapon extends Weapon {
         this.delay = new Delayed(key, 0.5)
         val.weapon.missile = this
 
-        let label = new Label(val.hudArea, [loc("missiles"), this.ammo], align.left, align.bottom)
-        val.hud.add(label)
+        val.hud.add(new Label(val.hudArea, [loc("missiles"), this.ammo], align.left, align.bottom))
     }
 
     update() {
@@ -58,12 +57,12 @@ export default class MissileWeapon extends Weapon {
             missile.setPositionAs(this.gun)
             missile.turn(val.shipSprite.angle)
             missile.damage = 300
-            this.ammo.value--
+            this.ammo.decrement()
             playSound(this.fire)
         }
     }
 
     collect() {
-        if(this.ammo.value < this.maxAmmo) this.ammo.value++
+        this.ammo.increment(1, this.maxAmmo)
     }
 }
