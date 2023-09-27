@@ -119,10 +119,6 @@ export function initUpdate() {
 
             flameSprite.visible = key.forward.isDown
 
-            if(key.fire.isDown) {
-                val.currentWeapon.fire()
-            }
-
             if(!val.invulnerable) {
                 shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
                     func.createExplosion(shipSprite, 2)

@@ -23,7 +23,7 @@ export default class MissileWeapon extends Weapon {
     loadAssets() {
         this.missileTexture = loadTexture("missile.png")
         this.bonus = loadTexture("bonus.png")
-        //this.bonus = loadSound("fireball.mp3")
+        this.fire = loadSound("fire.ogg")
     }
 
     init() {
@@ -59,7 +59,7 @@ export default class MissileWeapon extends Weapon {
             missile.turn(val.shipSprite.angle)
             missile.damage = 300
             this.ammo.value--
-            //playSound(this.fireSound)
+            playSound(this.fire)
         }
     }
 

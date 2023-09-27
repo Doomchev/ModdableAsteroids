@@ -36,6 +36,7 @@ export default class DoubleBarreled extends Weapon {
         this.turret = new Sprite(new Img(this.texture.turret), 0, 0, 2, 2)
         this.barrelEnd = []
         this.gunDelay = new Delayed(project.key.fire, 0.10)
+
         this.bullet = {
             layer: val.bullets,
             image: new Img(this.texture.bullet),
@@ -44,12 +45,14 @@ export default class DoubleBarreled extends Weapon {
             damage: 50,
             //angle = new Rnd(rad(-10), rad(10)),
         }
+
         this.gunfire = {
             layer: val.shipLayer,
             image: new Img(this.texture.gunfire, undefined, undefined, undefined, undefined
                 , 0, 0.5),
             size: 1,
         }
+
         this.bonus = new Sprite(new Img(this.texture.bonus))
         this.probability = 0.1
         this.ammo = 50

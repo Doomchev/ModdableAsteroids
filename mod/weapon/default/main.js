@@ -38,7 +38,9 @@ export default class DefaultWeapon extends Weapon {
         val.currentWeapon = this
     }
 
-    fire() {
+    update() {
+        if(val.currentWeapon !== this) return
+
         if(this.gunDelay.active()) {
             let bullet = Sprite.createFromTemplate(this.bullet)
             bullet.setPositionAs(this.gun)
