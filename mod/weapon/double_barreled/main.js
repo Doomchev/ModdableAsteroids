@@ -6,6 +6,7 @@ import Constraint from "../../../src/constraint.js"
 import Delayed from "../../../src/actions/delayed.js"
 import {loadSound, loadTexture, playSound} from "../../../src/system.js"
 import DelayedRemove from "../../../src/actions/sprite/delayed_remove.js"
+import {current} from "../../../src/variable/sprite.js"
 
 export default class DoubleBarreled extends Weapon {
     get name() {
@@ -67,7 +68,15 @@ export default class DoubleBarreled extends Weapon {
         val.shipLayer.add(this.turret)
     }
 
-    fire() {
+    collect() {
+        val.currentWeapon = this
+        val.ammo.value = Math.min(val.ammo.value + this.ammo, this.maxAmmo)
+        this.turret.visible = true
+    }
+
+    update() {
+        if(val.currentWeapon !== this) return
+
         if(this.gunDelay.active()) {
             for (let i = 0; i < 2; i++) {
                 let bullet = Sprite.createFromTemplate(this.bullet)
@@ -91,15 +100,7 @@ export default class DoubleBarreled extends Weapon {
                 val.currentWeapon = val.weapon.default
             }
         }
-    }
 
-    collect() {
-        val.currentWeapon = this
-        val.ammo.value = Math.min(val.ammo.value + this.ammo, this.maxAmmo)
-        this.turret.visible = true
-    }
-
-    update() {
         let ship = val.shipSprite
         let turret = this.turret
         turret.setPositionAs(ship)

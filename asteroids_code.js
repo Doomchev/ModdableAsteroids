@@ -27,7 +27,7 @@ export function initUpdate() {
     let currentState = state.alive
 
     loopedSound(val.sound.music, 0, 1.81, true)
-    let flameSound = loopedSound(val.sound.flame, 1.1, 1.9, true)
+    let flameSound = loopedSound(val.sound.flame, 1.1, 1.9)
 
     // functions
 
@@ -61,7 +61,7 @@ export function initUpdate() {
         return asteroid
     }
 
-    func.removeAsteroid= function (asteroid) {
+    func.removeAsteroid = function (asteroid) {
         score.value += asteroid.type.score
         asteroids.remove(asteroid)
     }

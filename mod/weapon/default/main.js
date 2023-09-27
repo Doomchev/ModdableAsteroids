@@ -31,9 +31,9 @@ export default class DefaultWeapon extends Weapon {
             //angle: new Rnd(rad(-10), rad(10)),
             animationSpeed: 16.0,
         }
-        this.gun = Sprite.create(undefined, undefined, 1, 0),
-        this.gunDelay = new Delayed(project.key.fire, 0.15),
-        this.actions = [new Constraint(this.gun, val.shipSprite),]
+        this.gun = Sprite.create(undefined, undefined, 1, 0)
+        this.gunDelay = new Delayed(project.key.fire, 0.15)
+        this.actions = [new Constraint(this.gun, val.shipSprite)]
         val.weapon.default = this
         val.currentWeapon = this
     }

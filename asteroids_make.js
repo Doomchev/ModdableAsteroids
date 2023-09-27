@@ -30,6 +30,7 @@ import DefaultWeapon from "./mod/weapon/default/main.js"
 import DoubleBarreled from "./mod/weapon/double_barreled/main.js"
 import AsteroidBonus from "./mod/asteroid_bonus.js"
 import Invulnerability from "./mod/invulnerability.js"
+import MissileWeapon from "./mod/weapon/missile/main.js"
 
 project.locales.en = {
     // hud
@@ -39,6 +40,7 @@ project.locales.en = {
     gameOver: "GAME OVER",
     paused: "PAUSED",
     ammo: "AMMO: ",
+    missiles: "MISSILES: ",
 
     // keys
 
@@ -63,6 +65,7 @@ project.locales.ru = {
     gameOver: "ИГРА ОКОНЧЕНА",
     paused: "ПАУЗА",
     ammo: "ПАТРОНЫ: ",
+    missiles: "РАКЕТЫ: ",
 
     left: "Повернуть влево",
     right: "Повернуть вправо",
@@ -122,7 +125,8 @@ project.allModules = [
     [new InfiniteLives(), false],
     [new DefaultWeapon(), true, "mod/weapon/default/"],
     [new DoubleBarreled(), true, "mod/weapon/double_barreled/"],
-    [new AsteroidBonus(0.1, 50, 100), true],
+    [new MissileWeapon(), true, "mod/weapon/missile/"],
+    [new AsteroidBonus(), true],
     [new Invulnerability(0.05), true],
 ]
 
@@ -189,14 +193,14 @@ project.init = () => {
     val.flameSprite = Sprite.create(val.shipLayer, val.flameImages._images[0], -0.9, 0
         , 1, 1, rad(-90))
 
-    let hudArea = new Shape(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
+    val.hudArea = new Shape(0, 0, currentCanvas.width - 1, currentCanvas.height - 1)
 
-    val.scoreLabel = new Label(hudArea, [val.score], align.left, align.top, "Z8")
-    val.levelLabel = new Label(hudArea, [loc("level"), val.level], align.center, align.top)
-    val.livesLabel = new Label(hudArea, [val.lives], align.right, align.top, "R ∆")
-    val.ammoLabel = new Label(hudArea, [loc("ammo"), val.ammo], align.right, align.bottom)
+    val.scoreLabel = new Label(val.hudArea, [val.score], align.left, align.top, "Z8")
+    val.levelLabel = new Label(val.hudArea, [loc("level"), val.level], align.center, align.top)
+    val.livesLabel = new Label(val.hudArea, [val.lives], align.right, align.top, "R ∆")
+    val.ammoLabel = new Label(val.hudArea, [loc("ammo"), val.ammo], align.right, align.bottom)
 
-    val.messageLabel = new Label(hudArea, [""], align.center, align.center)
+    val.messageLabel = new Label(val.hudArea, [""], align.center, align.center)
     val.hud = new Layer(val.scoreLabel, val.levelLabel, val.livesLabel, val.messageLabel, val.ammoLabel)
 
     project.background = "rgb(9, 44, 84)"
