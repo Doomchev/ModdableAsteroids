@@ -31,6 +31,7 @@ import DoubleBarreled from "./mod/weapon/double_barreled/main.js"
 import AsteroidBonus from "./mod/asteroid_bonus.js"
 import Invulnerability from "./mod/invulnerability.js"
 import MissileWeapon from "./mod/weapon/missile/main.js"
+import FriendlyFire from "./mod/weapon/missile/friendly_fire.js"
 
 project.locales.en = {
     // hud
@@ -126,6 +127,7 @@ project.allModules = [
     [new DefaultWeapon(), true, "mod/weapon/default/"],
     [new DoubleBarreled(), true, "mod/weapon/double_barreled/"],
     [new MissileWeapon(), true, "mod/weapon/missile/"],
+    [new FriendlyFire(), false],
     [new AsteroidBonus(), true],
     [new Invulnerability(0.05), true],
 ]

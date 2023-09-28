@@ -37,6 +37,17 @@ export default class MissileWeapon extends Weapon {
             parameters: {
                 damage: 300,
                 explosionSize: 5,
+            },
+            onHit: function() {
+                let missile = this
+                missile.size = missile.explosionSize
+                let inExplosion = []
+                missile.collisionWith(val.asteroids, (mis, asteroid) => {
+                    inExplosion.push(asteroid)
+                })
+                inExplosion.forEach((asteroid) => {
+                    func.destroyAsteroid(asteroid, missile.angleTo(asteroid))
+                })
             }
         }
 
@@ -61,16 +72,7 @@ export default class MissileWeapon extends Weapon {
             let missile = Sprite.createFromTemplate(this.missile)
             missile.setPositionAs(this.gun)
             missile.turn(val.shipSprite.angle)
-            missile.onHit = function() {
-                missile.width = missile.height = missile.explosionSize
-                let inExplosion = []
-                missile.collisionWith(val.asteroids, (mis, asteroid) => {
-                    inExplosion.push(asteroid)
-                })
-                inExplosion.forEach((asteroid) => {
-                    func.destroyAsteroid(asteroid, missile.angleTo(asteroid))
-                })
-            }
+            missile.onHit = this.missile.onHit
             this.ammo.decrement()
             playSound(this.fire)
         }

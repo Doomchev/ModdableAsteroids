@@ -86,6 +86,21 @@ export function initUpdate() {
     }
     func.createSingleExplosion = func.createExplosion
 
+    func.destroyShip = function() {
+        func.createExplosion(shipSprite, 2)
+        val.shipSprite.setFromTemplate(template.ship)
+        val.shipLayer.hide()
+        if(lives.value === 0) {
+            messageLabel.show(loc("gameOver"))
+            currentState = state.gameOver
+            playSound(val.sound.gameOver)
+        } else {
+            messageLabel.show(loc("pressEnter"))
+            currentState = state.dead
+            playSound(val.sound.death)
+        }
+    }
+
     // main
 
     project.update = () => {
@@ -121,24 +136,12 @@ export function initUpdate() {
 
             if(!val.invulnerable) {
                 shipSprite.collisionWith(asteroids, (sprite, asteroid) => {
-                    func.createExplosion(shipSprite, 2)
-                    shipSprite.setFromTemplate(template.ship)
-                    shipLayer.hide()
-                    if(lives.value === 0) {
-                        messageLabel.show(loc("gameOver"))
-                        currentState = state.gameOver
-                        playSound(val.sound.gameOver)
-                    } else {
-                        messageLabel.show(loc("pressEnter"))
-                        currentState = state.dead
-                        playSound(val.sound.death)
-                    }
+                    func.destroyShip()
                     func.destroyAsteroid(asteroid, 0)
                 })
             }
         } else if(key.continue.wasPressed) {
             shipLayer.show()
-
             messageLabel.show()
             if(currentState === state.dead) {
                 lives.decrement()

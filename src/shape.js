@@ -9,6 +9,14 @@ export default class Shape extends Renderable {
         this.halfHeight = 0.5 * height
     }
 
+    get size() {
+        return this.halfWidth * 2.0
+    }
+
+    set size(value) {
+        this.halfWidth = this.halfHeight = value * 0.5
+    }
+
     get width() {
         return this.halfWidth * 2.0
     }

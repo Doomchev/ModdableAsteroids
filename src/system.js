@@ -110,6 +110,8 @@ export function loc(stringName) {
 
 // listeners
 
+let square = true
+
 document.addEventListener("DOMContentLoaded", function() {
     let mods = document.getElementById("mods"), div
     project.allModules.forEach(module => {
@@ -141,8 +143,6 @@ document.addEventListener("DOMContentLoaded", function() {
             if (element?.module && element.checked) mod.push(element.module)
         }
         mods.style.display = "none"
-
-        let square = true
 
         let body = document.body
         let canvas = document.getElementById("canvas")
