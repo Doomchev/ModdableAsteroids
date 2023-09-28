@@ -114,6 +114,12 @@ export default class Sprite extends Shape {
         if(this.centerY >= bounds.bottomY) this.centerY -= bounds.height
     }
 
+    angleTo(sprite) {
+        return Math.atan2(this.centerY - sprite.centerY, this.centerX - sprite.centerX)
+    }
+
+    // collisions
+
     collisionWith(object, code) {
         object.collisionWithSprite(this, code)
     }
