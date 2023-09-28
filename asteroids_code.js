@@ -68,7 +68,7 @@ export function initUpdate() {
 
     func.onAsteroidHit = function(asteroid, bullet) {
         func.destroyAsteroid(asteroid, bullet.angle)
-        func.createSingleExplosion(bullet, 0.7, false)
+        func.createSingleExplosion(bullet, bullet.explosionSize, false)
     }
 
     func.destroyAsteroid = function (asteroid, angle) {

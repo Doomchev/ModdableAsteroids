@@ -45,8 +45,10 @@ export default class DoubleBarreled extends Weapon {
             image: new Img(this.texture.bullet),
             size: 0.12,
             speed: 30,
-            damage: 50,
-            //angle = new Rnd(rad(-10), rad(10)),
+            parameters: {
+                damage: 50,
+                explosionSize: 0.5,
+            }
         }
 
         this.gunfire = {
@@ -91,7 +93,6 @@ export default class DoubleBarreled extends Weapon {
                 let bullet = Sprite.createFromTemplate(this.bullet)
                 bullet.setPositionAs(this.barrelEnd[i])
                 bullet.turn(val.shipSprite.angle)
-                bullet.damage = this.bullet.damage
                 bullet.onHit = () => {
                     playSound(this.sound.bulletHit)
                 }

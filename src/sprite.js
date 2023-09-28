@@ -40,6 +40,11 @@ export default class Sprite extends Shape {
             sprite.actions = [new Animate(sprite, template.images, num(template.animationSpeed))]
             sprite.image = template.images._images[0]
         }
+        if(template.parameters) {
+            for(const [key, value] of Object.entries(template.parameters)) {
+                sprite[key] = value
+            }
+        }
         return sprite
     }
 

@@ -36,7 +36,7 @@ export default class Label extends Shape {
         if (this.format?.startsWith("I")) {
             height *= 2
             let k = height / this.image.height
-            width = this.image.width * k * Math.round(1.0 * parseInt(text) / parseInt(formatString))
+            width = this.image.width * k * Math.round(parseInt(text) / parseInt(formatString))
         }
 
         switch(this.horizontalAlign) {
@@ -50,6 +50,7 @@ export default class Label extends Shape {
                 x = xToScreen(this.rightX) - width
                 break
         }
+
         switch(this.verticalAlign) {
             case align.top:
                 y = yToScreen(this.topY)
@@ -63,7 +64,7 @@ export default class Label extends Shape {
         }
 
         if (this.format?.startsWith("I")) {
-            let value = Math.round(1.0 * parseInt(text) / parseInt(formatString))
+            let value = Math.round(parseInt(text) / parseInt(formatString))
             width /= value
             for(let i = 0; i < value ; i++) {
                 ctx.drawImage(this.image, 0, 0, this.image.width, this.image.height, x + i * width, y, width, height)
