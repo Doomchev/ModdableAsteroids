@@ -1,5 +1,5 @@
 import Sprite from "./src/sprite.js"
-import {loc, loopedSound, masterVolume, num, paused, playSound, rad, rnd, rndi, togglePause} from "./src/system.js"
+import {loc, loopedSound, num, paused, playSound, rad, rnd, togglePause} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
 import {func, mod, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
@@ -32,17 +32,9 @@ export function initUpdate() {
     // functions
 
     func.createAsteroids = function(num) {
-        let bounds = val.bounds
         for(let i = 0; i < num; i++) {
-            let x, y
-            if (rndi(2)) {
-                x = rnd(bounds.leftX, bounds.rightX)
-                y = bounds.topY
-            } else {
-                x = bounds.leftX
-                y = rnd(bounds.topY, bounds.bottomY)
-            }
-            func.createAsteroid(x, y, val.asteroidType.default, rnd(rad(360)))
+            let asteroid = func.createAsteroid(0, 0, val.asteroidType.default, rnd(rad(360)))
+            asteroid.moveToPerimeter(val.bounds)
         }
     }
 
@@ -74,7 +66,19 @@ export function initUpdate() {
     func.destroyAsteroid = function (asteroid, angle) {
         func.createExplosion(asteroid, asteroid.width)
         mod.forEach(module => module.destroyAsteroid(asteroid, angle))
+        if(asteroid.onHit) asteroid.onHit()
         func.removeAsteroid(asteroid)
+    }
+
+    func.explosionDamage = function(sprite) {
+        sprite.size = sprite.explosionSize
+        let inExplosion = []
+        sprite.collisionWith(val.asteroids, (mis, asteroid) => {
+            inExplosion.push(asteroid)
+        })
+        inExplosion.forEach((asteroid) => {
+            func.destroyAsteroid(asteroid, sprite.angleTo(asteroid))
+        })
     }
 
     func.createExplosion = function (sprite, size, playSnd = true) {

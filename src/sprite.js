@@ -82,11 +82,6 @@ export default class Sprite extends Shape {
         this.centerY += Math.sin(this.angle) * this.speed * apsk
     }
 
-    moveTo(x, y) {
-        this.centerX = x
-        this.centerY = y
-    }
-
     turn(value) {
         this.angle += value
     }
@@ -105,17 +100,6 @@ export default class Sprite extends Shape {
 
     add(action) {
         this.actions.push(action)
-    }
-
-    loop(bounds) {
-        if(this.centerX < bounds.leftX) this.centerX += bounds.width
-        if(this.centerX >= bounds.rightX) this.centerX -= bounds.width
-        if(this.centerY < bounds.topY) this.centerY += bounds.height
-        if(this.centerY >= bounds.bottomY) this.centerY -= bounds.height
-    }
-
-    angleTo(sprite) {
-        return Math.atan2(this.centerY - sprite.centerY, this.centerX - sprite.centerX)
     }
 
     // collisions

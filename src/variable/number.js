@@ -1,6 +1,5 @@
 import {Function} from "../function.js"
 import {num} from "../system.js"
-import {val} from "../project.js"
 
 export default class NumericVariable extends Function {
     constructor(value) {

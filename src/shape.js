@@ -1,4 +1,5 @@
 import {Renderable} from "./renderable.js"
+import {rnd, rndi} from "./system.js"
 
 export default class Shape extends Renderable {
     constructor(centerX = 0.0, centerY = 0.0,  width = 1.0, height = 1.0) {
@@ -59,14 +60,42 @@ export default class Shape extends Renderable {
         this.centerY = value - this.halfHeight
     }
 
+    moveTo(x, y) {
+        this.centerX = x
+        this.centerY = y
+    }
+
+    moveToPerimeter(bounds) {
+        let dx = bounds.rightX - bounds.leftX
+        let dy = bounds.bottomY - bounds.topY
+        if (rnd(0, dx + dy) < dx) {
+            this.centerX = rnd(bounds.leftX, bounds.rightX)
+            this.centerY = rndi(2) ? bounds.topY : bounds.bottomY
+        } else {
+            this.centerX = rndi(2) ? bounds.leftX : bounds.rightX
+            this.centerY = rnd(bounds.topY, bounds.bottomY)
+        }
+    }
+
     setPositionAs(sprite) {
         this.centerX = sprite.centerX
         this.centerY = sprite.centerY
     }
 
+    loop(bounds) {
+        if(this.centerX < bounds.leftX) this.centerX += bounds.width
+        if(this.centerX >= bounds.rightX) this.centerX -= bounds.width
+        if(this.centerY < bounds.topY) this.centerY += bounds.height
+        if(this.centerY >= bounds.bottomY) this.centerY -= bounds.height
+    }
+
     setSizeAs(sprite) {
         this.width = sprite.width
         this.height = sprite.height
+    }
+
+    angleTo(sprite) {
+        return Math.atan2(this.centerY - sprite.centerY, this.centerX - sprite.centerX)
     }
 
     collidesWithPoint(x, y) {

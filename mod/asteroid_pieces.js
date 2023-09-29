@@ -3,7 +3,7 @@ import {func, mod, project, val} from "../src/project.js"
 import {rad} from "../src/system.js"
 import Rnd from "../src/function/rnd.js"
 import Mul from "../src/function/mul.js"
-import RandomSign, {rnds} from "../src/function/random_sign.js"
+import {rnds} from "../src/function/random_sign.js"
 
 export default class AsteroidPieces extends Mod {
     get name() {
@@ -79,9 +79,10 @@ export default class AsteroidPieces extends Mod {
 
         func.destroyAsteroid = function (asteroid, angle) {
             mod.forEach(module => module.destroyAsteroid(asteroid, angle))
-            asteroid.type.pieces.forEach(piece => {
+            asteroid.type.pieces?.forEach(piece => {
                 func.createAsteroid(asteroid, undefined, piece.type, angle + rad(piece.angle))
             })
+            if(asteroid.onHit) asteroid.onHit()
             func.createExplosion(asteroid, asteroid.width)
             func.removeAsteroid(asteroid)
         }

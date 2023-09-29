@@ -1,6 +1,5 @@
 import Mod from "./mod.js"
 import {project, val} from "../src/project.js"
-import Img from "../src/image.js"
 import {playSound, rad, rnd} from "../src/system.js"
 import Sprite from "../src/sprite.js"
 import Cos from "../src/function/cos.js"

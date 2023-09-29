@@ -1,8 +1,7 @@
 import Weapon from "../weapon.js"
 import {func, project, val} from "../../../src/project.js"
-import ImageArray from "../../../src/image_array.js"
 import Sprite from "../../../src/sprite.js"
-import {align, loadSound, loadTexture, loc, playSound} from "../../../src/system.js"
+import {align, loadSound, loadTexture, playSound} from "../../../src/system.js"
 import Constraint from "../../../src/constraint.js"
 import Delayed from "../../../src/actions/delayed.js"
 import Img from "../../../src/image.js"
@@ -37,18 +36,10 @@ export default class MissileWeapon extends Weapon {
             parameters: {
                 damage: 300,
                 explosionSize: 5,
+                onHit: function() {
+                    func.explosionDamage(this, 5)
+                }
             },
-            onHit: function() {
-                let missile = this
-                missile.size = missile.explosionSize
-                let inExplosion = []
-                missile.collisionWith(val.asteroids, (mis, asteroid) => {
-                    inExplosion.push(asteroid)
-                })
-                inExplosion.forEach((asteroid) => {
-                    func.destroyAsteroid(asteroid, missile.angleTo(asteroid))
-                })
-            }
         }
 
         this.bonus = new Sprite(new Img(this.bonusTexture))
@@ -72,7 +63,6 @@ export default class MissileWeapon extends Weapon {
             let missile = Sprite.createFromTemplate(this.missile)
             missile.setPositionAs(this.gun)
             missile.turn(val.shipSprite.angle)
-            missile.onHit = this.missile.onHit
             this.ammo.decrement()
             playSound(this.fire)
         }

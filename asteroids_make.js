@@ -17,7 +17,7 @@ import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import {project, setRegistry, val} from "./src/project.js"
 import {initUpdate} from "./asteroids_code.js"
 import Rnd from "./src/function/rnd.js"
-import RandomSign, {rnds} from "./src/function/random_sign.js"
+import {rnds} from "./src/function/random_sign.js"
 import Mul from "./src/function/mul.js"
 import AsteroidPieces from "./mod/asteroid_pieces.js"
 import AsteroidsHealth from "./mod/asteroid_health.js"
@@ -32,6 +32,7 @@ import AsteroidBonus from "./mod/asteroid_bonus.js"
 import Invulnerability from "./mod/invulnerability.js"
 import MissileWeapon from "./mod/weapon/missile/main.js"
 import FriendlyFire from "./mod/weapon/missile/friendly_fire.js"
+import ExplodingAsteroids from "./mod/exploding_asteroids/main.js"
 
 project.locales.en = {
     // hud
@@ -127,7 +128,8 @@ project.allModules = [
     [new DefaultWeapon(), true, "mod/weapon/default/"],
     [new DoubleBarreled(), true, "mod/weapon/double_barreled/"],
     [new MissileWeapon(), true, "mod/weapon/missile/"],
-    [new FriendlyFire(), false],
+    [new FriendlyFire(), true],
+    [new ExplodingAsteroids(), true, "mod/exploding_asteroids/"],
     [new AsteroidBonus(), true],
     [new Invulnerability(0.05), true],
 ]

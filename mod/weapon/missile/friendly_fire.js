@@ -12,9 +12,9 @@ export default class FriendlyFire extends Mod {
     }
 
     init() {
-        //let missile = val.weapon.missile
-        let onHit = val.weapon.missile.missile.onHit
-        val.weapon.missile.missile.onHit = function() {
+        let parameters = val.weapon.missile.missile.parameters
+        let onHit = parameters.onHit
+        parameters.onHit = function() {
             onHit.call(this)
             if(this.collidesWithSprite(val.shipSprite)) {
                 func.destroyShip()
