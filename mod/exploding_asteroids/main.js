@@ -1,26 +1,22 @@
 import {func, project, val} from "../../src/project.js"
 import ImageArray from "../../src/image_array.js"
-import {loadTexture, rad, rnd} from "../../src/system.js"
+import {rad, rnd} from "../../src/system.js"
 import Mod from "../mod.js"
 
 export default class ExplodingAsteroids extends Mod {
-    get name() {
-        switch (project.locale) {
-            case "ru":
-                return "Взрывающиеся астероиды"
-            default:
-                return "Exploding asteroids"
+   getAssets() {
+        return {
+            texture: {
+                asteroid: "asteroid.png"
+            },
+            sound: {},
         }
     }
 
-    loadAssets() {
-        this.texture = loadTexture("asteroid.png")
-    }
-
-    init() {
+    init(texture) {
         this.asteroid = {
             layer: val.asteroids,
-            images: new ImageArray(this.texture, 8, 4, 0.5, 0.5, 1.5, 1.5),
+            images: new ImageArray(texture.asteroid, 8, 4, 0.5, 0.5, 1.5, 1.5),
             size: 2,
             speed: 5,
             //angle: new Rnd(rad(-10), rad(10)),
@@ -45,8 +41,5 @@ export default class ExplodingAsteroids extends Mod {
             let asteroid = func.createAsteroid(0, 0, this.asteroid, rnd(rad(360)))
             asteroid.moveToPerimeter(val.bounds)
         }
-    }
-
-    update() {
     }
 }

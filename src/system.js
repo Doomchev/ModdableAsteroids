@@ -54,30 +54,45 @@ export function togglePause() {
 
 // assets
 
-let assetSource = new Map()
-let assetPath = ""
+let assetsToLoad = 0
+export function loadAssets(path, asset) {
+    let textures = {}
 
-export function extractFileName(path) {
-    return path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf("."))
-}
+    for(const[key, value] of Object.entries(asset.texture)) {
+        let texture = new Image()
+        texture.onload = () => {
+            assetsToLoad--
+            if(assetsToLoad <= 0) start()
+        }
+        texture.src = path + value
+        textures[key] = texture
+        assetsToLoad++
+    }
 
-// textures
+    function addAudioListener(audio) {
+        let listener = () => {
+            assetsToLoad--
+            audio.removeEventListener("canplaythrough", listener, false)
+            if (assetsToLoad <= 0) start()
+        }
+        audio.addEventListener("canplaythrough", listener, false);
+    }
 
-export function loadTexture(src) {
-    let texture = setName(new Image(), extractFileName(src));
-    assetSource.set(texture, assetPath + src)
-    return texture
+    let sounds = {}
+    for(const[key, value] of Object.entries(asset.sound)) {
+        let audio = new Audio()
+        addAudioListener(audio)
+        audio.src = path + value
+        sounds[key] = audio
+        assetsToLoad++
+    }
+
+    return {texture: textures, sound: sounds}
 }
 
 // sound
 
 export let masterVolume = 0.25
-
-export function loadSound(src) {
-    let sound = setName(new Audio(), extractFileName(src))
-    assetSource.set(sound, assetPath + src)
-    return sound
-}
 
 export function playSound(sound) {
     let newSound = new Audio(sound.src)
@@ -139,41 +154,21 @@ document.addEventListener("DOMContentLoaded", function() {
     project.canvas = Canvas.create(square ? 16 : 9, 16, canvas.width, canvas.height)
     setCanvas(project.canvas)
 
-    let assetsToLoad = 0
-    project.loadAssets()
+    project._assets = loadAssets("", project.getAssets())
+    project.sound = project._assets.sound
     mod.forEach(module => {
-        assetPath = module.path
-        if(module.loadAssets) module.loadAssets()
-    })
-    assetPath = "=error="
-
-    function addAudioListener(audio) {
-        let listener = () => {
-            assetsToLoad--
-            audio.removeEventListener("canplaythrough", listener, false)
-            if (assetsToLoad <= 0) start()
-        }
-        audio.addEventListener("canplaythrough", listener, false);
-    }
-
-    assetsToLoad = assetSource.size
-    assetSource.forEach((src, asset) => {
-        if(asset instanceof Audio) {
-            addAudioListener(asset)
-        } else {
-            asset.onload = () => {
-                assetsToLoad--
-                if (assetsToLoad <= 0) start()
-            }
-        }
-        asset.src = src
+        module._assets = loadAssets(module.path, module.getAssets())
+        module.sound = module._assets.sound
     })
 })
 
 function start() {
-    project.init()
-    mod.forEach(module => module.init())
-    exportProject()
+    project.init(project._assets.texture)
+
+    mod.forEach(module => {
+        module.init(module._assets.texture)
+    })
+    //exportProject()
 
     let projectDiv = document.getElementById("project")
     createTree(projectDiv, mod)

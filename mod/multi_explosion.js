@@ -17,7 +17,7 @@ export default class MultiExplosion extends Mod {
         func.createExplosion = function (sprite, size, playSnd = true) {
             let times = rndi(3) + size
             createParticle(true)
-            if(playSnd) playSound(val.sound.explosion)
+            if(playSnd) playSound(project.sound.explosion)
 
             function createParticle(first) {
                 let angle = rad(rnd(360))

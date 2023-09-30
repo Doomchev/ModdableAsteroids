@@ -11,8 +11,10 @@ export let project = {
     _function: {},
     _data: "",
 
-    loadAssets: () => {},
-    init: () => {},
+    getAssets() {
+        return {texture: {}, sound: {}}
+    },
+    init: (texture) => {},
     update: () => {},
 }
 

@@ -2,7 +2,7 @@ import NumericVariable from "./src/variable/number.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {align, loadSound, loadTexture, loc, rad} from "./src/system.js"
+import {align, loc, rad} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Img from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -136,27 +136,28 @@ project.allModules = [
     [new Invulnerability(0.05), true],
 ]
 
-project.loadAssets = () => {
-    val.texture = {
-        ship: loadTexture("textures/ship.png"),
-        flame: loadTexture("textures/flame.png"),
-        asteroid: loadTexture("textures/asteroid.png"),
-        explosion: loadTexture("textures/explosion.png"),
-    }
-
-    val.sound = {
-        explosion: loadSound("sounds/explosion.mp3"),
-        death: loadSound("sounds/death.mp3"),
-        extraLife: loadSound("sounds/extra_life.mp3"),
-        flame: loadSound("sounds/flame.mp3"),
-        newLevel: loadSound("sounds/new_level.mp3"),
-        gameOver: loadSound("sounds/game_over.mp3"),
-        music: loadSound("sounds/music.mp3"),
-        bonus: loadSound("sounds/bonus.mp3"),
+project.getAssets = () => {
+    return {
+        texture: {
+            ship: "textures/ship.png",
+            flame: "textures/flame.png",
+            asteroid: "textures/asteroid.png",
+            explosion: "textures/explosion.png",
+        },
+        sound: {
+            explosion: "sounds/explosion.mp3",
+            death: "sounds/death.mp3",
+            extraLife: "sounds/extra_life.mp3",
+            flame: "sounds/flame.mp3",
+            newLevel: "sounds/new_level.mp3",
+            gameOver: "sounds/game_over.mp3",
+            music: "sounds/music.mp3",
+            bonus: "sounds/bonus.mp3",
+        }
     }
 }
 
-project.init = () => {
+project.init = (texture) => {
     val.score = setName(new NumericVariable(0), "score")
     val.lives = setName(new NumericVariable(val.startingLives), "lives")
     val.level = setName(new NumericVariable(0), "level")
@@ -167,15 +168,15 @@ project.init = () => {
     val.bonuses = setName(new Layer(), "bonuses")
     val.explosions = setName(new Layer(), "explosions")
 
-    val.asteroidImages = new ImageArray(val.texture.asteroid, 8, 4
+    val.asteroidImages = new ImageArray(texture.asteroid, 8, 4
         , 0.5, 0.5, 1.5, 1.5)
     val.asteroidType.default.images = val.asteroidImages
 
-    val.explosionImages = new ImageArray(val.texture.explosion, 4, 4
+    val.explosionImages = new ImageArray(texture.explosion, 4, 4
         , 0.5, 0.5, 2, 2)
     project.registry.template = {
         ship: {
-            image: new Img(val.texture.ship, 0, 0, undefined, undefined
+            image: new Img(texture.ship, 0, 0, undefined, undefined
                 , 0.5, 0.5, 1.75, 1.75),
             angle: 0,
             speed: 0,
@@ -194,7 +195,7 @@ project.init = () => {
     val.shipSprite = Sprite.createFromTemplate(template.ship)
     val.shipLayer.add(val.shipSprite)
 
-    val.flameImages = new ImageArray(val.texture.flame, 3, 3)
+    val.flameImages = new ImageArray(texture.flame, 3, 3)
     val.flameSprite = Sprite.create(val.shipLayer, val.flameImages._images[0], -0.9, 0
         , 1, 1, rad(-90))
 
@@ -202,7 +203,7 @@ project.init = () => {
 
     val.scoreLabel = new Label(val.hudArea, [val.score], align.left, align.top, "Z8")
     val.levelLabel = new Label(val.hudArea, [loc("level"), val.level], align.center, align.top)
-    val.livesLabel = new Label(val.hudArea, [val.lives], align.right, align.top, "I1", val.texture.ship)
+    val.livesLabel = new Label(val.hudArea, [val.lives], align.right, align.top, "I1", texture.ship)
 
     val.messageLabel = new Label(val.hudArea, [""], align.center, align.center)
     val.hud = new Layer(val.scoreLabel, val.levelLabel, val.livesLabel, val.messageLabel)

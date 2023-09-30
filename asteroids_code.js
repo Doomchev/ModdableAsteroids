@@ -26,8 +26,8 @@ export function initUpdate() {
 
     let currentState = state.alive
 
-    loopedSound(val.sound.music, 0, 1.81, true)
-    let flameSound = loopedSound(val.sound.flame, 1.1, 1.9)
+    loopedSound(project.sound.music, 0, 1.81, true)
+    let flameSound = loopedSound(project.sound.flame, 1.1, 1.9)
 
     // functions
 
@@ -86,7 +86,7 @@ export function initUpdate() {
         explosion.width = explosion.height = size
         explosion.moveTo(sprite.centerX, sprite.centerY)
         explosion.add(new DelayedRemove(explosion, explosions, 1.0))
-        if(playSnd) playSound(val.sound.explosion)
+        if(playSnd) playSound(project.sound.explosion)
     }
     func.createSingleExplosion = func.createExplosion
 
@@ -97,11 +97,11 @@ export function initUpdate() {
         if(lives.value === 0) {
             messageLabel.show(loc("gameOver"))
             currentState = state.gameOver
-            playSound(val.sound.gameOver)
+            playSound(project.sound.gameOver)
         } else {
             messageLabel.show(loc("pressEnter"))
             currentState = state.dead
-            playSound(val.sound.death)
+            playSound(project.sound.death)
         }
     }
 
@@ -166,7 +166,7 @@ export function initUpdate() {
             level.increment()
             func.createAsteroids(level.value)
             mod.forEach(module => module.initLevel(level.value))
-            playSound(val.sound.newLevel)
+            playSound(project.sound.newLevel)
         }
 
         bullets.collisionWith(asteroids, (bullet, asteroid) => {

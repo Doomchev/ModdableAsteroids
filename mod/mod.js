@@ -1,6 +1,9 @@
 export default class Mod {
     _actions = []
-    init() {}
+    getAssets() {
+        return {texture: {}, sound: {}}
+    }
+    init(texture) {}
     reset() {}
     draw() {}
     update() {}

@@ -2,21 +2,27 @@ import Weapon from "../weapon.js"
 import {project, val} from "../../../src/project.js"
 import ImageArray from "../../../src/image_array.js"
 import Sprite from "../../../src/sprite.js"
-import {loadSound, loadTexture, playSound} from "../../../src/system.js"
+import {playSound} from "../../../src/system.js"
 import Constraint from "../../../src/constraint.js"
 import Delayed from "../../../src/actions/delayed.js"
 import {addTranslations, setName} from "../../../src/tree.js"
 
 export default class DefaultWeapon extends Weapon {
-    loadAssets() {
-        this._fireballImage = loadTexture("fireball.png")
-        this._fireSound = loadSound("fireball.mp3")
+    getAssets() {
+        return {
+            texture: {
+                fireball: "fireball.png"
+            },
+            sound: {
+                fire: "fireball.mp3"
+            },
+        }
     }
 
-    init() {
+    init(texture) {
         this.bullet = {
             layer: val.bullets,
-            images: new ImageArray(this._fireballImage, 1, 16
+            images: new ImageArray(texture.fireball, 1, 16
                 , 43 / 48, 5.5 / 12, 5.25, 1.5),
             size: 0.3,
             speed: 15,
@@ -54,7 +60,7 @@ export default class DefaultWeapon extends Weapon {
             let bullet = Sprite.createFromTemplate(this.bullet)
             bullet.setPositionAs(this.gun)
             bullet.turn(val.shipSprite.angle)
-            playSound(this._fireSound)
+            playSound(this.sound.fire)
         }
     }
 }

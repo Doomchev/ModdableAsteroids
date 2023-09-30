@@ -32,7 +32,7 @@ export default class AsteroidBonus extends Mod {
     update() {
         val.bonuses.collisionWith(val.shipSprite, function(bonus) {
             bonus.weapon.collect()
-            playSound(val.sound.bonus)
+            playSound(project.sound.bonus)
             val.bonuses.remove(bonus)
         })
     }

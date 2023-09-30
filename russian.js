@@ -1,6 +1,4 @@
 import {addTranslations, setName} from "./src/tree.js"
-import {loadSound, loadTexture} from "./src/system.js"
-import {val} from "./src/project.js"
 
 addTranslations({
     score: "очки",

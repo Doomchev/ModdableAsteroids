@@ -4,36 +4,37 @@ import Img from "../../../src/image.js"
 import {project, val} from "../../../src/project.js"
 import Constraint from "../../../src/constraint.js"
 import Delayed from "../../../src/actions/delayed.js"
-import {align, loadSound, loadTexture, playSound} from "../../../src/system.js"
+import {align, playSound} from "../../../src/system.js"
 import DelayedRemove from "../../../src/actions/sprite/delayed_remove.js"
 import NumericVariable from "../../../src/variable/number.js"
 import Label from "../../../src/gui/label.js"
 import {addTranslations, setName} from "../../../src/tree.js"
 
 export default class DoubleBarreled extends Weapon {
-    loadAssets() {
-        this.texture = {
-            gunfire: loadTexture("gunfire.png"),
-            bullet: loadTexture("bullet.png"),
-            turret: loadTexture("turret.png"),
-            bonus: loadTexture("bonus.png"),
-            icon: loadTexture("icon.png")
-        }
-
-        this.sound = {
-            bulletFire: loadSound("bullet.mp3"),
-            bulletHit: loadSound("bullet_hit.mp3"),
+    getAssets() {
+        return {
+            texture: {
+                gunfire: "gunfire.png",
+                bullet: "bullet.png",
+                turret: "turret.png",
+                bonus: "bonus.png",
+                icon: "icon.png",
+            },
+            sound: {
+                bulletFire: "bullet.mp3",
+                bulletHit: "bullet_hit.mp3",
+            },
         }
     }
 
-    init() {
-        this.turret = new Sprite(new Img(this.texture.turret), 0, 0, 2, 2)
+    init(texture) {
+        this.turret = new Sprite(new Img(texture.turret), 0, 0, 2, 2)
         this.barrelEnd = []
         this.controller = new Delayed(project.key.fire, 0.10)
 
         this.bullet = {
             layer: val.bullets,
-            image: new Img(this.texture.bullet),
+            image: new Img(texture.bullet),
             size: 0.12,
             speed: 30,
             parameters: {
@@ -44,19 +45,19 @@ export default class DoubleBarreled extends Weapon {
 
         this.gunfire = {
             layer: val.shipLayer,
-            image: new Img(this.texture.gunfire, undefined, undefined, undefined, undefined
+            image: new Img(texture.gunfire, undefined, undefined, undefined, undefined
                 , 0, 0.5),
             size: 1,
         }
 
-        this.bonus = new Sprite(new Img(this.texture.bonus))
+        this.bonus = new Sprite(new Img(texture.bonus))
         this.probability = 0.1
         this.ammo = new NumericVariable(0)
         this.bonusAmmo = 50
         this.maxAmmo = 100
 
         for(let i = 0; i < 2; i++) {
-            let barrelEnd = setName(new Sprite(undefined, 0.5, 0.4 * (i === 0 ? -1 : 1)), "barrelEnd" + i)
+            let barrelEnd = new Sprite(undefined, 0.5, 0.4 * (i === 0 ? -1 : 1))
             this.barrelEnd.push(barrelEnd)
             this._actions.push(new Constraint(barrelEnd, this.turret))
         }
@@ -67,7 +68,7 @@ export default class DoubleBarreled extends Weapon {
         this.turret.visible = false
         val.shipLayer.add(this.turret)
 
-        val.hud.add(new Label(val.hudArea, [this.ammo], align.right, align.bottom, "I10", this.texture.icon))
+        val.hud.add(new Label(val.hudArea, [this.ammo], align.right, align.bottom, "I10", texture.icon))
 
         addTranslations({
             DoubleBarreled: "СдвоенноеДуло",
@@ -76,8 +77,6 @@ export default class DoubleBarreled extends Weapon {
             bonusAmmo: "бонусныеПатроны",
             maxAmmo: "максимумПатронов",
             barrelEnd: "конецДула",
-            barrelEnd0: "конецДула0",
-            barrelEnd1: "конецДула1",
             gunfire: "огоньИзДула",
             bullet: "пуля",
             turret: "туррель",

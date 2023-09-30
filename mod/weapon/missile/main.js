@@ -1,7 +1,7 @@
 import Weapon from "../weapon.js"
 import {func, project, val} from "../../../src/project.js"
 import Sprite from "../../../src/sprite.js"
-import {align, loadSound, loadTexture, playSound} from "../../../src/system.js"
+import {align, playSound} from "../../../src/system.js"
 import Constraint from "../../../src/constraint.js"
 import Delayed from "../../../src/actions/delayed.js"
 import Img from "../../../src/image.js"
@@ -11,17 +11,24 @@ import NumericVariable from "../../../src/variable/number.js"
 import {addTranslations} from "../../../src/tree.js"
 
 export default class MissileWeapon extends Weapon {
-    loadAssets() {
-        this.missileTexture = loadTexture("missile.png")
-        this.iconTexture = loadTexture("icon.png")
-        this.bonusTexture = loadTexture("bonus.png")
-        this.fire = loadSound("fire.ogg")
+    getAssets() {
+        return {
+            texture: {
+                missile: "missile.png",
+                icon: "icon.png",
+                bonus: "bonus.png",
+            },
+            sound: {
+                fire: "fire.ogg"
+            },
+        }
+
     }
 
-    init() {
+    init(texture) {
         this.missile = {
             layer: val.bullets,
-            image: new Img(this.missileTexture, undefined, undefined, undefined, undefined
+            image: new Img(texture.missile, undefined, undefined, undefined, undefined
                 , 0.95, 0.5, 10, 3),
             size: 0.15,
             speed: 15,
@@ -34,7 +41,7 @@ export default class MissileWeapon extends Weapon {
             },
         }
 
-        this.bonus = new Sprite(new Img(this.bonusTexture))
+        this.bonus = new Sprite(new Img(texture.bonus))
         this.probability = 0.1
         this.ammo = new NumericVariable(3)
         this.maxAmmo = 8
@@ -47,7 +54,7 @@ export default class MissileWeapon extends Weapon {
         this.delay = new Delayed(key, 0.5)
         val.weapon.missile = this
 
-        val.hud.add(new Label(val.hudArea, [this.ammo], align.left, align.bottom, "I1", this.iconTexture))
+        val.hud.add(new Label(val.hudArea, [this.ammo], align.left, align.bottom, "I1", texture.icon))
 
         addTranslations({
             MissileWeapon: "Ракеты",
@@ -70,7 +77,7 @@ export default class MissileWeapon extends Weapon {
             missile.setPositionAs(this.gun)
             missile.turn(val.shipSprite.angle)
             this.ammo.decrement()
-            playSound(this.fire)
+            playSound(this.sound.fire)
         }
     }
 
