@@ -2,6 +2,7 @@ import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {Function} from "./function.js"
 import {mod, project} from "./project.js"
 import {exportProject} from "./export.js"
+import {createTree} from "./tree.js"
 
 // global variables
 
@@ -113,76 +114,33 @@ export function loc(stringName) {
 let square = true
 
 document.addEventListener("DOMContentLoaded", function() {
-    let mods = document.getElementById("mods"), div
     project.allModules.forEach(module => {
-        div = document.createElement("div")
-
-        let checkbox = document.createElement("input")
-        let moduleObject = module[0]
-
-        checkbox.type = "checkbox"
-        checkbox.name = moduleObject.constructor.name
-        checkbox.checked = module[1]
-        checkbox.module = moduleObject
-        moduleObject.path = module.length < 3 ? "" : module[2]
-
-        div.appendChild(checkbox)
-
-        let label = document.createElement("label")
-        label.for = moduleObject.constructor.name
-        label.textContent = moduleObject.name
-        div.appendChild(label)
-
-        mods.appendChild(div)
+        module[0].path ??= module[2]
+        if (module[1]) mod.push(module[0])
     })
 
-    let assetsToLoad = 0
-    document.getElementById("start").onclick = function ()  {
-        for(let div of mods.childNodes) {
-            let element = div.childNodes[0]
-            if (element?.module && element.checked) mod.push(element.module)
-        }
-        mods.style.display = "none"
-
-        let body = document.body
-        let canvas = document.getElementById("canvas")
-        canvas.hidden = false
-        if(square) {
-            let size = Math.min(body.clientWidth - 20, body.clientHeight - 20)
-            canvas.width = canvas.height = size
-        } else {
-            canvas.width = 360
-            canvas.height = 640
-            body.style.flexDirection = ""
-        }
-        canvas.focus()
-        ctx = canvas.getContext("2d")
-        ctx.fillStyle = "white"
-        ctx.font = canvas.width / 24 + "px monospace"
-        ctx.textBaseline = "top"
-        project.canvas = Canvas.create(square ? 16 : 9, 16, canvas.width, canvas.height)
-        setCanvas(project.canvas)
-
-        project.loadAssets()
-        mod.forEach(module => {
-            assetPath = module.path
-            if(module.loadAssets) module.loadAssets()
-        })
-        assetPath = "=error="
-
-        assetsToLoad = assetSource.size
-        assetSource.forEach((src, asset) => {
-            if(asset instanceof Audio) {
-                addAudioListener(asset)
-            } else {
-                asset.onload = () => {
-                    assetsToLoad--
-                    if (assetsToLoad <= 0) start()
-                }
-            }
-            asset.src = src
-        })
+    let canvas = document.getElementById("canvas")
+    if(square) {
+        canvas.width = canvas.height = 640
+    } else {
+        canvas.width = 360
     }
+    canvas.focus()
+
+    ctx = canvas.getContext("2d")
+    ctx.fillStyle = "white"
+    ctx.font = canvas.width / 24 + "px monospace"
+    ctx.textBaseline = "top"
+    project.canvas = Canvas.create(square ? 16 : 9, 16, canvas.width, canvas.height)
+    setCanvas(project.canvas)
+
+    let assetsToLoad = 0
+    project.loadAssets()
+    mod.forEach(module => {
+        assetPath = module.path
+        if(module.loadAssets) module.loadAssets()
+    })
+    assetPath = "=error="
 
     function addAudioListener(audio) {
         let listener = () => {
@@ -192,12 +150,29 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         audio.addEventListener("canplaythrough", listener, false);
     }
+
+    assetsToLoad = assetSource.size
+    assetSource.forEach((src, asset) => {
+        if(asset instanceof Audio) {
+            addAudioListener(asset)
+        } else {
+            asset.onload = () => {
+                assetsToLoad--
+                if (assetsToLoad <= 0) start()
+            }
+        }
+        asset.src = src
+    })
 })
 
 function start() {
     project.init()
     mod.forEach(module => module.init())
     exportProject()
+
+    let projectDiv = document.getElementById("project")
+    createTree(projectDiv, project.registry)
+    createTree(projectDiv, mod)
 
     let apsTime = 0, realAps = 0, apsCounter = 0
     setInterval(function () {
@@ -246,6 +221,8 @@ function start() {
 }
 
 document.addEventListener("keydown", event => {
+    //event.preventDefault();
+
     switch (event.code) {
         case "KeyL":
             project.locale = project.locale === "ru" ? "en" : "ru"

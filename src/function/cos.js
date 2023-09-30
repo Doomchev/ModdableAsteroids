@@ -1,4 +1,5 @@
 import {Function} from "../function.js"
+import {getString} from "../tree.js"
 
 export default class Cos extends Function {
     constructor(length, amplitude = 1, xshift = 0, yshift = 0) {
@@ -12,5 +13,10 @@ export default class Cos extends Function {
 
     calculate(x) {
         return this.yshift + this.amplitude * Math.cos((this.xshift + x) * 2 * Math.PI / this.length)
+    }
+
+    getString() {
+        return "cos(" + getString(this.xshift) + ", " + getString(this.yshift) + ", " + getString(this.length)
+            + ", " + getString(this.amplitude) + ")"
     }
 }

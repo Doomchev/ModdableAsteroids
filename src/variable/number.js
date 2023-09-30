@@ -24,4 +24,8 @@ export default class NumericVariable extends Function {
     toString() {
         return this.value
     }
+
+    getString() {
+        return "var(" + this.value + ")"
+    }
 }

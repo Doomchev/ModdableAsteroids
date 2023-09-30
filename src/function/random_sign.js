@@ -5,6 +5,10 @@ export default class RandomSign extends Function {
     toNumber() {
         return randomSign()
     }
+
+    getString() {
+        return "(+/-)"
+    }
 }
 
 export let rnds = new RandomSign()

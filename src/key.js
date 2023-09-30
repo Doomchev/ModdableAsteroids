@@ -13,4 +13,8 @@ export default class Key {
     get wasPressed() {
         return this._wasPressed
     }
+
+    getString() {
+        return "Key(" + this.code + ")"
+    }
 }
