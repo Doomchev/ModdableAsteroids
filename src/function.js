@@ -1,6 +1,6 @@
 export class Function {
     toNumber() {
-        return null
+        return 0
     }
 
     calculate(x) {

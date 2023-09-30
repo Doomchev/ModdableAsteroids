@@ -1,14 +1,12 @@
 import Mod from "./mod.js"
 import {project, val} from "../src/project.js"
+import {addTranslations} from "../src/tree.js"
 
 export default class InfiniteLives extends Mod {
-    get name() {
-        switch (project.locale) {
-            case "ru":
-                return "Бесконечные жизни"
-            default:
-                return "Infinite lives"
-        }
+    init() {
+        addTranslations({
+            InfiniteLives: "БесконечныеЖизни",
+        })
     }
 
     update() {

@@ -8,17 +8,9 @@ import Img from "../../../src/image.js"
 import Key from "../../../src/key.js"
 import Label from "../../../src/gui/label.js"
 import NumericVariable from "../../../src/variable/number.js"
+import {addTranslations} from "../../../src/tree.js"
 
 export default class MissileWeapon extends Weapon {
-    get name() {
-        switch (project.locale) {
-            case "ru":
-                return "Ракеты"
-            default:
-                return "Missiles"
-        }
-    }
-
     loadAssets() {
         this.missileTexture = loadTexture("missile.png")
         this.iconTexture = loadTexture("icon.png")
@@ -48,7 +40,7 @@ export default class MissileWeapon extends Weapon {
         this.maxAmmo = 8
 
         this.gun = Sprite.create(undefined, undefined, 0.9, 0)
-        this.actions = [new Constraint(this.gun, val.shipSprite),]
+        this._actions = [new Constraint(this.gun, val.shipSprite),]
 
         let key = new Key("fireMissile", "KeyX")
         project.key.fireMissile = key
@@ -56,6 +48,20 @@ export default class MissileWeapon extends Weapon {
         val.weapon.missile = this
 
         val.hud.add(new Label(val.hudArea, [this.ammo], align.left, align.bottom, "I1", this.iconTexture))
+
+        addTranslations({
+            MissileWeapon: "Ракеты",
+            probability: "вероятность",
+            ammo: "патроны",
+            bonusAmmo: "бонусныеПатроны",
+            maxAmmo: "максимумПатронов",
+            gun: "дуло",
+            missile: "ракета",
+            icon: "иконка",
+            bonus: "бонус",
+            fire: "огонь",
+            fireMissile: "пуститьРакету",
+        })
     }
 
     update() {

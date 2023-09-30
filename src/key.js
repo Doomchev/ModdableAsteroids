@@ -1,3 +1,5 @@
+import {translate} from "./tree.js"
+
 export default class Key {
     constructor(name, code) {
         if(name) this._name = name
@@ -15,6 +17,6 @@ export default class Key {
     }
 
     getString() {
-        return "Key(" + this.code + ")"
+        return translate("Key") + "(" + this.code + ")"
     }
 }

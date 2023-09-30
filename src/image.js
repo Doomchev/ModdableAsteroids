@@ -1,5 +1,6 @@
 import {ctx, showCollisionShapes} from "./system.js"
 import {Renderable} from "./renderable.js"
+import {getString} from "./tree.js"
 
 export default class Img extends Renderable {
     constructor(texture, x = 0, y = 0, width = texture.width, height = texture.height
@@ -42,5 +43,9 @@ export default class Img extends Renderable {
             ctx.fillStyle = oldStyle
         }
         ctx.restore()
+    }
+
+    getString() {
+        return getString(this.texture)
     }
 }

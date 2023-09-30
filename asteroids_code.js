@@ -120,15 +120,15 @@ export function initUpdate() {
 
         if(currentState === state.alive) {
             if(key.left.isDown) {
-                LinearChange.execute(shipSprite, "angle", -rad(ship.dAngle))
+                LinearChange.execute(shipSprite, "angle", -rad(ship.angularSpeed))
             }
 
             if(key.right.isDown) {
-                LinearChange.execute(shipSprite, "angle", rad(ship.dAngle))
+                LinearChange.execute(shipSprite, "angle", rad(ship.angularSpeed))
             }
 
             if(key.forward.isDown) {
-                LinearChange.execute(shipSprite,"speed", ship.acceleration, 0, ship.limit)
+                LinearChange.execute(shipSprite,"speed", ship.acceleration, 0, ship.accelerationLimit)
                 if(flameSound) flameSound.play()
             } else {
                 LinearChange.execute(shipSprite, "speed", -ship.deceleration, 0)

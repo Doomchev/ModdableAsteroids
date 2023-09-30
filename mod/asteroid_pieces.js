@@ -4,17 +4,9 @@ import {rad} from "../src/system.js"
 import Rnd from "../src/function/rnd.js"
 import Mul from "../src/function/mul.js"
 import {rnds} from "../src/function/random_sign.js"
+import {addTranslations} from "../src/tree.js"
 
 export default class AsteroidPieces extends Mod {
-    get name() {
-        switch (project.locale) {
-            case "ru":
-                return "Разбиение астероидов на куски"
-            default:
-                return "Splitting asteroids to pieces"
-        }
-    }
-
     init() {
         let type = val.asteroidType
 
@@ -86,5 +78,14 @@ export default class AsteroidPieces extends Mod {
             func.createExplosion(asteroid, asteroid.width)
             func.removeAsteroid(asteroid)
         }
+
+        addTranslations({
+            AsteroidPieces: "КускиАстероидов",
+            type: "тип",
+            pieces: "куски",
+            big: "большой",
+            medium: "средний",
+            small: "маленький",
+        })
     }
 }

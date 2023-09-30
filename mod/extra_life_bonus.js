@@ -1,32 +1,31 @@
 import Mod from "./mod.js"
 import {project, val} from "../src/project.js"
 import {playSound} from "../src/system.js"
+import {addTranslations} from "../src/tree.js"
 
 export default class ExtraLifeBonus extends Mod {
     constructor(lifeBonus) {
         super()
         this.lifeBonus = lifeBonus
-        this.nextLifeBonus = lifeBonus
+        this._nextLifeBonus = lifeBonus
     }
 
-    get name() {
-        switch (project.locale) {
-            case "ru":
-                return "Дополнительная жизнь за очки"
-            default:
-                return "Extra life for score"
-        }
+    init() {
+        addTranslations({
+            ExtraLifeBonus: "ДополнительнаяЖизньЗаОчки",
+            lifeBonus: "очки",
+        })
     }
 
     update() {
-        if(val.score.value >= this.nextLifeBonus) {
+        if(val.score.value >= this._nextLifeBonus) {
             val.lives.increment()
             playSound(val.sound.extraLife)
-            this.nextLifeBonus += this.lifeBonus
+            this._nextLifeBonus += this.lifeBonus
         }
     }
 
     reset() {
-        this.nextLifeBonus = this.lifeBonus
+        this._nextLifeBonus = this.lifeBonus
     }
 }

@@ -1,6 +1,5 @@
 export default class Mod {
-    get name() {return "Module"}
-    actions = []
+    _actions = []
     init() {}
     reset() {}
     draw() {}

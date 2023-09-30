@@ -3,19 +3,11 @@ import {func, project, val} from "../src/project.js"
 import Sprite from "../src/sprite.js"
 import {playSound, rad, rnd, rndi} from "../src/system.js"
 import DelayedRemove from "../src/actions/sprite/delayed_remove.js"
+import {addTranslations} from "../src/tree.js"
 
 export default class MultiExplosion extends Mod {
     constructor() {
         super()
-    }
-
-    get name() {
-        switch (project.locale) {
-            case "ru":
-                return "Многоспрайтовый взрыв"
-            default:
-                return "Multisprite explosion"
-        }
     }
 
     init() {
@@ -40,5 +32,9 @@ export default class MultiExplosion extends Mod {
                 if(times > 0) setTimeout(createParticle, 100)
             }
         }
+
+        addTranslations({
+            MultiExplosion: "МультиВзрыв"
+        })
     }
 }

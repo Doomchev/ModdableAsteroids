@@ -5,15 +5,13 @@ import Sprite from "../src/sprite.js"
 import Cos from "../src/function/cos.js"
 import SetSize from "../src/actions/sprite/set_size.js"
 import SetAngle from "../src/actions/sprite/set_angle.js"
+import {addTranslations} from "../src/tree.js"
 
 export default class AsteroidBonus extends Mod {
-    get name() {
-        switch (project.locale) {
-            case "ru":
-                return "Бонусы из разрушенных астероидов"
-            default:
-                return "Bonuses from destroyed asteroids"
-        }
+    init() {
+        addTranslations({
+            AsteroidBonus: "БонусИзАстероидов",
+        })
     }
 
     destroyAsteroid(asteroid) {

@@ -2,7 +2,7 @@ import {Function} from "./function.js"
 
 export function createTree(element, object) {
     if(object.getString) {
-
+        if(object.getItems) createTree(element, object.getItems())
     } else if(object instanceof Array) {
         object.forEach(item => {
             let div = document.createElement("div")
@@ -26,7 +26,7 @@ export function createTree(element, object) {
 
             let div = document.createElement("div")
             div.style.textAlign = "left"
-            div.innerText = key + ": " + getString(value)
+            div.innerText = (translate(key)) + ": " + getString(value)
             element.appendChild(div)
 
             let container = document.createElement("div")
@@ -39,13 +39,49 @@ export function createTree(element, object) {
     }
 }
 
+let objectName = new Map()
+let precision = 5
+
 export function getString(object) {
-    if(!(object instanceof Object) || object instanceof String) {
+    if(typeof object === 'string') {
+        return "\"" + object + "\""
+    }
+
+    if(typeof object === 'number') {
+        let string = object.toString()
+        let dotPos = string.indexOf(".")
+        if(dotPos >= 0) return string.substring(0, dotPos + precision)
+    }
+
+    if(!(object instanceof Object)) {
         return object
-    } else if(object instanceof HTMLImageElement) {
-        return "Image"
+    }
+
+    let name = objectName.get(object)
+    if(name !== undefined) return translate(name)
+
+    if(object instanceof HTMLImageElement) {
+        return translate("Image")
     } else if(object.getString) {
         return object.getString()
     }
-    return object.constructor.name
+
+    return translate(object.constructor.name)
+}
+
+export function setName(object, name) {
+    objectName.set(object, name)
+    return object
+}
+
+let translations = new Map()
+export function addTranslations(map) {
+    for(const[key, value] of Object.entries(map)) {
+        translations.set(key, value)
+    }
+}
+
+export function translate(string) {
+    let translation = translations.get(string)
+    return translation ? translation : string
 }

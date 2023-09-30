@@ -33,6 +33,8 @@ import Invulnerability from "./mod/invulnerability.js"
 import MissileWeapon from "./mod/weapon/missile/main.js"
 import FriendlyFire from "./mod/weapon/missile/friendly_fire.js"
 import ExplodingAsteroids from "./mod/exploding_asteroids/main.js"
+import {setName} from "./src/tree.js"
+import "./russian.js"
 
 project.locales.en = {
     // hud
@@ -96,8 +98,8 @@ setRegistry({
     ship: {
         acceleration: 25,
         deceleration: 15,
-        limit: 7.5,
-        dAngle: 180,
+        accelerationLimit: 7.5,
+        angularSpeed: 180,
     },
     weapon: {},
     state: {
@@ -155,15 +157,15 @@ project.loadAssets = () => {
 }
 
 project.init = () => {
-    val.score = new NumericVariable(0)
-    val.lives = new NumericVariable(val.startingLives)
-    val.level = new NumericVariable(0)
+    val.score = setName(new NumericVariable(0), "score")
+    val.lives = setName(new NumericVariable(val.startingLives), "lives")
+    val.level = setName(new NumericVariable(0), "level")
 
-    val.bullets = new Layer()
-    val.shipLayer = new Layer()
-    val.asteroids = new Layer()
-    val.bonuses = new Layer()
-    val.explosions = new Layer()
+    val.bullets = setName(new Layer(), "bullets")
+    val.shipLayer = setName(new Layer(), "shipLayer")
+    val.asteroids = setName(new Layer(), "asteroids")
+    val.bonuses = setName(new Layer(), "bonuses")
+    val.explosions = setName(new Layer(), "explosions")
 
     val.asteroidImages = new ImageArray(val.texture.asteroid, 8, 4
         , 0.5, 0.5, 1.5, 1.5)

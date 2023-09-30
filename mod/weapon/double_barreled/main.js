@@ -8,17 +8,9 @@ import {align, loadSound, loadTexture, playSound} from "../../../src/system.js"
 import DelayedRemove from "../../../src/actions/sprite/delayed_remove.js"
 import NumericVariable from "../../../src/variable/number.js"
 import Label from "../../../src/gui/label.js"
+import {addTranslations, setName} from "../../../src/tree.js"
 
 export default class DoubleBarreled extends Weapon {
-    get name() {
-        switch (project.locale) {
-            case "ru":
-                return "Двуствольный пулемёт"
-            default:
-                return "Double barreled gun"
-        }
-    }
-
     loadAssets() {
         this.texture = {
             gunfire: loadTexture("gunfire.png"),
@@ -37,7 +29,7 @@ export default class DoubleBarreled extends Weapon {
     init() {
         this.turret = new Sprite(new Img(this.texture.turret), 0, 0, 2, 2)
         this.barrelEnd = []
-        this.gunDelay = new Delayed(project.key.fire, 0.10)
+        this.controller = new Delayed(project.key.fire, 0.10)
 
         this.bullet = {
             layer: val.bullets,
@@ -64,9 +56,9 @@ export default class DoubleBarreled extends Weapon {
         this.maxAmmo = 100
 
         for(let i = 0; i < 2; i++) {
-            let barrelEnd = new Sprite(undefined, 0.5, 0.4 * (i === 0 ? -1 : 1))
+            let barrelEnd = setName(new Sprite(undefined, 0.5, 0.4 * (i === 0 ? -1 : 1)), "barrelEnd" + i)
             this.barrelEnd.push(barrelEnd)
-            this.actions.push(new Constraint(barrelEnd, this.turret))
+            this._actions.push(new Constraint(barrelEnd, this.turret))
         }
 
         this.gunfire = new Array(2)
@@ -76,6 +68,25 @@ export default class DoubleBarreled extends Weapon {
         val.shipLayer.add(this.turret)
 
         val.hud.add(new Label(val.hudArea, [this.ammo], align.right, align.bottom, "I10", this.texture.icon))
+
+        addTranslations({
+            DoubleBarreled: "СдвоенноеДуло",
+            probability: "вероятность",
+            ammo: "патроны",
+            bonusAmmo: "бонусныеПатроны",
+            maxAmmo: "максимумПатронов",
+            barrelEnd: "конецДула",
+            barrelEnd0: "конецДула0",
+            barrelEnd1: "конецДула1",
+            gunfire: "огоньИзДула",
+            bullet: "пуля",
+            turret: "туррель",
+            icon: "иконка",
+            bulletFire: "выстрел",
+            bulletHit: "попадание",
+            bullet_hit: "попадание",
+            controller: "контроллер",
+        })
     }
 
     collect() {
@@ -87,7 +98,7 @@ export default class DoubleBarreled extends Weapon {
     update() {
         if(val.currentWeapon !== this) return
 
-        if(this.gunDelay.active()) {
+        if(this.controller.active()) {
             for (let i = 0; i <= 1; i++) {
                 let bullet = Sprite.createFromTemplate(this.bullet)
                 bullet.setPositionAs(this.barrelEnd[i])

@@ -106,4 +106,8 @@ export default class Shape extends Renderable {
         return shape.leftX >= this.leftX && shape.topY >= this.topY && shape.rightX < this.rightX
             && shape.bottomY < this.bottomY
     }
+
+    getString() {
+        return "Shape(" + this.width + " x " + this.height + ")"
+    }
 }

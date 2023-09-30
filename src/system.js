@@ -2,7 +2,7 @@ import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {Function} from "./function.js"
 import {mod, project} from "./project.js"
 import {exportProject} from "./export.js"
-import {createTree} from "./tree.js"
+import {createTree, setName} from "./tree.js"
 
 // global variables
 
@@ -57,10 +57,14 @@ export function togglePause() {
 let assetSource = new Map()
 let assetPath = ""
 
+export function extractFileName(path) {
+    return path.substring(path.lastIndexOf("/") + 1, path.lastIndexOf("."))
+}
+
 // textures
 
 export function loadTexture(src) {
-    let texture = new Image();
+    let texture = setName(new Image(), extractFileName(src));
     assetSource.set(texture, assetPath + src)
     return texture
 }
@@ -70,7 +74,7 @@ export function loadTexture(src) {
 export let masterVolume = 0.25
 
 export function loadSound(src) {
-    let sound = new Audio()
+    let sound = setName(new Audio(), extractFileName(src))
     assetSource.set(sound, assetPath + src)
     return sound
 }
@@ -115,6 +119,7 @@ let square = true
 
 document.addEventListener("DOMContentLoaded", function() {
     project.allModules.forEach(module => {
+        setName(module, module.constructor.name)
         module[0].path ??= module[2]
         if (module[1]) mod.push(module[0])
     })
@@ -171,8 +176,8 @@ function start() {
     exportProject()
 
     let projectDiv = document.getElementById("project")
-    createTree(projectDiv, project.registry)
     createTree(projectDiv, mod)
+    createTree(projectDiv, project.registry)
 
     let apsTime = 0, realAps = 0, apsCounter = 0
     setInterval(function () {
@@ -182,7 +187,7 @@ function start() {
             project.actions.forEach(action => action.execute())
             project.update()
             mod.forEach(module => {
-                module.actions.forEach(action => action.execute())
+                module._actions.forEach(action => action.execute())
                 module.update()
             })
         }

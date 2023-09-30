@@ -1,5 +1,6 @@
 import Mod from "./mod.js"
 import {project, val} from "../src/project.js"
+import {addTranslations} from "../src/tree.js"
 
 export default class BonusForLevel extends Mod {
     constructor(bonus) {
@@ -7,13 +8,10 @@ export default class BonusForLevel extends Mod {
         this.bonus = bonus
     }
 
-    get name() {
-        switch (project.locale) {
-            case "ru":
-                return "Бонус за прохождение уровня"
-            default:
-                return "Bonus for finishing level"
-        }
+    init() {
+        addTranslations({
+            BonusForLevel: "БонусЗаПрохождениеУровня"
+        })
     }
 
     initLevel(level) {

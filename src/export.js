@@ -3,6 +3,7 @@ import {dv} from "./classes.js"
 import {Action} from "./actions/action.js"
 import {project} from "./project.js"
 import Shape from "./shape.js"
+import "./russian.js"
 
 let text = "", indent = "", currentIndex = -1
 

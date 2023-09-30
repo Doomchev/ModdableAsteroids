@@ -14,6 +14,6 @@ export default class Rnd extends Function {
     }
 
     getString() {
-        return "rnd(" + getString(this.from) + "..." + getString(this.to) + ")"
+        return "(" + getString(this.from) + "..." + getString(this.to) + ")"
     }
 }

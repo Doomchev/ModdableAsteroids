@@ -1,16 +1,8 @@
 import Mod from "./mod.js"
 import {func, project, val} from "../src/project.js"
+import {addTranslations} from "../src/tree.js"
 
 export default class AsteroidsHealth extends Mod {
-    get name() {
-        switch (project.locale) {
-            case "ru":
-                return "Здоровье астероидов"
-            default:
-                return "Asteroid health"
-        }
-    }
-
     init() {
         val.asteroidType.small.hp = 100
         val.asteroidType.medium.hp = 200
@@ -22,6 +14,10 @@ export default class AsteroidsHealth extends Mod {
             func.createSingleExplosion(bullet, bullet.explosionSize, false)
             if(bullet.onHit) bullet.onHit()
         }
+
+        addTranslations({
+            AsteroidsHealth: "ЗдоровьеАстероидов",
+        })
     }
 
     initAsteroid(asteroid) {
