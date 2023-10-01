@@ -4,7 +4,7 @@ import {rad} from "../src/system.js"
 import Rnd from "../src/function/rnd.js"
 import Mul from "../src/function/mul.js"
 import {rnds} from "../src/function/random_sign.js"
-import {addTranslations} from "../src/tree.js"
+import {addTranslations, setName} from "../src/tree.js"
 
 export default class AsteroidPieces extends Mod {
     init() {
@@ -20,6 +20,8 @@ export default class AsteroidPieces extends Mod {
             rotationSpeed: new Rnd(rad(-180), rad(180)),
             score: 100,
         }
+        setName(type.big, "big")
+
         type.medium = {
             layer: val.asteroids,
             images: val.asteroidImages,
@@ -30,6 +32,8 @@ export default class AsteroidPieces extends Mod {
             rotationSpeed: new Rnd(rad(-180), rad(180)),
             score: 200,
         }
+        setName(type.medium, "medium")
+
         type.small = {
             layer: val.asteroids,
             images: val.asteroidImages,
@@ -40,6 +44,7 @@ export default class AsteroidPieces extends Mod {
             rotationSpeed: new Rnd(rad(-180), rad(180)),
             score: 300,
         }
+        setName(type.small, "small")
 
         type.big.pieces = [
             {
@@ -86,6 +91,7 @@ export default class AsteroidPieces extends Mod {
             big: "большой",
             medium: "средний",
             small: "маленький",
+            rotationSpeed: "скоростьВращения",
         })
     }
 }

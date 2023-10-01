@@ -3,6 +3,7 @@ import {Function} from "./function.js"
 import {mod, project} from "./project.js"
 import {exportProject} from "./export.js"
 import {createTree, setName} from "./tree.js"
+import ImageArray from "./image_array.js"
 
 // global variables
 
@@ -52,44 +53,6 @@ export function togglePause() {
     paused = !paused
 }
 
-// assets
-
-let assetsToLoad = 0
-export function loadAssets(path, asset) {
-    let textures = {}
-
-    for(const[key, value] of Object.entries(asset.texture)) {
-        let texture = new Image()
-        texture.onload = () => {
-            assetsToLoad--
-            if(assetsToLoad <= 0) start()
-        }
-        texture.src = path + value
-        textures[key] = texture
-        assetsToLoad++
-    }
-
-    function addAudioListener(audio) {
-        let listener = () => {
-            assetsToLoad--
-            audio.removeEventListener("canplaythrough", listener, false)
-            if (assetsToLoad <= 0) start()
-        }
-        audio.addEventListener("canplaythrough", listener, false);
-    }
-
-    let sounds = {}
-    for(const[key, value] of Object.entries(asset.sound)) {
-        let audio = new Audio()
-        addAudioListener(audio)
-        audio.src = path + value
-        sounds[key] = audio
-        assetsToLoad++
-    }
-
-    return {texture: textures, sound: sounds}
-}
-
 // sound
 
 export let masterVolume = 0.25
@@ -128,10 +91,49 @@ export function loc(stringName) {
     return new Loc(stringName)
 }
 
+// assets loader
+
+let assetsToLoad = 0
+export function loadAssets(path, asset) {
+    let textures = {}
+
+    for(const[key, value] of Object.entries(asset.texture)) {
+        let texture = new Image()
+        texture.onload = () => {
+            assetsToLoad--
+            if(assetsToLoad <= 0) start()
+        }
+        texture.src = path + value
+        textures[key] = texture
+        setName(texture, value)
+        assetsToLoad++
+    }
+
+    function addAudioListener(audio) {
+        let listener = () => {
+            assetsToLoad--
+            audio.removeEventListener("canplaythrough", listener, false)
+            if (assetsToLoad <= 0) start()
+        }
+        audio.addEventListener("canplaythrough", listener, false);
+    }
+
+    let sounds = {}
+    for(const[key, value] of Object.entries(asset.sound)) {
+        let audio = new Audio()
+        addAudioListener(audio)
+        audio.src = path + value
+        setName(audio, value)
+        sounds[key] = audio
+        assetsToLoad++
+    }
+
+    return {texture: textures, sound: sounds}
+}
+
 // listeners
 
 let square = true
-
 document.addEventListener("DOMContentLoaded", function() {
     project.allModules.forEach(module => {
         setName(module, module.constructor.name)
@@ -158,15 +160,17 @@ document.addEventListener("DOMContentLoaded", function() {
     project.sound = project._assets.sound
     mod.forEach(module => {
         module._assets = loadAssets(module.path, module.getAssets())
-        module.sound = module._assets.sound
+        if(Object.keys(module._assets.sound).length > 0) module.sound = module._assets.sound
     })
 })
 
 function start() {
     project.init(project._assets.texture)
+    delete project._assets
 
     mod.forEach(module => {
         module.init(module._assets.texture)
+        delete module._assets
     })
     //exportProject()
 

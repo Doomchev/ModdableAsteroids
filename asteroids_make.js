@@ -23,12 +23,12 @@ import AsteroidPieces from "./mod/asteroid_pieces.js"
 import AsteroidsHealth from "./mod/asteroid_health.js"
 import MultiExplosion from "./mod/multi_explosion.js"
 import CameraMovement from "./mod/camera_movement.js"
-import ExtraLifeBonus from "./mod/extra_life_bonus.js"
+import ExtraLifeBonus from "./mod/extra_life_bonus/main.js"
 import BonusForLevel from "./mod/bonus_for_level.js"
 import InfiniteLives from "./mod/infinite_lives.js"
 import DefaultWeapon from "./mod/weapon/default/main.js"
 import DoubleBarreled from "./mod/weapon/double_barreled/main.js"
-import AsteroidBonus from "./mod/asteroid_bonus.js"
+import AsteroidBonus from "./mod/asteroid_bonus/main.js"
 import Invulnerability from "./mod/invulnerability.js"
 import MissileWeapon from "./mod/weapon/missile/main.js"
 import FriendlyFire from "./mod/weapon/missile/friendly_fire.js"
@@ -124,7 +124,7 @@ project.allModules = [
     [new AsteroidsHealth(), true],
     [new MultiExplosion(), true],
     [new CameraMovement(), true],
-    [new ExtraLifeBonus(25000), true],
+    [new ExtraLifeBonus(25000), true, "mod/extra_life_bonus/"],
     [new BonusForLevel(1000), true],
     [new InfiniteLives(), false],
     [new DefaultWeapon(), true, "mod/weapon/default/"],
@@ -132,7 +132,7 @@ project.allModules = [
     [new MissileWeapon(), true, "mod/weapon/missile/"],
     [new FriendlyFire(), true],
     [new ExplodingAsteroids(), true, "mod/exploding_asteroids/"],
-    [new AsteroidBonus(), true],
+    [new AsteroidBonus(), true, "mod/asteroid_bonus/"],
     [new Invulnerability(0.05), true],
 ]
 
@@ -147,12 +147,10 @@ project.getAssets = () => {
         sound: {
             explosion: "sounds/explosion.mp3",
             death: "sounds/death.mp3",
-            extraLife: "sounds/extra_life.mp3",
             flame: "sounds/flame.mp3",
             newLevel: "sounds/new_level.mp3",
             gameOver: "sounds/game_over.mp3",
             music: "sounds/music.mp3",
-            bonus: "sounds/bonus.mp3",
         }
     }
 }

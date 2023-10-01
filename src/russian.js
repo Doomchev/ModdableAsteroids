@@ -29,6 +29,7 @@ addTranslations({
     AddAction: "ДобавитьДействие",
 
     texture: "текстура",
+    sound: "звук",
     layer: "слой",
     sprite: "спрайт",
     key: "клавиша",

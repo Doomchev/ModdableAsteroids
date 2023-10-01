@@ -62,7 +62,7 @@ export default class DoubleBarreled extends Weapon {
             this._actions.push(new Constraint(barrelEnd, this.turret))
         }
 
-        this.gunfire = new Array(2)
+        this.gunfire = [0, 1]
         val.weapon.doubleBarreled = this
 
         this.turret.visible = false
@@ -79,7 +79,7 @@ export default class DoubleBarreled extends Weapon {
             barrelEnd: "конецДула",
             gunfire: "огоньИзДула",
             bullet: "пуля",
-            turret: "туррель",
+            turret: "турель",
             icon: "иконка",
             bulletFire: "выстрел",
             bulletHit: "попадание",

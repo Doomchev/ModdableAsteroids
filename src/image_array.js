@@ -23,6 +23,6 @@ export default class ImageArray {
     }
 
     getString() {
-        return getString(this.texture)
+        return getString(this.texture) + " (" + this.columns + " x " + this.rows + ")"
     }
 }

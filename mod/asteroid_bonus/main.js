@@ -1,13 +1,22 @@
-import Mod from "./mod.js"
-import {project, val} from "../src/project.js"
-import {playSound, rad, rnd} from "../src/system.js"
-import Sprite from "../src/sprite.js"
-import Cos from "../src/function/cos.js"
-import SetSize from "../src/actions/sprite/set_size.js"
-import SetAngle from "../src/actions/sprite/set_angle.js"
-import {addTranslations} from "../src/tree.js"
+import Mod from "../mod.js"
+import {project, val} from "../../src/project.js"
+import {playSound, rad, rnd} from "../../src/system.js"
+import Sprite from "../../src/sprite.js"
+import Cos from "../../src/function/cos.js"
+import SetSize from "../../src/actions/sprite/set_size.js"
+import SetAngle from "../../src/actions/sprite/set_angle.js"
+import {addTranslations} from "../../src/tree.js"
 
 export default class AsteroidBonus extends Mod {
+    getAssets() {
+        return {
+            texture: {},
+            sound: {
+                bonus: "bonus.mp3",
+            }
+        }
+    }
+
     init() {
         addTranslations({
             AsteroidBonus: "БонусИзАстероидов",
@@ -30,9 +39,10 @@ export default class AsteroidBonus extends Mod {
     }
 
     update() {
+        let snd = this.sound.bonus
         val.bonuses.collisionWith(val.shipSprite, function(bonus) {
             bonus.weapon.collect()
-            playSound(project.sound.bonus)
+            playSound(snd)
             val.bonuses.remove(bonus)
         })
     }

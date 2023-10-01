@@ -1,42 +1,76 @@
-import {Function} from "./function.js"
+function objectDiv(element, text, object, isLast) {
+    let container = document.createElement("div")
+    container.style.display = "flex"
+    container.style.flexDirection = "row"
 
-export function createTree(element, object) {
+    let line = document.createElement("div")
+    if(!isLast) line.style.background = "url(./src/line.png)"
+    line.style.width = "9px"
+    line.style.flexShrink = "0"
+    container.appendChild(line)
+
+    let items = document.createElement("div")
+    items.style.flexDirection = "column"
+    items.style.textAlign = "left"
+    let iconPos = createTree(items, object, isLast)
+    container.appendChild(items)
+
+    let div = document.createElement("div")
+    div.style.display = "flex"
+    div.style.flexDirection = "row"
+
+    let icon = document.createElement("div")
+    icon.style.background = "url(./src/tree.png)"
+    icon.style.backgroundSize = "18"
+    icon.style.backgroundPosition = iconPos
+    icon.style.width = "18px"
+    icon.style.height = "18px"
+    div.appendChild(icon)
+
+    let textDiv = document.createElement("div")
+    textDiv.innerText = text
+    textDiv.style.textAlign = "left"
+    div.appendChild(textDiv)
+
+    element.appendChild(div)
+
+    element.appendChild(container)
+}
+
+export function createTree(element, object, isLast) {
     if(object.getString) {
-        if(object.getItems) createTree(element, object.getItems())
+        if(object.getItems) {
+            let array = object.getItems()
+            createTree(element, array)
+            if(array.length === 0) return isLast ? "0px 36px" : "0px -18px"
+            return isLast ? "0px 36px" : "18px 54px"
+        }
     } else if(object instanceof Array) {
-        object.forEach(item => {
-            let div = document.createElement("div")
-            div.innerText = getString(item)
-            div.style.textAlign = "left"
-            element.appendChild(div)
+        if(object.length === 0) return isLast ? "0px 36px" : "0px -18px"
 
-            let container = document.createElement("div")
-            container.style.flexDirection = "column"
-            container.style.marginLeft = "8px"
-            container.style.textAlign = "left"
-            createTree(container, item)
-            element.appendChild(container)
-        })
+        for(let i = 0; i < object.length; i++) {
+            let item = object[i]
+            objectDiv(element, getString(item), item, i === object.length - 1)
+        }
+        return isLast ? "18px 36px" : "18px 54px"
     } else if(object instanceof Object) {
-        for(const[key, value] of Object.entries(object)) {
+        let empty = true
+        let entries = Object.entries(object)
+        for(let i = 0; i < entries.length; i++) {
+            let entry = entries[i]
+            let key = entry[0]
+            let value = entry[1]
             if(key.startsWith("_")
-                || (value instanceof Function)
+                || (typeof value === 'function')
                 || (value === undefined))
                 continue
-
-            let div = document.createElement("div")
-            div.style.textAlign = "left"
-            div.innerText = (translate(key)) + ": " + getString(value)
-            element.appendChild(div)
-
-            let container = document.createElement("div")
-            container.style.flexDirection = "column"
-            container.style.textAlign = "left"
-            container.style.marginLeft = "8px"
-            createTree(container, value)
-            element.appendChild(container)
+            objectDiv(element, translate(key) + ": " + getString(value), value, i === entries.length - 1)
+            empty = false
         }
+        if(empty) return isLast ? "0px 36px" :  "0px -18px"
+        return isLast ? "18px 36px" : "18px 54px"
     }
+    return isLast ? "0px 36px" : "0px -18px"
 }
 
 let objectName = new Map()

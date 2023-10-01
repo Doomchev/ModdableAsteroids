@@ -1,5 +1,6 @@
 import {func, project, val} from "../../../src/project.js"
 import Mod from "../../mod.js"
+import {addTranslations} from "../../../src/tree.js"
 
 export default class FriendlyFire extends Mod {
     get name() {
@@ -20,5 +21,19 @@ export default class FriendlyFire extends Mod {
                 func.destroyShip()
             }
         }
+
+        addTranslations({
+            FriendlyFire: "ВзрывРакетыПовреждаетКорабль",
+            probability: "вероятность",
+            ammo: "патроны",
+            bonusAmmo: "бонусныеПатроны",
+            maxAmmo: "максимумПатронов",
+            gun: "дуло",
+            missile: "ракета",
+            icon: "иконка",
+            bonus: "бонус",
+            fire: "огонь",
+            fireMissile: "пуститьРакету",
+        })
     }
 }
