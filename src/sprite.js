@@ -1,6 +1,6 @@
 import Shape from "./shape.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
-import {apsk, num} from "./system.js"
+import {apsk, num, rad} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
 import {getString, translate} from "./tree.js"
 
@@ -66,7 +66,7 @@ export default class Sprite extends Shape {
             if(template.height !== undefined) this.height = num(template.height)
         }
         if(template.speed !== undefined) this.speed = num(template.speed)
-        if(template.angle !== undefined) this.angle = num(template.angle)
+        if(template.angle !== undefined) this.angle = rad(num(template.angle))
         if(template.imageAngle !== undefined) this.imageAngle = num(template.imageAngle)
         if(template.active !== undefined) this.active = template.active
         if(template.visible !== undefined) this.visible = template.visible

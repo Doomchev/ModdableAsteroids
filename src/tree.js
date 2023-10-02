@@ -1,40 +1,49 @@
-function objectDiv(element, text, object, isLast) {
-    let container = document.createElement("div")
-    container.style.display = "flex"
-    container.style.flexDirection = "row"
+export let notExpandedKeys = new Set()
 
-    let line = document.createElement("div")
-    if(!isLast) line.style.background = "url(./src/line.png)"
-    line.style.width = "9px"
-    line.style.flexShrink = "0"
-    container.appendChild(line)
+export function treeInit() {
+    notExpandedKeys.add("type")
+    notExpandedKeys.add("currentWeapon")
+}
 
-    let items = document.createElement("div")
-    items.style.flexDirection = "column"
-    items.style.textAlign = "left"
-    let iconPos = createTree(items, object, isLast)
-    container.appendChild(items)
+function objectDiv(element, text, object, isLast, showContents = true) {
+    let iconPos = isLast ? "0px 36px" :  "0px -18px"
 
     let div = document.createElement("div")
     div.style.display = "flex"
     div.style.flexDirection = "row"
+    element.appendChild(div)
 
-    let icon = document.createElement("div")
-    icon.style.background = "url(./src/tree.png)"
-    icon.style.backgroundSize = "18"
-    icon.style.backgroundPosition = iconPos
-    icon.style.width = "18px"
-    icon.style.height = "18px"
-    div.appendChild(icon)
+    if(showContents) {
+        let container = document.createElement("div")
+        container.style.display = "flex"
+        container.style.flexDirection = "row"
+
+        let line = document.createElement("div")
+        if(!isLast) line.style.background = "url(./src/icons/line.png)"
+        line.style.width = "9px"
+        line.style.flexShrink = "0"
+        container.appendChild(line)
+
+        let items = document.createElement("div")
+        items.style.flexDirection = "column"
+        items.style.textAlign = "left"
+        iconPos = createTree(items, object, isLast)
+        container.appendChild(items)
+        element.appendChild(container)
+    }
+
+    let button = document.createElement("div")
+    button.style.background = "url(./src/icons/tree.png)"
+    button.style.backgroundSize = "18"
+    button.style.backgroundPosition = iconPos
+    button.style.width = "18px"
+    button.style.height = "18px"
+    div.appendChild(button)
 
     let textDiv = document.createElement("div")
     textDiv.innerText = text
     textDiv.style.textAlign = "left"
     div.appendChild(textDiv)
-
-    element.appendChild(div)
-
-    element.appendChild(container)
 }
 
 export function createTree(element, object, isLast) {
@@ -64,7 +73,8 @@ export function createTree(element, object, isLast) {
                 || (typeof value === 'function')
                 || (value === undefined))
                 continue
-            objectDiv(element, translate(key) + ": " + getString(value), value, i === entries.length - 1)
+            objectDiv(element, translate(key) + ": " + getString(value), value, i === entries.length - 1
+                , !notExpandedKeys.has(key))
             empty = false
         }
         if(empty) return isLast ? "0px 36px" :  "0px -18px"

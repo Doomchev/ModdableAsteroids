@@ -14,10 +14,10 @@ export default class AsteroidPieces extends Mod {
             layer: val.asteroids,
             images: val.asteroidImages,
             size: 3,
-            angle: new Rnd(rad(-15), rad(15)),
+            angle: new Rnd(-15, 15),
             speed: new Rnd(2, 3),
             animationSpeed: new Mul(new Rnd(12, 20), rnds),
-            rotationSpeed: new Rnd(rad(-180), rad(180)),
+            rotationSpeed: new Rnd(-180, 180),
             score: 100,
         }
         setName(type.big, "big")
@@ -26,10 +26,10 @@ export default class AsteroidPieces extends Mod {
             layer: val.asteroids,
             images: val.asteroidImages,
             size: 2,
-            angle: new Rnd(rad(-15), rad(15)),
+            angle: new Rnd(-15, 15),
             speed: new Rnd(2.5, 4),
             animationSpeed: new Mul(new Rnd(16, 25), rnds),
-            rotationSpeed: new Rnd(rad(-180), rad(180)),
+            rotationSpeed: new Rnd(-180, 180),
             score: 200,
         }
         setName(type.medium, "medium")
@@ -38,10 +38,10 @@ export default class AsteroidPieces extends Mod {
             layer: val.asteroids,
             images: val.asteroidImages,
             size: 1,
-            angle: new Rnd(rad(-15), rad(15)),
+            angle: new Rnd(-15, 15),
             speed: new Rnd(3, 5),
             animationSpeed: new Mul(new Rnd(20, 30), rnds),
-            rotationSpeed: new Rnd(rad(-180), rad(180)),
+            rotationSpeed: new Rnd(-180, 180),
             score: 300,
         }
         setName(type.small, "small")

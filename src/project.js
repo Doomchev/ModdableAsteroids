@@ -7,6 +7,7 @@ export let project = {
     registry: {},
     modules: [],
     allModules: [],
+    sound: {},
 
     _function: {},
     _data: "",

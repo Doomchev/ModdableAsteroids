@@ -182,7 +182,7 @@ project.init = (texture) => {
         explosion: {
             layer: val.explosions,
             images: val.explosionImages,
-            angle: new Rnd(rad(360)),
+            angle: new Rnd(360),
             animationSpeed: 16
         },
     }

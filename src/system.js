@@ -2,7 +2,7 @@ import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {Function} from "./function.js"
 import {mod, project} from "./project.js"
 import {exportProject} from "./export.js"
-import {createTree, setName} from "./tree.js"
+import {createTree, notExpandedKeys, setName, treeInit} from "./tree.js"
 import ImageArray from "./image_array.js"
 
 // global variables
@@ -137,7 +137,7 @@ let square = true
 document.addEventListener("DOMContentLoaded", function() {
     project.allModules.forEach(module => {
         setName(module, module.constructor.name)
-        module[0].path ??= module[2]
+        module[0]._path ??= module[2]
         if (module[1]) mod.push(module[0])
     })
 
@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", function() {
     project._assets = loadAssets("", project.getAssets())
     project.sound = project._assets.sound
     mod.forEach(module => {
-        module._assets = loadAssets(module.path, module.getAssets())
+        module._assets = loadAssets(module._path, module.getAssets())
         if(Object.keys(module._assets.sound).length > 0) module.sound = module._assets.sound
     })
 })
@@ -175,8 +175,9 @@ function start() {
     //exportProject()
 
     let projectDiv = document.getElementById("project")
-    createTree(projectDiv, mod)
+    treeInit()
     createTree(projectDiv, project.registry)
+    createTree(projectDiv, mod)
 
     let apsTime = 0, realAps = 0, apsCounter = 0
     setInterval(function () {

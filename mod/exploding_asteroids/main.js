@@ -42,7 +42,7 @@ export default class ExplodingAsteroids extends Mod {
 
     initLevel(num) {
         for(let i = 5; i <= num; i += 5) {
-            let asteroid = func.createAsteroid(0, 0, this.asteroid, rnd(rad(360)))
+            let asteroid = func.createAsteroid(0, 0, this.asteroid, rnd(360))
             asteroid.moveToPerimeter(val.bounds)
         }
     }
