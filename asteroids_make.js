@@ -156,9 +156,9 @@ project.getAssets = () => {
 }
 
 project.init = (texture) => {
-    val.score = setName(new NumericVariable(0), "score")
+    val.score = setName(new NumericVariable(), "score")
     val.lives = setName(new NumericVariable(val.startingLives), "lives")
-    val.level = setName(new NumericVariable(0), "level")
+    val.level = setName(new NumericVariable(), "level")
 
     val.bullets = setName(new Layer(), "bullets")
     val.shipLayer = setName(new Layer(), "shipLayer")

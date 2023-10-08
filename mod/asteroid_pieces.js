@@ -1,5 +1,5 @@
 import Mod from "./mod.js"
-import {func, mod, project, val} from "../src/project.js"
+import {func, mod, val} from "../src/project.js"
 import {rad} from "../src/system.js"
 import Rnd from "../src/function/rnd.js"
 import Mul from "../src/function/mul.js"
@@ -10,7 +10,7 @@ export default class AsteroidPieces extends Mod {
     init() {
         let type = val.asteroidType
 
-        type.big = {
+        type.default = {
             layer: val.asteroids,
             images: val.asteroidImages,
             size: 3,
@@ -20,7 +20,7 @@ export default class AsteroidPieces extends Mod {
             rotationSpeed: new Rnd(-180, 180),
             score: 100,
         }
-        setName(type.big, "big")
+        setName(type.default, "big")
 
         type.medium = {
             layer: val.asteroids,
@@ -46,7 +46,7 @@ export default class AsteroidPieces extends Mod {
         }
         setName(type.small, "small")
 
-        type.big.pieces = [
+        type.default.pieces = [
             {
                 type: type.medium,
                 angle: 0,
@@ -71,8 +71,6 @@ export default class AsteroidPieces extends Mod {
             },
         ]
         type.small.pieces = []
-
-        type.default = type.big
 
         func.destroyAsteroid = function (asteroid, angle) {
             mod.forEach(module => module.destroyAsteroid(asteroid, angle))

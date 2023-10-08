@@ -9,6 +9,7 @@ import Key from "../../../src/key.js"
 import Label from "../../../src/gui/label.js"
 import NumericVariable from "../../../src/variable/number.js"
 import {addTranslations} from "../../../src/tree.js"
+import {currentState} from "../../../asteroids_code.js"
 
 export default class MissileWeapon extends Weapon {
     getAssets() {
@@ -72,6 +73,8 @@ export default class MissileWeapon extends Weapon {
     }
 
     update() {
+        if(currentState !== val.state.alive) return
+
         if(this.ammo.value > 0 && this.delay.active()) {
             let missile = Sprite.createFromTemplate(this.missile)
             missile.setPositionAs(this.gun)

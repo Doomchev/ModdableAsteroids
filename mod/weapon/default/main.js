@@ -6,6 +6,7 @@ import {playSound} from "../../../src/system.js"
 import Constraint from "../../../src/constraint.js"
 import Delayed from "../../../src/actions/delayed.js"
 import {addTranslations, setName} from "../../../src/tree.js"
+import {currentState} from "../../../asteroids_code.js"
 
 export default class DefaultWeapon extends Weapon {
     getAssets() {
@@ -54,7 +55,7 @@ export default class DefaultWeapon extends Weapon {
     }
 
     update() {
-        if(val.currentWeapon !== this) return
+        if(val.currentWeapon !== this || currentState !== val.state.alive) return
 
         if(this.gunController.active()) {
             let bullet = Sprite.createFromTemplate(this.bullet)

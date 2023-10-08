@@ -6,6 +6,8 @@ import RotateImage from "./src/actions/sprite/rotate_image.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 import {makeInvulnerable} from "./mod/invulnerability.js"
 
+export let currentState
+
 export function initUpdate() {
     let asteroids = val.asteroids
     let shipSprite = val.shipSprite
@@ -24,7 +26,7 @@ export function initUpdate() {
     let template = val.template
     let ship = val.ship
 
-    let currentState = state.alive
+    currentState = state.alive
 
     loopedSound(project.sound.music, 0, 1.81, true)
     let flameSound = loopedSound(project.sound.flame, 1.1, 1.9)

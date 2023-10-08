@@ -1,12 +1,12 @@
 import Mod from "./mod.js"
-import {func, project, val} from "../src/project.js"
+import {func, val} from "../src/project.js"
 import {addTranslations} from "../src/tree.js"
 
 export default class AsteroidsHealth extends Mod {
     init() {
         val.asteroidType.small.hp = 100
         val.asteroidType.medium.hp = 200
-        val.asteroidType.big.hp = 300
+        val.asteroidType.default.hp = 300
 
         func.onAsteroidHit = function(asteroid, bullet) {
             asteroid.hp -= bullet.damage

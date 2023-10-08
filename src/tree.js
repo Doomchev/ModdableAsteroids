@@ -6,7 +6,7 @@ export function treeInit() {
 }
 
 function objectDiv(element, text, object, isLast, showContents = true) {
-    let iconPos = isLast ? "0px 36px" :  "0px -18px"
+    let iconPos = isLast ? "36px 36px" :  "36px -18px"
 
     let div = document.createElement("div")
     div.style.display = "flex"

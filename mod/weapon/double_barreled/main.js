@@ -9,6 +9,7 @@ import DelayedRemove from "../../../src/actions/sprite/delayed_remove.js"
 import NumericVariable from "../../../src/variable/number.js"
 import Label from "../../../src/gui/label.js"
 import {addTranslations, setName} from "../../../src/tree.js"
+import {currentState} from "../../../asteroids_code.js"
 
 export default class DoubleBarreled extends Weapon {
     getAssets() {
@@ -52,7 +53,7 @@ export default class DoubleBarreled extends Weapon {
 
         this.bonus = new Sprite(new Img(texture.bonus))
         this.probability = 0.1
-        this.ammo = new NumericVariable(0)
+        this.ammo = new NumericVariable()
         this.bonusAmmo = 50
         this.maxAmmo = 100
 
@@ -95,7 +96,7 @@ export default class DoubleBarreled extends Weapon {
     }
 
     update() {
-        if(val.currentWeapon !== this) return
+        if(val.currentWeapon !== this || currentState !== val.state.alive) return
 
         if(this.controller.active()) {
             for (let i = 0; i <= 1; i++) {

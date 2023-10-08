@@ -2,7 +2,7 @@ import {Function} from "../function.js"
 import {num} from "../system.js"
 
 export default class NumericVariable extends Function {
-    constructor(value) {
+    constructor(value = 0) {
         super()
         this.value = num(value)
     }
