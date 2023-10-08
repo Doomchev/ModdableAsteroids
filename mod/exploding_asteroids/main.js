@@ -1,6 +1,6 @@
-import {func, project, val} from "../../src/project.js"
+import {func, val} from "../../src/project.js"
 import ImageArray from "../../src/image_array.js"
-import {rad, rnd} from "../../src/system.js"
+import {rnd} from "../../src/system.js"
 import Mod from "../mod.js"
 import {addTranslations} from "../../src/tree.js"
 

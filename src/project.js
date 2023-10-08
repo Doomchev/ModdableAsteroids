@@ -1,6 +1,4 @@
 export let project = {
-    locale: "en",
-    locales: {},
     key: {},
     scene: [],
     actions: [],

@@ -20,7 +20,7 @@ import SpriteVariable from "./variable/sprite.js"
 import NumericVariable from "./variable/number.js"
 import EnumVariable from "./variable/enum.js"
 import Canvas from "./canvas.js"
-import {Loc} from "./system.js"
+import {Loc} from "./localization.js"
 
 export let classes = {
 

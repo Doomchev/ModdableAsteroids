@@ -2,7 +2,7 @@ import NumericVariable from "./src/variable/number.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {align, loc, rad} from "./src/system.js"
+import {align, rad} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Img from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -35,8 +35,9 @@ import FriendlyFire from "./mod/weapon/missile/friendly_fire.js"
 import ExplodingAsteroids from "./mod/exploding_asteroids/main.js"
 import {setName} from "./src/tree.js"
 import "./russian.js"
+import {loc, locales} from "./src/localization.js"
 
-project.locales.en = {
+locales.en = {
     // hud
 
     level: "LEVEL ",
@@ -63,7 +64,7 @@ project.locales.en = {
     dAngle: "Ship turning speed",
 }
 
-project.locales.ru = {
+locales.ru = {
     level: "УРОВЕНЬ ",
     pressEnter: "НАЖМИТЕ ENTER",
     gameOver: "ИГРА ОКОНЧЕНА",

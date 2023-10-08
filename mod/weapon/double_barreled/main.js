@@ -8,7 +8,7 @@ import {align, playSound} from "../../../src/system.js"
 import DelayedRemove from "../../../src/actions/sprite/delayed_remove.js"
 import NumericVariable from "../../../src/variable/number.js"
 import Label from "../../../src/gui/label.js"
-import {addTranslations, setName} from "../../../src/tree.js"
+import {addTranslations} from "../../../src/tree.js"
 import {currentState} from "../../../asteroids_code.js"
 
 export default class DoubleBarreled extends Weapon {

@@ -1,5 +1,5 @@
 import Mod from "./mod.js"
-import {project, val} from "../src/project.js"
+import {val} from "../src/project.js"
 import {addTranslations} from "../src/tree.js"
 
 export default class BonusForLevel extends Mod {

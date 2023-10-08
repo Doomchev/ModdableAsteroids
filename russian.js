@@ -1,4 +1,4 @@
-import {addTranslations, setName} from "./src/tree.js"
+import {addTranslations} from "./src/tree.js"
 
 addTranslations({
     score: "очки",

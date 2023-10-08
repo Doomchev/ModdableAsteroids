@@ -1,9 +1,7 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
-import {Function} from "./function.js"
 import {mod, project} from "./project.js"
-import {exportProject} from "./export.js"
-import {createTree, notExpandedKeys, setName, treeInit} from "./tree.js"
-import ImageArray from "./image_array.js"
+import {createTree, setName, treeInit} from "./tree.js"
+import {locale, setLocale} from "./localization.js"
 
 // global variables
 
@@ -75,21 +73,6 @@ export function loopedSound(sound, loopStart, loopEnd, play) {
 }
 
 // localization
-
-export class Loc extends Function {
-    constructor(name) {
-        super()
-        this.name = name
-    }
-
-    toString() {
-        return project.locales[project.locale][this.name]
-    }
-}
-
-export function loc(stringName) {
-    return new Loc(stringName)
-}
 
 // assets loader
 
@@ -230,7 +213,7 @@ document.addEventListener("keydown", event => {
 
     switch (event.code) {
         case "KeyL":
-            project.locale = project.locale === "ru" ? "en" : "ru"
+            setLocale(locale === "ru" ? "en" : "ru")
             break
         case "KeyO":
             showCollisionShapes = !showCollisionShapes

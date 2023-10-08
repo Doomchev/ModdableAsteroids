@@ -1,10 +1,11 @@
 import Sprite from "./src/sprite.js"
-import {loc, loopedSound, num, paused, playSound, rad, rnd, togglePause} from "./src/system.js"
+import {loopedSound, num, paused, playSound, rad, rnd, togglePause} from "./src/system.js"
 import LinearChange from "./src/actions/linear_change.js"
 import {func, mod, project, val} from "./src/project.js"
 import RotateImage from "./src/actions/sprite/rotate_image.js"
 import DelayedRemove from "./src/actions/sprite/delayed_remove.js"
 import {makeInvulnerable} from "./mod/invulnerability.js"
+import {loc} from "./src/localization.js"
 
 export let currentState
 
