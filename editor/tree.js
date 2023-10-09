@@ -114,7 +114,7 @@ export function getString(object) {
 }
 
 export function setName(object, name) {
-    objectName.set(object, name)
+    object.name = name
     return object
 }
 

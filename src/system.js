@@ -1,7 +1,6 @@
 import Canvas, {currentCanvas, setCanvas} from "./canvas.js"
 import {mod, project} from "./project.js"
-import {createTree, setName, treeInit} from "./tree.js"
-import {locale, setLocale} from "./localization.js"
+import {Function} from "./function.js"
 
 // global variables
 
@@ -74,6 +73,21 @@ export function loopedSound(sound, loopStart, loopEnd, play) {
 
 // localization
 
+export class Loc extends Function {
+    constructor(name) {
+        super()
+        this.name = name
+    }
+
+    toString() {
+        return project.locales[project.locale][this.name]
+    }
+}
+
+export function loc(stringName) {
+    return new Loc(stringName)
+}
+
 // assets loader
 
 let assetsToLoad = 0
@@ -88,7 +102,6 @@ export function loadAssets(path, asset) {
         }
         texture.src = path + value
         textures[key] = texture
-        setName(texture, value)
         assetsToLoad++
     }
 
@@ -106,7 +119,6 @@ export function loadAssets(path, asset) {
         let audio = new Audio()
         addAudioListener(audio)
         audio.src = path + value
-        setName(audio, value)
         sounds[key] = audio
         assetsToLoad++
     }
@@ -118,8 +130,7 @@ export function loadAssets(path, asset) {
 
 let square = true
 document.addEventListener("DOMContentLoaded", function() {
-    project.allModules.forEach(module => {
-        setName(module, module.constructor.name)
+    project._allModules.forEach(module => {
         module[0]._path ??= module[2]
         if (module[1]) mod.push(module[0])
     })
@@ -155,12 +166,6 @@ function start() {
         module.init(module._assets.texture)
         delete module._assets
     })
-    //exportProject()
-
-    let projectDiv = document.getElementById("project")
-    treeInit()
-    createTree(projectDiv, project.registry)
-    createTree(projectDiv, mod)
 
     let apsTime = 0, realAps = 0, apsCounter = 0
     setInterval(function () {
@@ -213,7 +218,7 @@ document.addEventListener("keydown", event => {
 
     switch (event.code) {
         case "KeyL":
-            setLocale(locale === "ru" ? "en" : "ru")
+            project.locale = project.locale === "ru" ? "en" : "ru"
             break
         case "KeyO":
             showCollisionShapes = !showCollisionShapes

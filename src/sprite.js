@@ -2,7 +2,6 @@ import Shape from "./shape.js"
 import {distToScreen, xToScreen, yToScreen} from "./canvas.js"
 import {apsk, num, rad} from "./system.js"
 import Animate from "./actions/sprite/animate.js"
-import {getString, translate} from "./tree.js"
 
 export default class Sprite extends Shape {
     constructor(image, centerX = 0.0, centerY = 0.0, width = 1.0, height = 1.0
@@ -125,9 +124,4 @@ export default class Sprite extends Shape {
     toSprite() {
         return this
     }
-
-    getString() {
-        return (this.image ? getString(this.image.texture) : translate("sprite"))
-    }
 }
-

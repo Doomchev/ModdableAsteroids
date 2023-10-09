@@ -1,7 +1,6 @@
 import Mod from "../mod.js"
 import {val} from "../../src/project.js"
 import {playSound} from "../../src/system.js"
-import {addTranslations} from "../../src/tree.js"
 
 export default class ExtraLifeBonus extends Mod {
     constructor(lifeBonus) {
@@ -17,13 +16,6 @@ export default class ExtraLifeBonus extends Mod {
                 extraLife: "extra_life.mp3",
             },
         }
-    }
-
-    init() {
-        addTranslations({
-            ExtraLifeBonus: "ДополнительнаяЖизньЗаОчки",
-            lifeBonus: "очки",
-        })
     }
 
     update() {

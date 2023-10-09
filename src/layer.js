@@ -69,12 +69,4 @@ export default class Layer extends Renderable {
     collisionWithSprite(sprite, code) {
         this.items.forEach(item => item.collisionWithSprite(sprite, code))
     }
-
-    getItems() {
-        return this.items
-    }
-
-    getString() {
-        return "Layer" + (this.visible ? "" : "invisible")
-    }
 }

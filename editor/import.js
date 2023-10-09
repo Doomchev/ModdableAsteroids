@@ -1,9 +1,8 @@
-import {addTextures} from "./system.js"
-import {setCurrentCanvas} from "./canvas.js"
+import {addTextures, Loc} from "../src/system.js"
+import {setCurrentCanvas} from "../src/canvas.js"
 import {classes} from "./classes.js"
-import {current} from "./variable/sprite.js"
-import {project} from "./project.js"
-import {Loc} from "./localization.js"
+import {current} from "../src/variable/sprite.js"
+import {project} from "../src/project.js"
 
 let log = true
 let pos = 0, objects = new Map(), logText = "", data

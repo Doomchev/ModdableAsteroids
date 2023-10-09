@@ -1,14 +1,15 @@
 export let project = {
+    locale: "en",
+    locales: {},
     key: {},
     scene: [],
     actions: [],
     registry: {},
+    _allModules: [],
     modules: [],
-    allModules: [],
     sound: {},
 
     _function: {},
-    _data: "",
 
     getAssets() {
         return {texture: {}, sound: {}}

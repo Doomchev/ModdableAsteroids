@@ -1,7 +1,6 @@
 import Shape from "../shape.js"
 import {align, ctx} from "../system.js"
 import {xToScreen, yToScreen} from "../canvas.js"
-import {translate} from "../tree.js"
 
 export default class Label extends Shape {
     constructor(sprite, items, horizontalAlign, verticalAlign, format, image) {
@@ -78,9 +77,5 @@ export default class Label extends Shape {
 
     show(...objects) {
         this.items = objects
-    }
-
-    getString() {
-        return translate("Label") + "(" + this.items + ")"
     }
 }

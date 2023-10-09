@@ -2,7 +2,6 @@ import {func, val} from "../../src/project.js"
 import ImageArray from "../../src/image_array.js"
 import {rnd} from "../../src/system.js"
 import Mod from "../mod.js"
-import {addTranslations} from "../../src/tree.js"
 
 export default class ExplodingAsteroids extends Mod {
    getAssets() {
@@ -34,10 +33,6 @@ export default class ExplodingAsteroids extends Mod {
                 }
             }
         }
-
-        addTranslations({
-            ExplodingAsteroids: "ВзрывающиесяАстероиды",
-        })
     }
 
     initLevel(num) {

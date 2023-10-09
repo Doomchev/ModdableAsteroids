@@ -1,6 +1,6 @@
-import {importProject, importTextures} from "./src/import.js"
-import {project} from "./src/project.js"
-import {initUpdate} from "./asteroids_code.js"
+import {importProject, importTextures} from "./import.js"
+import {project} from "../src/project.js"
+import {initUpdate} from "../code.js"
 
 project.loadTextures = () => {
     importTextures()

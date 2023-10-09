@@ -1,5 +1,4 @@
 import {Action} from "./actions/action.js"
-import {getString, translate} from "./tree.js"
 
 export default class Constraint extends Action {
     constructor(sprite, parent) {
@@ -20,9 +19,5 @@ export default class Constraint extends Action {
         let angle = parent.angle + this.dAngle2
         this.sprite.centerX = parent.centerX + this.distance * Math.cos(angle)
         this.sprite.centerY = parent.centerY + this.distance * Math.sin(angle)
-    }
-
-    getString() {
-        return translate("Constraint") + "(" + getString(this.sprite) + " -> " + getString(this.parent) + ")"
     }
 }

@@ -8,8 +8,7 @@ import Img from "../../../src/image.js"
 import Key from "../../../src/key.js"
 import Label from "../../../src/gui/label.js"
 import NumericVariable from "../../../src/variable/number.js"
-import {addTranslations} from "../../../src/tree.js"
-import {currentState} from "../../../asteroids_code.js"
+import {currentState} from "../../../code.js"
 
 export default class MissileWeapon extends Weapon {
     getAssets() {
@@ -28,6 +27,7 @@ export default class MissileWeapon extends Weapon {
 
     init(texture) {
         this.missile = {
+            class: "template",
             layer: val.bullets,
             image: new Img(texture.missile, undefined, undefined, undefined, undefined
                 , 0.95, 0.5, 10, 3),
@@ -56,20 +56,6 @@ export default class MissileWeapon extends Weapon {
         val.weapon.missile = this
 
         val.hud.add(new Label(val.hudArea, [this.ammo], align.left, align.bottom, "I1", texture.icon))
-
-        addTranslations({
-            MissileWeapon: "Ракеты",
-            probability: "вероятность",
-            ammo: "патроны",
-            bonusAmmo: "бонусныеПатроны",
-            maxAmmo: "максимумПатронов",
-            gun: "дуло",
-            missile: "ракета",
-            icon: "иконка",
-            bonus: "бонус",
-            fire: "огонь",
-            fireMissile: "пуститьРакету",
-        })
     }
 
     update() {

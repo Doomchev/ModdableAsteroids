@@ -1,6 +1,5 @@
 import Mod from "./mod.js"
 import {func, val} from "../src/project.js"
-import {addTranslations} from "../src/tree.js"
 
 export default class AsteroidsHealth extends Mod {
     init() {
@@ -14,10 +13,6 @@ export default class AsteroidsHealth extends Mod {
             func.createSingleExplosion(bullet, bullet.explosionSize, false)
             if(bullet.onHit) bullet.onHit()
         }
-
-        addTranslations({
-            AsteroidsHealth: "ЗдоровьеАстероидов",
-        })
     }
 
     initAsteroid(asteroid) {

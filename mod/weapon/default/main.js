@@ -5,8 +5,7 @@ import Sprite from "../../../src/sprite.js"
 import {playSound} from "../../../src/system.js"
 import Constraint from "../../../src/constraint.js"
 import Delayed from "../../../src/actions/delayed.js"
-import {addTranslations, setName} from "../../../src/tree.js"
-import {currentState} from "../../../asteroids_code.js"
+import {currentState} from "../../../code.js"
 
 export default class DefaultWeapon extends Weapon {
     getAssets() {
@@ -35,23 +34,12 @@ export default class DefaultWeapon extends Weapon {
             }
         }
 
-        this.gun = setName(Sprite.create(undefined, undefined, 1, 0), "gun")
+        this.gun = Sprite.create(undefined, undefined, 1, 0)
         this.gunController = new Delayed(project.key.fire, 0.15)
         this._actions = [new Constraint(this.gun, val.shipSprite)]
 
         val.weapon.default = this
         val.currentWeapon = this
-
-        addTranslations({
-            DefaultWeapon: "ОружиеПоУмолчанию",
-            fireball: "огненныйШар",
-            bullet: "пуля",
-            damage: "повреждение",
-            explosionSize: "размерВзрыва",
-            gunController: "контроллерСтрельбы",
-            gun: "дуло",
-            default: "поУмолчанию",
-        })
     }
 
     update() {

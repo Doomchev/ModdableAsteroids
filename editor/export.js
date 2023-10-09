@@ -1,30 +1,23 @@
 import {dv} from "./classes.js"
-import {Action} from "./actions/action.js"
-import {project} from "./project.js"
-import Shape from "./shape.js"
+import {Action} from "../src/actions/action.js"
+import {project} from "../src/project.js"
+import Shape from "../src/shape.js"
 import "./russian.js"
-import {Loc} from "./localization.js"
+import {Loc} from "../src/system.js"
 
 let text = "", indent = "", currentIndex = -1
+export let objectId = new Map()
 
 export function exportProject() {
-    for(let [name, object] of Object.entries(project)) {
-        if(name.startsWith("_")) continue
-        if(object instanceof Function) continue
-
-        text += `\r\n${name}: `
-        if(!(object instanceof Object) || object instanceof Array) {
-            exportValue(object)
-        } else {
-            exportObject(object)
-        }
-    }
+    text = "let project = "
+    exportObject(project)
     console.log(text)
 }
 
 function exportObject(object, attachId = false) {
-    if(object._id) {
-        text += `#${object._id}`
+    let id = objectId.get(object)
+    if(id !== undefined) {
+        text += `"#${id}"`
         return
     }
 
@@ -32,16 +25,23 @@ function exportObject(object, attachId = false) {
 
     if(!single) {
         if(object._name) {
-            object._id = object._name
+            id = object._name
         } else {
             currentIndex++
-            object._id = currentIndex
+            id = `object${currentIndex}`
         }
+        objectId.set(object, id)
     }
 
-    let id = single ? "" : (attachId ? `(#${object._id})` : "")
-    text += `${object.constructor.name}${id} {`
+    if(object.toJSON) {
+        text += object.toJSON()
+        return
+    }
+
+    //text += `${object.constructor.name}()`
+    text += "{"
     indent += "\t"
+    if(!single) text += `\r\n${indent}id: "${id}"`
     let hasValue = false
     let isShape = object instanceof Shape
     for(const[key, value] of Object.entries(object)) {
@@ -102,13 +102,21 @@ function exportValue(value) {
         })
         indent = indent.substring(1)
         text += `\r\n${indent}]`
-    } else if(value instanceof HTMLImageElement) {
-        if(value._id) {
-            text += `#${value._id}`
+    } else if(value instanceof Image) {
+        let id = objectId[value]
+        if(id) {
+            text += `#${id}`
         } else {
-            value._id = `${value._name}Texture`
-            text += `Texture(\"${value.src.substring(value.src.indexOf("/textures/") + 1)}\")`
-            if(!value._id) throw Error(`Texture ${value.src}`)
+            objectId[value] = `${value._name}Texture`
+            text += textureToJSON(value)
+        }
+    } else if(value instanceof Audio) {
+        let id = objectId[value]
+        if(id) {
+            text += `#${id}`
+        } else {
+            objectId[value] = `${value.name}`
+            text += soundToJSON(value)
         }
     } else if(value instanceof Loc) {
         text += `Loc(${value.name})`
@@ -119,4 +127,19 @@ function exportValue(value) {
     } else {
         text += value
     }
+}
+
+export function toJSON(object) {
+    if(object instanceof Object) return object.toJSON()
+    return object
+}
+
+export function textureToJSON(texture) {
+    if(texture) return (`new Image(${texture.src})`)
+    return "undefined"
+}
+
+export function soundToJSON(sound) {
+    if(sound) return (`new Audio(${sound.src})`)
+    return "undefined"
 }

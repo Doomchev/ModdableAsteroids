@@ -5,7 +5,6 @@ import Sprite from "../../src/sprite.js"
 import Cos from "../../src/function/cos.js"
 import SetSize from "../../src/actions/sprite/set_size.js"
 import SetAngle from "../../src/actions/sprite/set_angle.js"
-import {addTranslations} from "../../src/tree.js"
 
 export default class AsteroidBonus extends Mod {
     getAssets() {
@@ -15,12 +14,6 @@ export default class AsteroidBonus extends Mod {
                 bonus: "bonus.mp3",
             }
         }
-    }
-
-    init() {
-        addTranslations({
-            AsteroidBonus: "БонусИзАстероидов",
-        })
     }
 
     destroyAsteroid(asteroid) {

@@ -11,8 +11,4 @@ export default class Sum extends Function {
     toNumber() {
         return num(this.value1) + num(this.value2)
     }
-
-    getString() {
-        return getString(this.value1) + " + " + getString(this.value2)
-    }
 }

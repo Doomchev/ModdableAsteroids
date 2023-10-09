@@ -1,6 +1,5 @@
 import {Renderable} from "./renderable.js"
 import {rnd, rndi} from "./system.js"
-import {translate} from "./tree.js"
 
 export default class Shape extends Renderable {
     constructor(centerX = 0.0, centerY = 0.0,  width = 1.0, height = 1.0) {
@@ -106,9 +105,5 @@ export default class Shape extends Renderable {
     overlaps(shape) {
         return shape.leftX >= this.leftX && shape.topY >= this.topY && shape.rightX < this.rightX
             && shape.bottomY < this.bottomY
-    }
-
-    getString() {
-        return translate("Shape") + "(" + this.width + " x " + this.height + ")"
     }
 }

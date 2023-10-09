@@ -8,8 +8,7 @@ import {align, playSound} from "../../../src/system.js"
 import DelayedRemove from "../../../src/actions/sprite/delayed_remove.js"
 import NumericVariable from "../../../src/variable/number.js"
 import Label from "../../../src/gui/label.js"
-import {addTranslations} from "../../../src/tree.js"
-import {currentState} from "../../../asteroids_code.js"
+import {currentState} from "../../../code.js"
 
 export default class DoubleBarreled extends Weapon {
     getAssets() {
@@ -70,23 +69,6 @@ export default class DoubleBarreled extends Weapon {
         val.shipLayer.add(this.turret)
 
         val.hud.add(new Label(val.hudArea, [this.ammo], align.right, align.bottom, "I10", texture.icon))
-
-        addTranslations({
-            DoubleBarreled: "СдвоенноеДуло",
-            probability: "вероятность",
-            ammo: "патроны",
-            bonusAmmo: "бонусныеПатроны",
-            maxAmmo: "максимумПатронов",
-            barrelEnd: "конецДула",
-            gunfire: "огоньИзДула",
-            bullet: "пуля",
-            turret: "турель",
-            icon: "иконка",
-            bulletFire: "выстрел",
-            bulletHit: "попадание",
-            bullet_hit: "попадание",
-            controller: "контроллер",
-        })
     }
 
     collect() {

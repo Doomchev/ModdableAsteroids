@@ -2,7 +2,7 @@ import NumericVariable from "./src/variable/number.js"
 import Shape from "./src/shape.js"
 import {currentCanvas} from "./src/canvas.js"
 import Label from "./src/gui/label.js"
-import {align, rad} from "./src/system.js"
+import {align, loc, rad} from "./src/system.js"
 import Sprite from "./src/sprite.js"
 import Img from "./src/image.js"
 import ImageArray from "./src/image_array.js"
@@ -15,7 +15,7 @@ import Constraint from "./src/constraint.js"
 import SetBounds from "./src/actions/sprite/set_bounds.js"
 import ExecuteActions from "./src/actions/sprite/execute_actions.js"
 import {project, setRegistry, val} from "./src/project.js"
-import {initUpdate} from "./asteroids_code.js"
+import {initUpdate} from "./code.js"
 import Rnd from "./src/function/rnd.js"
 import {rnds} from "./src/function/random_sign.js"
 import Mul from "./src/function/mul.js"
@@ -33,11 +33,9 @@ import Invulnerability from "./mod/invulnerability.js"
 import MissileWeapon from "./mod/weapon/missile/main.js"
 import FriendlyFire from "./mod/weapon/missile/friendly_fire.js"
 import ExplodingAsteroids from "./mod/exploding_asteroids/main.js"
-import {setName} from "./src/tree.js"
-import "./russian.js"
-import {loc, locales} from "./src/localization.js"
+import "./editor/russian2.js"
 
-locales.en = {
+project.locales.en = {
     // hud
 
     level: "LEVEL ",
@@ -64,7 +62,7 @@ locales.en = {
     dAngle: "Ship turning speed",
 }
 
-locales.ru = {
+project.locales.ru = {
     level: "УРОВЕНЬ ",
     pressEnter: "НАЖМИТЕ ENTER",
     gameOver: "ИГРА ОКОНЧЕНА",
@@ -120,7 +118,7 @@ setRegistry({
     }
 })
 
-project.allModules = [
+project._allModules = [
     [new AsteroidPieces(), true],
     [new AsteroidsHealth(), true],
     [new MultiExplosion(), true],
@@ -157,15 +155,15 @@ project.getAssets = () => {
 }
 
 project.init = (texture) => {
-    val.score = setName(new NumericVariable(), "score")
-    val.lives = setName(new NumericVariable(val.startingLives), "lives")
-    val.level = setName(new NumericVariable(), "level")
+    val.score = new NumericVariable()
+    val.lives = new NumericVariable(val.startingLives)
+    val.level = new NumericVariable()
 
-    val.bullets = setName(new Layer(), "bullets")
-    val.shipLayer = setName(new Layer(), "shipLayer")
-    val.asteroids = setName(new Layer(), "asteroids")
-    val.bonuses = setName(new Layer(), "bonuses")
-    val.explosions = setName(new Layer(), "explosions")
+    val.bullets = new Layer()
+    val.shipLayer = new Layer()
+    val.asteroids = new Layer()
+    val.bonuses = new Layer()
+    val.explosions = new Layer()
 
     val.asteroidImages = new ImageArray(texture.asteroid, 8, 4
         , 0.5, 0.5, 1.5, 1.5)
@@ -173,7 +171,7 @@ project.init = (texture) => {
 
     val.explosionImages = new ImageArray(texture.explosion, 4, 4
         , 0.5, 0.5, 2, 2)
-    project.registry.template = {
+    val.template = {
         ship: {
             image: new Img(texture.ship, 0, 0, undefined, undefined
                 , 0.5, 0.5, 1.75, 1.75),
@@ -187,7 +185,7 @@ project.init = (texture) => {
             animationSpeed: 16
         },
     }
-    let template = project.registry.template
+    let template = val.template
 
     val.bounds = new Shape(0, 0, currentCanvas.width + 3, currentCanvas.height + 3)
 

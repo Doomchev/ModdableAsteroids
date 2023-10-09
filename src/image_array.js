@@ -1,5 +1,4 @@
 import Img from "./image.js"
-import {getString} from "./tree.js"
 
 export default class ImageArray {
     constructor(texture, columns, rows, xMul = 0.5, yMul = 0.5
@@ -20,9 +19,5 @@ export default class ImageArray {
                 , xMul, yMul, widthMul, heightMul)
         }
         this._images = images
-    }
-
-    getString() {
-        return getString(this.texture) + " (" + this.columns + " x " + this.rows + ")"
     }
 }

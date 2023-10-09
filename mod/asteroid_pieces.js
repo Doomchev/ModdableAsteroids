@@ -4,7 +4,6 @@ import {rad} from "../src/system.js"
 import Rnd from "../src/function/rnd.js"
 import Mul from "../src/function/mul.js"
 import {rnds} from "../src/function/random_sign.js"
-import {addTranslations, setName} from "../src/tree.js"
 
 export default class AsteroidPieces extends Mod {
     init() {
@@ -20,7 +19,6 @@ export default class AsteroidPieces extends Mod {
             rotationSpeed: new Rnd(-180, 180),
             score: 100,
         }
-        setName(type.default, "big")
 
         type.medium = {
             layer: val.asteroids,
@@ -32,7 +30,6 @@ export default class AsteroidPieces extends Mod {
             rotationSpeed: new Rnd(-180, 180),
             score: 200,
         }
-        setName(type.medium, "medium")
 
         type.small = {
             layer: val.asteroids,
@@ -44,7 +41,6 @@ export default class AsteroidPieces extends Mod {
             rotationSpeed: new Rnd(-180, 180),
             score: 300,
         }
-        setName(type.small, "small")
 
         type.default.pieces = [
             {
@@ -81,15 +77,5 @@ export default class AsteroidPieces extends Mod {
             func.createExplosion(asteroid, asteroid.width)
             func.removeAsteroid(asteroid)
         }
-
-        addTranslations({
-            AsteroidPieces: "КускиАстероидов",
-            type: "тип",
-            pieces: "куски",
-            big: "большой",
-            medium: "средний",
-            small: "маленький",
-            rotationSpeed: "скоростьВращения",
-        })
     }
 }

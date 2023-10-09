@@ -1,10 +1,8 @@
-import {translate} from "./tree.js"
-
 export let key = []
 
 export default class Key {
     constructor(name, code) {
-        if(name) this._name = name
+        this.name = name
         this.code = code
         this._wasPressed = false
         this._isDown = false
@@ -17,9 +15,5 @@ export default class Key {
 
     get wasPressed() {
         return this._wasPressed
-    }
-
-    getString() {
-        return translate("Key") + "(" + this.code + ")"
     }
 }
