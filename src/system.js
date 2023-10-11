@@ -130,32 +130,59 @@ export function loadAssets(path, asset) {
 
 let square = true
 document.addEventListener("DOMContentLoaded", function() {
+    let mods = document.getElementById("mods"), div
     project._allModules.forEach(module => {
-        module[0]._path ??= module[2]
-        if (module[1]) mod.push(module[0])
+        div = document.createElement("div")
+
+        let checkbox = document.createElement("input")
+        let moduleObject = module[0]
+
+        checkbox.type = "checkbox"
+        checkbox.name = moduleObject.constructor.name
+        checkbox.checked = module[1]
+        checkbox.module = moduleObject
+        moduleObject.path = module.length < 3 ? "" : module[2]
+
+        div.appendChild(checkbox)
+
+        let label = document.createElement("label")
+        label.for = moduleObject.constructor.name
+        label.textContent = moduleObject.constructor.name
+        div.appendChild(label)
+
+        mods.appendChild(div)
     })
 
-    let canvas = document.getElementById("canvas")
-    if(square) {
-        canvas.width = canvas.height = 640
-    } else {
-        canvas.width = 360
+    document.getElementById("start").onclick = function () {
+        for(let div of mods.childNodes) {
+            let element = div.childNodes[0]
+            if(element?.module && element.checked) mod.push(element.module)
+        }
+        mods.style.display = "none"
+
+        let canvas = document.getElementById("canvas")
+        if(square) {
+            canvas.width = canvas.height = 640
+        } else {
+            canvas.width = 360
+        }
+        canvas.style.display = "flex"
+        canvas.focus()
+
+        ctx = canvas.getContext("2d")
+        ctx.fillStyle = "white"
+        ctx.font = canvas.width / 24 + "px monospace"
+        ctx.textBaseline = "top"
+        project.canvas = Canvas.create(square ? 16 : 9, 16, canvas.width, canvas.height)
+        setCanvas(project.canvas)
+
+        project._assets = loadAssets("", project.getAssets())
+        project.sound = project._assets.sound
+        mod.forEach(module => {
+            module._assets = loadAssets(module.path, module.getAssets())
+            if(Object.keys(module._assets.sound).length > 0) module.sound = module._assets.sound
+        })
     }
-    canvas.focus()
-
-    ctx = canvas.getContext("2d")
-    ctx.fillStyle = "white"
-    ctx.font = canvas.width / 24 + "px monospace"
-    ctx.textBaseline = "top"
-    project.canvas = Canvas.create(square ? 16 : 9, 16, canvas.width, canvas.height)
-    setCanvas(project.canvas)
-
-    project._assets = loadAssets("", project.getAssets())
-    project.sound = project._assets.sound
-    mod.forEach(module => {
-        module._assets = loadAssets(module._path, module.getAssets())
-        if(Object.keys(module._assets.sound).length > 0) module.sound = module._assets.sound
-    })
 })
 
 function start() {
